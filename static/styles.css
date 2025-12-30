@@ -1,0 +1,4 @@
+li { background: white;
+ line-height: 150%; }
+li:nth-child(odd) { background: aliceblue; }
+li:hover {background: lavender;}
