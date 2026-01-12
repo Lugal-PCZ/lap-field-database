@@ -47,6 +47,7 @@ class Area(models.Model):
         max_length=5,
         unique=True,
         null=True,
+        blank=True,
     )
 
     class Meta:
@@ -56,27 +57,6 @@ class Area(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class SUPrefix(models.Model):
-    prefix = models.CharField(
-        max_length=2,
-        unique=True,
-        null=False,
-    )
-    feature = models.CharField(
-        max_length=20,
-        unique=True,
-        null=False,
-    )
-
-    class Meta:
-        db_table = "lap_suprefixes"
-        verbose_name_plural = "SU Prefixes"
-        ordering = ["prefix"]
-
-    def __str__(self):
-        return f"{self.prefix} - {self.feature}"
 
 
 class Locale(models.Model):
@@ -114,23 +94,40 @@ class Locale(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        locale_seasons = [season["name"] for season in self.seasons.values()]
-        if self.name.upper().startswith("TRENCH") and self.area.name.upper().startswith(
-            "AREA"
-        ):
-            return f"{self.area.name.split(' ')[1]}_{self.name} ({', '.join(locale_seasons)})"
-        elif self.method == "Excavation":  # Test Trenches/Soundings
-            return f"{self.name} ({', '.join(locale_seasons)})"
-        else:
-            return f"{self.area}: {self.name} ({', '.join(locale_seasons)})"
+        return self.name
+
+
+class SUPrefix(models.Model):
+    prefix = models.CharField(
+        max_length=2,
+        unique=True,
+        null=False,
+    )
+    feature = models.CharField(
+        max_length=20,
+        unique=True,
+        null=False,
+    )
+
+    class Meta:
+        db_table = "lap_suprefixes"
+        verbose_name_plural = "SU Prefixes"
+        ordering = ["prefix"]
+
+    def __str__(self):
+        return self.prefix
 
 
 class SU(models.Model):
-    number = models.IntegerField(unique=True, null=True)
+    number = models.IntegerField(
+        unique=True,
+        null=False,
+    )
     locuslayer = models.CharField(
         max_length=5,
         unique=True,
         null=True,
+        blank=True,
         verbose_name="1LAP/3LAP Locus.Layer",
     )
     locale = models.ForeignKey(
@@ -160,99 +157,121 @@ class SU(models.Model):
     elevationtop = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
         verbose_name="Elevation (top)",
     )
     elevationbottom = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
         verbose_name="Elevation (bottom)",
     )
     color = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     composition = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     texture = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     inclusions = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     dimensions = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     sameas = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
         verbose_name="Same As",
     )
     coveredby = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
         verbose_name="Covered By",
     )
     covers = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     cutby = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
         verbose_name="Cut By",
     )
     abuts = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     cuts = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     filledby = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
         verbose_name="Filled By",
     )
     fills = models.CharField(
         max_length=50,
         null=True,
+        blank=True,
     )
     prefix = models.ForeignKey(
         SUPrefix,
         on_delete=models.PROTECT,
         null=True,
+        blank=True,
         related_name="SUs",
     )
     description = models.TextField(
         null=True,
+        blank=True,
     )
     interpretation = models.TextField(
         null=True,
+        blank=True,
     )
     architecturalfeatures = models.CharField(
         max_length=100,
         null=True,
+        blank=True,
         verbose_name="Architectural Features",
     )
     architecturaltechnique = models.CharField(
         max_length=100,
         null=True,
+        blank=True,
         verbose_name="Architectural Technique",
     )
     photogrammetrynumbers = models.CharField(
         max_length=200,
         null=True,
+        blank=True,
         verbose_name="Photogrammetry Numbers",
     )
     photos = models.CharField(
         max_length=200,
         null=True,
+        blank=True,
     )
 
     class Meta:
@@ -261,7 +280,10 @@ class SU(models.Model):
         ordering = ["number"]
 
     def __str__(self):
-        return f"SU{self.number} - {self.locale}"
+        if self.prefix:
+            return f"{self.prefix}.{self.number}"
+        else:
+            return str(self.number)
 
 
 class Lot(models.Model):
@@ -275,6 +297,7 @@ class Lot(models.Model):
         SU,
         on_delete=models.PROTECT,
         null=False,
+        verbose_name="SU",
     )
 
     class Meta:

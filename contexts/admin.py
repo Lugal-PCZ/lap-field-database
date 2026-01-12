@@ -13,6 +13,7 @@ class AreaAdmin(admin.ModelAdmin):
 class LocaleAdmin(admin.ModelAdmin):
     list_display = ["name", "method", "area", "season_list"]
     list_filter = ["method", "area", "seasons"]
+    search_fields = ["name"]
 
     def season_list(self, obj):
         return ", ".join([season.name for season in obj.seasons.all()])
@@ -32,13 +33,22 @@ class SeasonAdmin(admin.ModelAdmin):
 
 @admin.register(SU)
 class SUAdmin(admin.ModelAdmin):
-    list_display = ["number", "locale", "season_list"]
-    list_filter = ["seasons", "locale"]
+    list_display = [
+        "__str__",
+        "locale",
+        "season_list",
+    ]
+    list_filter = [
+        "seasons",
+        "locale__method",
+        "locale",
+    ]
+    search_fields = ["number"]
+    ordering = ["number"]
 
+    @admin.display(description="Seasons")
     def season_list(self, obj):
         return ", ".join([season.name for season in obj.seasons.all()])
-
-    season_list.short_description = "Seasons"
 
 
 @admin.register(SUPrefix)
