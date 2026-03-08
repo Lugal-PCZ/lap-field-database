@@ -5,46 +5,73 @@ from .models import Area, Locale, Lot, Season, SU, SUPrefix
 
 @admin.register(Area)
 class AreaAdmin(admin.ModelAdmin):
-    list_display = ["name", "shortname"]
-    ordering = ["name"]
+    list_display = [
+        "name",
+        "shortname",
+    ]
+    ordering = [
+        "name",
+    ]
 
 
 @admin.register(Locale)
 class LocaleAdmin(admin.ModelAdmin):
-    list_display = ["name", "method", "area", "season_list"]
-    list_filter = ["method", "area", "seasons"]
-    search_fields = ["name"]
-
-    def season_list(self, obj):
-        return ", ".join([season.name for season in obj.seasons.all()])
-
-    season_list.short_description = "Seasons"
+    list_display = [
+        "name",
+        "method",
+        "area",
+    ]
+    list_filter = [
+        "method",
+        "area",
+    ]
+    search_fields = [
+        "name",
+    ]
 
 
 @admin.register(Lot)
 class LotAdmin(admin.ModelAdmin):
-    pass
+    autocomplete_fields = ["su"]
 
 
 @admin.register(Season)
 class SeasonAdmin(admin.ModelAdmin):
-    list_display = ["name", "year", "timeofyear"]
+    list_display = [
+        "name",
+        "year",
+        "timeofyear",
+    ]
 
 
 @admin.register(SU)
 class SUAdmin(admin.ModelAdmin):
     list_display = [
         "__str__",
-        "locale",
+        "feature_type",
         "season_list",
     ]
     list_filter = [
         "seasons",
         "locale__method",
+        # "locale__name",
+        "prefix__prefix",
+    ]
+    search_fields = [
+        "number",
+        "locus",
+        "locale__name",
+    ]
+    ordering = [
+        "number",
+        "locus",
         "locale",
     ]
-    search_fields = ["number"]
-    ordering = ["number"]
+    autocomplete_fields = ["locale"]
+
+    @admin.display(description="Feature Type")
+    def feature_type(self, obj):
+        return obj.prefix
 
     @admin.display(description="Seasons")
     def season_list(self, obj):
@@ -53,4 +80,7 @@ class SUAdmin(admin.ModelAdmin):
 
 @admin.register(SUPrefix)
 class SUPrefixAdmin(admin.ModelAdmin):
-    list_display = ["prefix", "feature"]
+    list_display = [
+        "prefix",
+        "feature",
+    ]

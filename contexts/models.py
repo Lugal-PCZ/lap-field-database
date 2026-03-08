@@ -1,6 +1,5 @@
 from datetime import date
 from django.db import models
-from django.db.models import Q
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
@@ -31,7 +30,7 @@ class Season(models.Model):
     class Meta:
         db_table = "lap_seasons"
         verbose_name_plural = "Seasons"
-        ordering = ["-id"]
+        ordering = ["id"]
 
     def __str__(self):
         return f"{self.name} - {self.timeofyear} {self.year}"
@@ -82,10 +81,9 @@ class Locale(models.Model):
         null=False,
         default="Excavation",
     )
-    seasons = models.ManyToManyField(
-        Season,
-        verbose_name="Season(s)",
-        default=Season.objects.all()[0].pk,
+    notes = models.TextField(
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -115,41 +113,38 @@ class SUPrefix(models.Model):
         ordering = ["prefix"]
 
     def __str__(self):
-        return self.prefix
+        return self.feature
 
 
 class SU(models.Model):
     number = models.IntegerField(
         unique=True,
-        null=False,
+        null=True,
     )
-    locuslayer = models.CharField(
-        max_length=5,
+    locus = models.CharField(
+        max_length=10,
         unique=True,
         null=True,
         blank=True,
-        verbose_name="1LAP/3LAP Locus.Layer",
+        verbose_name="1LAP/3LAP Locus",
     )
     locale = models.ForeignKey(
         Locale,
         on_delete=models.PROTECT,
         related_name="sus",
         null=False,
-        limit_choices_to=Q(method="Excavation")
-        | Q(method="Scraping")
-        | Q(method="Survey"),
     )
     seasons = models.ManyToManyField(
         Season,
         verbose_name="Season(s)",
-        default=Season.objects.all()[0].pk,
+        default=Season.objects.all()[0].name,
     )
     dateassigned = models.DateField(
         null=False,
-        auto_now=True,
+        default=date.today(),
         verbose_name="Date Assigned",
     )
-    author = models.ForeignKey(
+    recordedby = models.ForeignKey(
         "accounts.CustomUser",
         null=False,
         on_delete=models.PROTECT,
@@ -273,6 +268,10 @@ class SU(models.Model):
         null=True,
         blank=True,
     )
+    voided = models.BooleanField(
+        null=False,
+        default=False,
+    )
 
     class Meta:
         db_table = "lap_sus"
@@ -280,17 +279,27 @@ class SU(models.Model):
         ordering = ["number"]
 
     def __str__(self):
-        if self.prefix:
-            return f"{self.prefix}.{self.number}"
+        if self.locus:
+            return f"Locus {self.locus} - {self.locale}"
+        elif self.prefix:
+            return f"SU {self.prefix.prefix}.{self.number} - {self.locale}"
+        elif self.number is None:
+            return f"SU 0 - {self.locale}"
         else:
-            return str(self.number)
+            return f"SU {self.number} - {self.locale}"
 
 
 class Lot(models.Model):
     number = models.CharField(
         max_length=8,
-        default=Season.objects.all()[0].name,
+        default=Season.objects.all().reverse()[0].name,
         unique=True,
+        null=False,
+    )
+    season = models.ForeignKey(
+        Season,
+        on_delete=models.PROTECT,
+        default=Season.objects.all().reverse()[0].id,
         null=False,
     )
     su = models.ForeignKey(
@@ -298,6 +307,24 @@ class Lot(models.Model):
         on_delete=models.PROTECT,
         null=False,
         verbose_name="SU",
+    )
+    dateassigned = models.DateField(
+        null=False,
+        default=date.today(),
+        verbose_name="Date Assigned",
+    )
+    contents = models.CharField(
+        max_length=20,
+        null=True,
+        blank=True,
+    )
+    notes = models.TextField(
+        null=True,
+        blank=True,
+    )
+    voided = models.BooleanField(
+        null=False,
+        default=False,
     )
 
     class Meta:
