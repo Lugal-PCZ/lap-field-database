@@ -19,6 +19,7 @@ class CustomUserAdmin(UserAdmin):
             {
                 "fields": (
                     "is_active",
+                    "is_staff",
                     "is_superuser",
                     "groups",
                 )
@@ -45,6 +46,7 @@ class CustomUserAdmin(UserAdmin):
             {
                 "fields": (
                     "is_active",
+                    "is_staff",
                     "is_superuser",
                     "groups",
                 )
