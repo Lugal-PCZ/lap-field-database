@@ -1,4 +1,111 @@
-li { background: white;
- line-height: 150%; }
-li:nth-child(odd) { background: aliceblue; }
-li:hover {background: lavender;}
+* {
+    margin: 0; 
+    padding: 0;
+}
+
+body {
+    background-color: whitesmoke;
+}
+
+#background {
+    position: fixed;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    background-image: url("LAP_Logo.png");
+    background-repeat: no-repeat;
+    top: 100px;
+    left: 200px;
+    background-size: 800px;
+    opacity: .3;
+}
+
+#header {
+    position: sticky;
+    top: 0px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#pagetitle {
+    color: white;
+    font-size: xx-large;
+    font-weight: bold;
+    font-family: Helvetica, Arial, sans-serif;
+    background-color: midnightblue;
+    padding: 10px 0px 8px 15px;
+}
+
+#pagetitle a {
+    color: white;
+}
+
+#dingir {
+    float: right;
+    margin: 0px 15px 0px 0px;
+    top: 50%;
+    height: 36px;
+    width: 36px;
+}
+
+#filters {
+    font-size: large;
+    font-weight: bold;
+    color: black;
+    background-color: lightsteelblue;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+    padding: 8px 0px 8px 15px;
+}
+
+#itemscount {
+    float: right;
+    margin-right: 18px;
+}
+
+#mainmenu {
+    display: grid;
+    width: 500px;
+    grid-template-columns: auto auto auto;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+dl {
+    margin-left: 10px;
+    width: max-content;
+    border-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+    background-color: white;
+}
+
+dt {
+    font-size: large;
+    font-weight: bold;
+    font-family: Helvetica, Arial, sans-serif;
+    background-color: lightsteelblue;
+    color: midnightblue;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+    padding-left: 8px;
+    padding-right: 15px;
+    column-rule: 1px solid;
+}
+
+dd {
+    padding: 8px 15px 8px 10px;
+}
+
+dd:nth-child(odd) {
+    background-color: aliceblue;
+}
+
+dd:hover {
+    background-color: #FFEDEC;
+}

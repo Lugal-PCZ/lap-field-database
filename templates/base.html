@@ -1,12 +1,23 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <head>
-    <title>{{ title }}</title>
-	<link rel="stylesheet" href="{% static 'styles.css' %}">
-    </head>
+<head>
+<title>{{ title }}</title>
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
 
-    <body>
-    {% block content %}{% endblock %}
-    </body>
+<body>
+<div id="background"></div>
+<div id="header">
+    <div id="pagetitle"><a href="/">LAP FIELD DATABASE</a> | {{ title }}<img id="dingir" src="{% static 'dingir.svg' %}"></img></div>
+    <div id="filters">
+        {% block filters %}{% endblock %}&nbsp;
+        {% if all_items %}
+        <span id="itemscount">{{ all_items|length }} Items</span>
+        {% endif %}
+    </div>
+</div>
+{% block content %}
+{% endblock %}
+</body>
 </html>
