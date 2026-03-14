@@ -1,6 +1,6 @@
-from datetime import date
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils import timezone
 
 
 class Season(models.Model):
@@ -17,7 +17,7 @@ class Season(models.Model):
     )
     year = models.IntegerField(
         validators=[MinValueValidator(2019), MaxValueValidator(2030)],
-        default=date.today().year,
+        default=timezone.now().year,
         null=False,
     )
     timeofyear = models.CharField(
@@ -33,6 +33,9 @@ class Season(models.Model):
         ordering = ["id"]
 
     def __str__(self):
+        return self.name
+
+    def formatted_name(self):
         return f"{self.name} - {self.timeofyear} {self.year}"
 
 
@@ -55,6 +58,9 @@ class Area(models.Model):
         ordering = ["name"]
 
     def __str__(self):
+        return self.name
+
+    def formatted_name(self):
         return self.name
 
 
@@ -94,6 +100,12 @@ class Locale(models.Model):
     def __str__(self):
         return self.name
 
+    def formatted_name(self):
+        if self.name.startswith("Trench"):
+            return f"{self.area.shortname}_{self.name}"
+        else:
+            return self.name
+
 
 class SUPrefix(models.Model):
     prefix = models.CharField(
@@ -113,7 +125,10 @@ class SUPrefix(models.Model):
         ordering = ["prefix"]
 
     def __str__(self):
-        return self.feature
+        return self.prefix
+
+    def formatted_name(self):
+        return f"{self.prefix} ({self.feature})"
 
 
 class SU(models.Model):
@@ -137,11 +152,11 @@ class SU(models.Model):
     seasons = models.ManyToManyField(
         Season,
         verbose_name="Season(s)",
-        default=Season.objects.all()[0].name,
+        default=Season.objects.last(),
     )
     dateassigned = models.DateField(
         null=False,
-        default=date.today(),
+        default=timezone.now().date,
         verbose_name="Date Assigned",
     )
     recordedby = models.ForeignKey(
@@ -279,27 +294,29 @@ class SU(models.Model):
         ordering = ["number"]
 
     def __str__(self):
-        if self.locus:
-            return f"Locus {self.locus} - {self.locale}"
+        if str(self.locus).startswith("Wall"):
+            return f"{self.locus}"
+        elif self.locus:
+            return f"Locus {self.locus}"
         elif self.prefix:
-            return f"SU {self.prefix.prefix}.{self.number} - {self.locale}"
+            return f"SU {self.prefix.prefix}.{self.number}"
         elif self.number is None:
-            return f"SU 0 - {self.locale}"
+            return f"SU 0"
         else:
-            return f"SU {self.number} - {self.locale}"
+            return f"SU {self.number}"
 
 
 class Lot(models.Model):
     number = models.CharField(
         max_length=8,
-        default=Season.objects.all().reverse()[0].name,
+        default=Season.objects.reverse()[0].name,
         unique=True,
         null=False,
     )
     season = models.ForeignKey(
         Season,
         on_delete=models.PROTECT,
-        default=Season.objects.all().reverse()[0].id,
+        default=Season.objects.last(),
         null=False,
     )
     su = models.ForeignKey(
@@ -310,7 +327,7 @@ class Lot(models.Model):
     )
     dateassigned = models.DateField(
         null=False,
-        default=date.today(),
+        default=timezone.now().date,
         verbose_name="Date Assigned",
     )
     contents = models.CharField(

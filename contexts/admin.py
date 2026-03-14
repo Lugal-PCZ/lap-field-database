@@ -32,7 +32,18 @@ class LocaleAdmin(admin.ModelAdmin):
 
 @admin.register(Lot)
 class LotAdmin(admin.ModelAdmin):
-    autocomplete_fields = ["su"]
+    list_display = [
+        "number",
+        "su",
+        "contents",
+        "season",
+    ]
+    search_fields = [
+        "number",
+    ]
+    autocomplete_fields = [
+        "su",
+    ]
 
 
 @admin.register(Season)
@@ -48,13 +59,13 @@ class SeasonAdmin(admin.ModelAdmin):
 class SUAdmin(admin.ModelAdmin):
     list_display = [
         "__str__",
+        "locale__name",
         "feature_type",
         "season_list",
     ]
     list_filter = [
         "seasons",
         "locale__method",
-        # "locale__name",
         "prefix__prefix",
     ]
     search_fields = [
@@ -73,7 +84,7 @@ class SUAdmin(admin.ModelAdmin):
     def feature_type(self, obj):
         return obj.prefix
 
-    @admin.display(description="Seasons")
+    @admin.display(description="Season(s)")
     def season_list(self, obj):
         return ", ".join([season.name for season in obj.seasons.all()])
 
