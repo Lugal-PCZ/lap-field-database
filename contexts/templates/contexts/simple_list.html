@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ title }}</h1>
-<ol>
+<dl>
+    <dt>{{ title|slice:":-1" }}</dt>
     {% for item in all_items %}
-    <li>{{ item }}</i>
+    <dd>{{ item.formatted_name }}</dd>
     {% endfor %}
-</ol>
+</dl>
 {% endblock %}
-
-</body>
-</html>

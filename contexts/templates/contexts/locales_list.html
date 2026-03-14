@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block filters %}
+filters will go here
+{% endblock %}
+
+{% block content %}
+<dl>
+    <dt style="columns: 2 400px;">
+        <div>Locale</div>
+        <div>Area</div>
+    </dt>
+    {% for item in all_items %}
+    <dd style="columns: 2 400px;">
+        <div><b>{{ item.name }}</b></div>
+        <div>{{ item.area }}</div>
+    </dd>
+    {% endfor %}
+</dl>
+{% endblock %}

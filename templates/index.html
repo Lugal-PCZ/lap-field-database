@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block filters %}
+Hello
+{% if user.is_authenticated %}
+    {{ user.first_name }}.
+{% else %}
+    visitor, please log in to add or edit records.
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div id="mainmenu">
+    <dl>
+        <dt>Project</dt>
+        <dd><a href="seasons">Seasons</a></dd>
+        <dd><a href="areas">Areas</a></dd>
+    </dl>
+    <dl>
+        <dt>Contexts</dt>
+        <dd><a href="locales/excavation_trenches">Excavation Trenches</a></dd>
+        <dd><a href="locales/scraping_trenches">Scraping Trenches</a></dd>
+        <dd><a href="locales/survey_units">Survey Units</a></dd>
+        <dd><a href="locales/surface_findspots">Surface Findspots</a></dd>
+        <dd><a href="stratigraphic_units">Stratigraphic Units</a></dd>
+        <dd><a href="lots">Lots</a></dd>
+    </dl>
+    <dl>
+        <dt>Collections</dt>
+        <dd>Objects</dd>
+        <dd>Samples</dd>
+        <dd>Pottery</dd>
+        <dd>Human Remains</dd>
+    </dl>
+</div>
+{% endblock %}

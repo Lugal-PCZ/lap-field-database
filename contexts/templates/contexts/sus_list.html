@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block filters %}
+filters will go here
+{% endblock %}
+
+{% block content %}
+<dl>
+    <dt style="columns: 4 200px;">
+        <div>SU or Locus</div>
+        <div>Locale</div>
+        <div>Feature Type</div>
+        <div>Season(s)</div>
+    </dt>
+    {% for item in all_items %}
+    <dd style="columns: 4 200px;">
+        <div><b>{{ item }}</b></div>
+        <div>{{ item.locale }}</div>
+        {% if item.prefix %}
+        <div>{{ item.prefix }}</div>
+        {% else %}
+        <div>-</div>
+        {% endif %}
+        <div>{{ item.season_list|join:", " }}</div>
+    </dd>
+    {% endfor %}
+</dl>
+{% endblock %}

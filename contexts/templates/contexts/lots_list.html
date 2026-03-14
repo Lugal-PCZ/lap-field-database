@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block filters %}
+filters will go here
+{% endblock %}
+
+{% block content %}
+<dl>
+    <dt style="columns: 4 200px;">
+        <div>Lot</div>
+        <div>SU or Locus</div>
+        <div>Contents</div>
+        <div>Season</div>
+    </dt>
+    {% for item in all_items %}
+    <dd style="columns: 4 200px;">
+        <div><b>{{ item }}</b></div>
+        <div>{{ item.su }}</div>
+        {% if item.contents %}
+        <div>{{ item.contents }}</div>
+        {% else %}
+        <div>-</div>
+        {% endif %}
+        <div>{{ item.season }}</div>
+    </dd>
+    {% endfor %}
+</dl>
+{% endblock %}
