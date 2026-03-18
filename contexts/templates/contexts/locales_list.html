@@ -1,7 +1,22 @@
 {% extends "base.html" %}
 
 {% block filters %}
-filters will go here
+<form id="filters" action="" method="get">
+{% for filter, options in filters.items %}
+    {{ filter|title }}:
+    <select name="{{ filter }}" onchange="this.form.submit()">
+        <option value="all">all</option>
+        <option disabled>------</option>
+        {% for key, val in options.items %}
+            <option value="{{ key }}"
+            {% if filter == "area" and request.GET.area|add:0 == key %}
+            selected
+            {% endif %}
+            >{{ val }}</option>
+        {% endfor %}
+    </select>
+{% endfor %}
+</form>
 {% endblock %}
 
 {% block content %}

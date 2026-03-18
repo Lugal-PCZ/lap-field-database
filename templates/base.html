@@ -9,12 +9,12 @@
 <body>
 <div id="background"></div>
 <div id="header">
-    <div id="pagetitle"><a href="/">LAP FIELD DATABASE</a> | {{ title }}<img id="dingir" src="{% static 'dingir.svg' %}"></img></div>
-    <div id="filters">
-        {% block filters %}{% endblock %}&nbsp;
-        {% if all_items %}
-        <span id="itemscount">{{ all_items|length }} Items</span>
+    <div id="pagetitle"><a href="/">LAP FIELD DATABASE</a>: {{ title }}<img id="dingir" src="{% static 'dingir.svg' %}"></img></div>
+    <div id="pagesubhead">
+        {% if all_items or request.GET|length > 0 %}
+        {{ all_items|length }} Item{{ all_items|pluralize }}
         {% endif %}
+        {% block filters %}{% endblock %}
     </div>
 </div>
 {% block content %}

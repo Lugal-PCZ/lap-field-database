@@ -125,7 +125,7 @@ class SUPrefix(models.Model):
         ordering = ["prefix"]
 
     def __str__(self):
-        return self.prefix
+        return self.feature
 
     def formatted_name(self):
         return f"{self.prefix} ({self.feature})"

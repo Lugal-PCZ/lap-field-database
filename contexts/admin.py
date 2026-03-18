@@ -35,8 +35,14 @@ class LotAdmin(admin.ModelAdmin):
     list_display = [
         "number",
         "su",
+        "su__locale",
         "contents",
         "season",
+    ]
+    list_filter = [
+        "season",
+        "contents",
+        "su__locale",
     ]
     search_fields = [
         "number",
@@ -66,7 +72,7 @@ class SUAdmin(admin.ModelAdmin):
     list_filter = [
         "seasons",
         "locale__method",
-        "prefix__prefix",
+        "prefix__feature",
     ]
     search_fields = [
         "number",

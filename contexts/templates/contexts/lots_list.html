@@ -1,26 +1,47 @@
 {% extends "base.html" %}
 
 {% block filters %}
-filters will go here
+<form id="filters" action="" method="get">
+{% for filter, options in filters.items %}
+    {{ filter|title }}:
+    <select name="{{ filter }}" onchange="this.form.submit()">
+        <option value="all">all</option>
+        <option disabled>------</option>
+        {% for key, val in options.items %}
+            {% if key %}
+                <option value="{{ key }}"
+                {% if filter == "su" and request.GET.su|add:0 == key %}
+                selected
+                {% elif filter == "locale" and request.GET.locale|add:0 == key %}
+                selected
+                {% elif filter == "contents" and request.GET.contents == key %}
+                selected
+                {% elif filter == "season" and request.GET.season|add:0 == key %}
+                selected
+                {% endif %}
+            {% endif %}
+            >{{ val }}</option>
+        {% endfor %}
+    </select>
+{% endfor %}
+</form>
 {% endblock %}
 
 {% block content %}
 <dl>
-    <dt style="columns: 4 200px;">
+    <dt style="columns: 5 200px;">
         <div>Lot</div>
         <div>SU or Locus</div>
+        <div>Locale</div>
         <div>Contents</div>
         <div>Season</div>
     </dt>
     {% for item in all_items %}
-    <dd style="columns: 4 200px;">
+    <dd style="columns: 5 200px;">
         <div><b>{{ item }}</b></div>
         <div>{{ item.su }}</div>
-        {% if item.contents %}
-        <div>{{ item.contents }}</div>
-        {% else %}
-        <div>-</div>
-        {% endif %}
+        <div>{{ item.su.locale }}</div>
+        <div>{{ item.contents|default:"-" }}</div>
         <div>{{ item.season }}</div>
     </dd>
     {% endfor %}

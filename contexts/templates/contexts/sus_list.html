@@ -1,7 +1,30 @@
 {% extends "base.html" %}
 
 {% block filters %}
-filters will go here
+<form id="filters" action="" method="get">
+{% for filter, options in filters.items %}
+    {% if filter == "prefix" %}
+        Feature Type:
+    {% else %}
+        {{ filter|title }}:
+    {% endif %}
+    <select name="{{ filter }}" onchange="this.form.submit()">
+        <option value="all">all</option>
+        <option disabled>------</option>
+        {% for key, val in options.items %}
+            <option value="{{ key }}"
+            {% if filter == "locale" and request.GET.locale|add:0 == key %}
+            selected
+            {% elif filter == "prefix" and request.GET.prefix|add:0 == key %}
+            selected
+            {% elif filter == "season" and request.GET.season|add:0 == key %}
+            selected
+            {% endif %}
+            >{{ val }}</option>
+        {% endfor %}
+    </select>
+{% endfor %}
+</form>
 {% endblock %}
 
 {% block content %}
@@ -16,11 +39,7 @@ filters will go here
     <dd style="columns: 4 200px;">
         <div><b>{{ item }}</b></div>
         <div>{{ item.locale }}</div>
-        {% if item.prefix %}
-        <div>{{ item.prefix }}</div>
-        {% else %}
-        <div>-</div>
-        {% endif %}
+        <div>{{ item.prefix|default:"-" }}</div>
         <div>{{ item.season_list|join:", " }}</div>
     </dd>
     {% endfor %}
