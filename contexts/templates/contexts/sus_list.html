@@ -1,15 +1,23 @@
 {% extends "base.html" %}
 
 {% block filters %}
-<form id="filters" action="" method="get">
 {% for filter, options in filters.items %}
+    <label for="{{ filter }}">
     {% if filter == "prefix" %}
         Feature Type:
     {% else %}
         {{ filter|title }}:
     {% endif %}
+    </label>
     <select name="{{ filter }}" onchange="this.form.submit()">
         <option value="all">all</option>
+        {% if filter == "prefix" %}
+        <option value="0"
+        {% if request.GET.prefix == "0" %}
+        selected
+        {% endif %}
+        >unspecified</option>
+        {% endif %}
         <option disabled>------</option>
         {% for key, val in options.items %}
             <option value="{{ key }}"
@@ -24,7 +32,6 @@
         {% endfor %}
     </select>
 {% endfor %}
-</form>
 {% endblock %}
 
 {% block content %}
@@ -36,12 +43,12 @@
         <div>Season(s)</div>
     </dt>
     {% for item in all_items %}
-    <dd style="columns: 4 200px;">
-        <div><b>{{ item }}</b></div>
-        <div>{{ item.locale }}</div>
-        <div>{{ item.prefix|default:"-" }}</div>
-        <div>{{ item.season_list|join:", " }}</div>
-    </dd>
+        <dd style="columns: 4 200px;">
+            <div><b>{{ item }}</b></div>
+            <div>{{ item.locale }}</div>
+            <div>{{ item.prefix|default:"-" }}</div>
+            <div>{{ item.season_list|join:", " }}</div>
+        </dd>
     {% endfor %}
 </dl>
 {% endblock %}

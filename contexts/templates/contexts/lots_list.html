@@ -3,9 +3,22 @@
 {% block filters %}
 <form id="filters" action="" method="get">
 {% for filter, options in filters.items %}
-    {{ filter|title }}:
+    <label for="{{ filter }}">
+    {% if filter == "su" %}
+        SU:
+    {% else %}
+        {{ filter|title }}:
+    {% endif %}
+    </label>
     <select name="{{ filter }}" onchange="this.form.submit()">
         <option value="all">all</option>
+        {% if filter == "contents" %}
+        <option value="0"
+        {% if request.GET.contents == "0" %}
+        selected
+        {% endif %}
+        >unspecified (Mixed/Pottery)</option>
+        {% endif %}
         <option disabled>------</option>
         {% for key, val in options.items %}
             {% if key %}
@@ -14,7 +27,7 @@
                 selected
                 {% elif filter == "locale" and request.GET.locale|add:0 == key %}
                 selected
-                {% elif filter == "contents" and request.GET.contents == key %}
+                {% elif filter == "contents" and request.GET.contents == key or request.GET.contents|add:0 == key %}
                 selected
                 {% elif filter == "season" and request.GET.season|add:0 == key %}
                 selected

@@ -9,12 +9,38 @@
 <body>
 <div id="background"></div>
 <div id="header">
-    <div id="pagetitle"><a href="/">LAP FIELD DATABASE</a>: {{ title }}<img id="dingir" src="{% static 'dingir.svg' %}"></img></div>
+    <div id="pagetitle">
+        <a href="/">LAP FIELD DATABASE</a>: {{ title }}
+        <div id="usermenu">
+            {% if user.is_authenticated %}
+                {{ user.first_name }} {{ user.last_name }}
+            {% else %}
+                Log In
+            {% endif %}
+            <img id="dingir" src="{% static 'dingir.svg' %}"></img>
+        </div>
+    </div>
     <div id="pagesubhead">
-        {% if all_items or request.GET|length > 0 %}
-        {{ all_items|length }} Item{{ all_items|pluralize }}
+        {% if count >= 0 %}
+        <span id="count">{{ count }} Item{{ count|pluralize }}</span>
+        <form id="filters" action="" method="get">
+        {% if all_items.paginator and all_items.paginator.num_pages > 1 %}
+        [
+        {% for pagenum in all_items.paginator.page_range %}
+            {% if pagenum == all_items.number %}
+            <span id="currentpage">{{ pagenum }}</span>
+            {% else %}
+            <button name="p" value="{{ pagenum }}" onclick="this.form.submit();">{{ pagenum }}</button>
+            {% endif %}
+        {% endfor %}
+        ]
         {% endif %}
-        {% block filters %}{% endblock %}
+        {% else %}
+        &nbsp;
+        {% endif %}
+        {% block filters %}
+        {% endblock %}
+        </form>
     </div>
 </div>
 {% block content %}

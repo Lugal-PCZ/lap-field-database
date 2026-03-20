@@ -84,7 +84,9 @@ class SUAdmin(admin.ModelAdmin):
         "locus",
         "locale",
     ]
-    autocomplete_fields = ["locale"]
+    autocomplete_fields = [
+        "locale",
+    ]
 
     @admin.display(description="Feature Type")
     def feature_type(self, obj):
