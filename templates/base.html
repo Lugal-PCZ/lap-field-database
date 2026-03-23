@@ -26,9 +26,11 @@
         <form id="filters" action="" method="get">
         {% if all_items.paginator and all_items.paginator.num_pages > 1 %}
         [
-        {% for pagenum in all_items.paginator.page_range %}
+        {% for pagenum in pages %}
             {% if pagenum == all_items.number %}
             <span id="currentpage">{{ pagenum }}</span>
+            {% elif pagenum == "…" %}
+            …
             {% else %}
             <button name="p" value="{{ pagenum }}" onclick="this.form.submit();">{{ pagenum }}</button>
             {% endif %}

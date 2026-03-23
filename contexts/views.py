@@ -5,16 +5,9 @@ from django.shortcuts import render
 
 from .models import Area, Locale, Lot, Season, SU
 
-from dal import autocomplete
 from natsort_rs import natsort
 
-
-class LocaleAutocomplete(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
-        qs = Locale.objects.all()
-        if self.q:
-            qs = qs.filter(name__istartswith)
-        return qs
+ITEMSPERPAGE = 100
 
 
 def simple_list(request, contexttype):
@@ -70,10 +63,16 @@ def locales_list(request, contexttype):
     if _ := request.GET.get("area"):
         if _ != "all":
             all_items = all_items.filter(area_id=_)
+    p = Paginator(all_items, ITEMSPERPAGE)
+    if _ := request.GET.get("p"):
+        pagenum = int(_) if int(_) <= p.num_pages else p.num_pages
+    else:
+        pagenum = 1
     context = {
-        "title": title,
-        "count": len(all_items),
-        "all_items": all_items,
+        "title": Lot._meta.verbose_name_plural,
+        "count": p.count,
+        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=2),
+        "all_items": p.page(pagenum),
         "filters": filters,
     }
     return render(
@@ -127,7 +126,7 @@ def sus_list(request):
     if _ := request.GET.get("season"):
         if _ != "all":
             all_items = all_items.filter(seasons__id=_)
-    p = Paginator(all_items, 200)
+    p = Paginator(all_items, ITEMSPERPAGE)
     if _ := request.GET.get("p"):
         pagenum = int(_) if int(_) <= p.num_pages else p.num_pages
     else:
@@ -135,6 +134,7 @@ def sus_list(request):
     context = {
         "title": "Stratigraphic Units",
         "count": p.count,
+        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=2),
         "all_items": p.page(pagenum),
         "filters": filters,
     }
@@ -182,7 +182,7 @@ def lots_list(request):
     if _ := request.GET.get("season"):
         if _ != "all":
             all_items = all_items.filter(season_id=_)
-    p = Paginator(all_items, 200)
+    p = Paginator(all_items, ITEMSPERPAGE)
     if _ := request.GET.get("p"):
         pagenum = int(_) if int(_) <= p.num_pages else p.num_pages
     else:
@@ -190,6 +190,7 @@ def lots_list(request):
     context = {
         "title": Lot._meta.verbose_name_plural,
         "count": p.count,
+        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=2),
         "all_items": p.page(pagenum),
         "filters": filters,
     }
