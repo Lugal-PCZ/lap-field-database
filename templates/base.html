@@ -4,6 +4,7 @@
 <head>
 <title>{{ title }}</title>
 <link rel="stylesheet" href="{% static 'styles.css' %}">
+{{ form.media }}
 </head>
 
 <body>
@@ -23,23 +24,23 @@
     <div id="pagesubhead">
         {% if count >= 0 %}
         <span id="count">{{ count }} Item{{ count|pluralize }}</span>
-        <form id="filters" action="" method="get">
-        {% if all_items.paginator and all_items.paginator.num_pages > 1 %}
-        [
+        {% if all_items.paginator %}
+        <span id="paginator"><b>[</b>
         {% for pagenum in pages %}
             {% if pagenum == all_items.number %}
             <span id="currentpage">{{ pagenum }}</span>
             {% elif pagenum == "…" %}
             …
             {% else %}
-            <button name="p" value="{{ pagenum }}" onclick="this.form.submit();">{{ pagenum }}</button>
+            <a href="?p={{ pagenum }}&{{ params }}">{{ pagenum }}</a>
             {% endif %}
         {% endfor %}
-        ]
+        <b>]</b></span>
         {% endif %}
         {% else %}
         &nbsp;
         {% endif %}
+        <form id="filters" action="" method="get">
         {% block filters %}
         {% endblock %}
         </form>

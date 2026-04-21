@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
 
@@ -95,7 +96,7 @@ class Locale(models.Model):
     class Meta:
         db_table = "lap_locales"
         unique_together = ["name", "area"]
-        ordering = ["name"]
+        ordering = [F("name")[1:7]]
 
     def __str__(self):
         return self.name
@@ -291,22 +292,33 @@ class SU(models.Model):
     class Meta:
         db_table = "lap_sus"
         verbose_name_plural = "SUs"
-        ordering = ["number"]
+        ordering = [
+            "number",
+            "locus",
+            "locale",
+        ]
 
     def __str__(self):
-        if str(self.locus).startswith("Wall"):
+        if str(self.locus).startswith(
+            "Wall"
+        ):  # special case for a handful of contexts that were named "Wall n"
             return f"{self.locus}"
         elif self.locus:
             return f"Locus {self.locus}"
         elif self.prefix:
             return f"SU {self.prefix.prefix}.{self.number}"
         elif self.number is None:
-            return f"SU 0"
+            return "SU 0"
         else:
             return f"SU {self.number}"
 
 
 class Lot(models.Model):
+    CONTENTS_CHOICES = [
+        ("foo", "foo"),
+        ("bar", "bar"),
+        ("baz", "baz"),
+    ]
     number = models.CharField(
         max_length=8,
         default=Season.objects.reverse()[0].name,
@@ -332,6 +344,7 @@ class Lot(models.Model):
     )
     contents = models.CharField(
         max_length=20,
+        choices=CONTENTS_CHOICES,
         null=True,
         blank=True,
     )

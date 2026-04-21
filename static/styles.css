@@ -94,21 +94,25 @@ body {
     display: inline;
 }
 
-#filters button {
-    background:none;
-    border:none;
-    margin:0;
-    padding:0;
-    cursor: pointer;
-}
-
 #filters label {
     margin-left: 20px;
     font-weight: bold;
 }
 
+#filters p {
+    display: inline;
+}
+
 #filters select {
     margin-left: 3px;
+    width: 25ex;
+}
+
+#filters .select2-selection {
+    background-color: whitesmoke;
+    border: solid;
+    border-width: 1px;
+    border-color: white;
 }
 
 #mainmenu {

@@ -1,13 +1,24 @@
 from django.core.paginator import Paginator
 from django.db.models import Prefetch
-from django.db.models.functions import Substr
 from django.shortcuts import render
 
+from .filters import SUFilters, LocaleFilters, LotFilters
 from .models import Area, Locale, Lot, Season, SU
 
-from natsort_rs import natsort
+# from natsort_rs import natsort
 
 ITEMSPERPAGE = 100
+
+
+def build_params(request, params):
+    paramdict = {}
+    for each_param in params:
+        paramdict[each_param] = request.GET.get(each_param)
+    paramstring = []
+    for key, val in paramdict.items():
+        if val:
+            paramstring.append(f"{key}={val}")
+    return paramdict, paramstring
 
 
 def simple_list(request, contexttype):
@@ -32,48 +43,32 @@ def simple_list(request, contexttype):
 def locales_list(request, contexttype):
     if contexttype == "excavation_trenches":
         title = "Excavation Trenches"
-        all_items = Locale.objects.filter(
-            method__in=[
-                "Excavation",
-            ]
-        ).order_by(Substr("name", 1, 7))
+        method = "Excavation"
     elif contexttype == "scraping_trenches":
         title = "Scraping Trenches"
-        all_items = Locale.objects.filter(
-            method__in=[
-                "Scraping",
-            ]
-        ).order_by(Substr("name", 1, 7))
+        method = "Scraping"
     elif contexttype == "survey_units":
         title = "Survey Units"
-        all_items = Locale.objects.filter(method="Survey")
-
+        method = "Survey"
     elif contexttype == "surface_findspots":
         title = "Surface Findspots"
-        all_items = Locale.objects.filter(method="Surface Find").order_by(
-            "area", "name"
-        )
-    filters = {
-        "area": {},
-    }
-    areas = set()
-    for item in all_items:
-        areas.add((int(item.area_id), str(item.area)))
-        filters["area"] = dict(natsort(list(areas), key=lambda _: _[1]))
-    if _ := request.GET.get("area"):
-        if _ != "all":
-            all_items = all_items.filter(area_id=_)
+        method = "Surface Find"
+    all_items = Locale.objects.filter(method=method)
+    params, paramstring = build_params(request, ["area"])
+    if _ := params["area"]:
+        all_items = all_items.filter(area_id=_)
     p = Paginator(all_items, ITEMSPERPAGE)
     if _ := request.GET.get("p"):
         pagenum = int(_) if int(_) <= p.num_pages else p.num_pages
     else:
         pagenum = 1
     context = {
-        "title": Lot._meta.verbose_name_plural,
+        "title": title,
         "count": p.count,
-        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=2),
+        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),
         "all_items": p.page(pagenum),
-        "filters": filters,
+        "params": "&".join(paramstring),
+        "form": LocaleFilters(initial=params),
     }
     return render(
         request,
@@ -83,49 +78,20 @@ def locales_list(request, contexttype):
 
 
 def sus_list(request):
-    all_items = (
-        SU.objects.exclude(voided=1)
-        .prefetch_related(
-            Prefetch(
-                "seasons",
-                Season.objects.all(),
-                to_attr="season_list",
-            )
-        )
-        .order_by(
-            "locus",
-            "number",
-            "locale",
+    all_items = SU.objects.exclude(voided=1).prefetch_related(
+        Prefetch(
+            "seasons",
+            Season.objects.all(),
+            to_attr="season_list",
         )
     )
-    filters = {
-        "locale": {},
-        "prefix": {},
-        "season": {},
-    }
-    locales = set()
-    prefixes = set()
-    seasons = set()
-    for item in all_items:
-        locales.add((int(item.locale_id), str(item.locale)))
-        filters["locale"] = dict(natsort(list(locales), key=lambda _: _[1]))
-        if item.prefix:
-            prefixes.add((int(item.prefix_id), str(item.prefix)))
-            filters["prefix"] = dict(natsort(list(prefixes), key=lambda _: _[1]))
-        for season in item.season_list:
-            seasons.add((int(season.id), str(season)))
-            filters["season"] = dict(natsort(list(seasons), key=lambda _: _[1]))
-    if _ := request.GET.get("locale"):
-        if _ != "all":
-            all_items = all_items.filter(locale_id=_)
-    if _ := request.GET.get("prefix"):
-        if _ == "0":
-            all_items = all_items.filter(prefix__isnull=True)
-        elif _ != "all":
-            all_items = all_items.filter(prefix_id=_)
-    if _ := request.GET.get("season"):
-        if _ != "all":
-            all_items = all_items.filter(seasons__id=_)
+    params, paramstring = build_params(request, ["locale", "type", "season"])
+    if _ := params["locale"]:
+        all_items = all_items.filter(locale_id=_)
+    if _ := params["type"]:
+        all_items = all_items.filter(prefix_id=_)
+    if _ := params["season"]:
+        all_items = all_items.filter(seasons__id=_)
     p = Paginator(all_items, ITEMSPERPAGE)
     if _ := request.GET.get("p"):
         pagenum = int(_) if int(_) <= p.num_pages else p.num_pages
@@ -134,9 +100,10 @@ def sus_list(request):
     context = {
         "title": "Stratigraphic Units",
         "count": p.count,
-        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=2),
+        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),
         "all_items": p.page(pagenum),
-        "filters": filters,
+        "params": "&".join(paramstring),
+        "form": SUFilters(initial=params),
     }
     return render(
         request,
@@ -146,53 +113,31 @@ def sus_list(request):
 
 
 def lots_list(request):
-    all_items = Lot.objects.exclude(voided=1).order_by(
-        "number",
+    all_items = Lot.objects.exclude(voided=1)
+    params, paramstring = build_params(
+        request,
+        ["su", "locale", "contents", "season"],
     )
-    filters = {
-        "su": {},
-        "locale": {},
-        "contents": {},
-        "season": {},
-    }
-    sus = set()
-    locales = set()
-    contents = set()
-    seasons = set()
-    for item in all_items:
-        sus.add((int(item.su_id), str(item.su)))
-        filters["su"] = dict(natsort(list(sus), key=lambda _: _[1]))
-        locales.add((int(item.su.locale_id), str(item.su.locale)))
-        filters["locale"] = dict(natsort(list(locales), key=lambda _: _[1]))
-        contents.add((item.contents, item.contents))
-        filters["contents"] = dict(natsort(list(contents), key=lambda _: _[1]))
-        seasons.add((int(item.season_id), str(item.season)))
-        filters["season"] = dict(natsort(list(seasons), key=lambda _: _[1]))
     if _ := request.GET.get("su"):
-        if _ != "all":
-            all_items = all_items.filter(su_id=_)
+        all_items = all_items.filter(su_id=_)
     if _ := request.GET.get("locale"):
-        if _ != "all":
-            all_items = all_items.filter(su__locale_id=_)
+        all_items = all_items.filter(su__locale_id=_)
     if _ := request.GET.get("contents"):
-        if _ == "0":
-            all_items = all_items.filter(contents__isnull=True)
-        elif _ != "all":
-            all_items = all_items.filter(contents__icontains=_)
+        all_items = all_items.filter(contents__iexact=_)
     if _ := request.GET.get("season"):
-        if _ != "all":
-            all_items = all_items.filter(season_id=_)
+        all_items = all_items.filter(season_id=_)
     p = Paginator(all_items, ITEMSPERPAGE)
     if _ := request.GET.get("p"):
         pagenum = int(_) if int(_) <= p.num_pages else p.num_pages
     else:
         pagenum = 1
     context = {
-        "title": Lot._meta.verbose_name_plural,
+        "title": "Lots",
         "count": p.count,
-        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=2),
+        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),
         "all_items": p.page(pagenum),
-        "filters": filters,
+        "params": "&".join(paramstring),
+        "form": LotFilters(initial=params),
     }
     return render(
         request,

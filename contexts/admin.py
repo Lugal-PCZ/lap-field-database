@@ -9,9 +9,6 @@ class AreaAdmin(admin.ModelAdmin):
         "name",
         "shortname",
     ]
-    ordering = [
-        "name",
-    ]
 
 
 @admin.register(Locale)
@@ -78,11 +75,6 @@ class SUAdmin(admin.ModelAdmin):
         "number",
         "locus",
         "locale__name",
-    ]
-    ordering = [
-        "number",
-        "locus",
-        "locale",
     ]
     autocomplete_fields = [
         "locale",
