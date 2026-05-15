@@ -6,7 +6,7 @@
 
 {% block content %}
 <dl>
-    <dt style="columns: 5 200px;">
+    <dt style="columns: 200px 5;">
         <div>Lot</div>
         <div>SU or Locus</div>
         <div>Locale</div>
@@ -14,8 +14,8 @@
         <div>Season</div>
     </dt>
     {% for item in all_items %}
-    <dd style="columns: 5 200px;">
-        <div><b>{{ item }}</b></div>
+    <dd style="columns: 200px 5;" onclick="window.open('/lot/{{ item.id }}')">
+        <div>{{ item }}</div>
         <div>{{ item.su }}</div>
         <div>{{ item.su.locale }}</div>
         <div>{{ item.contents|default:"-" }}</div>

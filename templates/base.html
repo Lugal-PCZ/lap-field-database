@@ -14,7 +14,7 @@
         <a href="/">LAP FIELD DATABASE</a>: {{ title }}
         <div id="usermenu">
             {% if user.is_authenticated %}
-                {{ user.first_name }} {{ user.last_name }}
+                {{ user }}
             {% else %}
                 Log In
             {% endif %}
@@ -23,24 +23,24 @@
     </div>
     <div id="pagesubhead">
         {% if count >= 0 %}
-        <span id="count">{{ count }} Item{{ count|pluralize }}</span>
-        {% if all_items.paginator %}
-        <span id="paginator"><b>[</b>
-        {% for pagenum in pages %}
-            {% if pagenum == all_items.number %}
-            <span id="currentpage">{{ pagenum }}</span>
-            {% elif pagenum == "…" %}
-            …
-            {% else %}
-            <a href="?p={{ pagenum }}&{{ params }}">{{ pagenum }}</a>
+            <span id="count">{{ count }} Item{{ count|pluralize }}</span>
+            {% if all_items.paginator %}
+                <span id="paginator"><b>[</b>
+                {% for pagenum in pages %}
+                    {% if pagenum == all_items.number %}
+                    <span id="currentpage">{{ pagenum }}</span>
+                    {% elif pagenum == "…" %}
+                    …
+                    {% else %}
+                    <a href="?p={{ pagenum }}{{ params }}">{{ pagenum }}</a>
+                    {% endif %}
+                {% endfor %}
+                <b>]</b></span>
             {% endif %}
-        {% endfor %}
-        <b>]</b></span>
-        {% endif %}
         {% else %}
-        &nbsp;
+            &nbsp;
         {% endif %}
-        <form id="filters" action="" method="get">
+        <form id="filters" method="get">
         {% block filters %}
         {% endblock %}
         </form>

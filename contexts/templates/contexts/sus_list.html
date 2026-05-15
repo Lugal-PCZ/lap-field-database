@@ -6,15 +6,15 @@
 
 {% block content %}
 <dl>
-    <dt style="columns: 4 200px;">
+    <dt style="columns: 200px 4;">
         <div>SU or Locus</div>
         <div>Locale</div>
         <div>Feature Type</div>
         <div>Season(s)</div>
     </dt>
     {% for item in all_items %}
-        <dd style="columns: 4 200px;">
-            <div><b>{{ item }}</b></div>
+        <dd style="columns: 200px 4;" onclick="window.open('/su/{{ item.id }}')">
+            <div>{{ item }}</div>
             <div>{{ item.locale }}</div>
             <div>{{ item.prefix|default:"-" }}</div>
             <div>{{ item.season_list|join:", " }}</div>

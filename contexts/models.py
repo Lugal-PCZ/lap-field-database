@@ -96,7 +96,7 @@ class Locale(models.Model):
     class Meta:
         db_table = "lap_locales"
         unique_together = ["name", "area"]
-        ordering = [F("name")[1:7]]
+        ordering = [F("name")[1:7]]  # type: ignore
 
     def __str__(self):
         return self.name
@@ -136,6 +136,7 @@ class SU(models.Model):
     number = models.IntegerField(
         unique=True,
         null=True,
+        verbose_name="SU",
     )
     locus = models.CharField(
         max_length=10,
@@ -252,6 +253,7 @@ class SU(models.Model):
         null=True,
         blank=True,
         related_name="SUs",
+        verbose_name="Feature Type",
     )
     description = models.TextField(
         null=True,

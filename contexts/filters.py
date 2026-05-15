@@ -52,7 +52,7 @@ class LotFilters(forms.Form):
         empty_label="all",
         queryset=Lot.objects.values_list("contents", flat=True)
         .order_by("contents")
-        .distinct(),
+        .distinct(),  # type: ignore
         widget=forms.Select(attrs={"onchange": "this.form.submit()"}),
     )
     season = forms.ModelChoiceField(

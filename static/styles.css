@@ -8,6 +8,51 @@ body {
     font-family: 'Times New Roman', Times, serif;
 }
 
+a {
+    color: black;
+    text-decoration: none;
+}
+
+dl {
+    margin-left: 10px;
+    width: max-content;
+    border-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+    background-color: white;
+    z-index: 0;
+}
+
+dt {
+    font-size: large;
+    font-weight: bold;
+    font-family: Helvetica, Arial, sans-serif;
+    color: midnightblue;
+    background-color: lightsteelblue;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+    padding-left: 8px;
+    padding-right: 15px;
+    column-rule: 1px solid;
+}
+
+dd {
+    padding: 8px 15px 8px 10px;
+}
+
+dd:nth-child(odd) {
+    background-color: aliceblue;
+}
+
+dd:hover {
+    background-color: rgb(223, 234, 246);
+}
+
+dd>div:first-child {
+    font-weight: bold;
+}
+
 #background {
     position: fixed;
     z-index: -10;
@@ -108,56 +153,164 @@ body {
     width: 25ex;
 }
 
-#filters .select2-selection {
-    background-color: whitesmoke;
-    border: solid;
-    border-width: 1px;
-    border-color: white;
-}
-
 #mainmenu {
-    display: grid;
     width: 500px;
-    grid-template-columns: auto auto auto;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
 }
 
-a {
-    color: black;
-    text-decoration: none;
+#detail {
+    width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: minmax(9ex, auto);
 }
 
-dl {
+#detail * {
     margin-left: 10px;
-    width: max-content;
-    border-style: solid;
-    border-width: 1px;
-    border-color: midnightblue;
-    background-color: white;
-    z-index: 0;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
 }
 
-dt {
-    font-size: large;
+#detail label {
+    display: block;
     font-weight: bold;
     font-family: Helvetica, Arial, sans-serif;
     color: midnightblue;
     background-color: lightsteelblue;
-    border-bottom-style: solid;
+    border-style: solid;
     border-width: 1px;
     border-color: midnightblue;
     padding-left: 8px;
     padding-right: 15px;
-    column-rule: 1px solid;
+    margin-bottom: 3px;
 }
 
-dd {
-    padding: 8px 15px 8px 10px;
+#detail input,
+#detail textarea,
+#detail select {
+    width: calc(100% - 13px)
 }
 
-dd:nth-child(odd) {
-    background-color: aliceblue;
+#detail select[multiple], 
+#detail textarea {
+    margin-bottom: 10px;
 }
 
-dd:hover {
-    background-color: rgb(223, 234, 246);
+/* Custom Detail Views Follow */
+
+/* locale detail */
+#detail:has([formname="locale"]) {
+    grid-template-areas:
+        "r1c1 r1c2 r1c3"
+        "r2c1 r2c1 r2c1"
+}
+
+#detail:has([formname="locale"])>div:has(#id_notes) {
+    grid-area: r2c1;
+}
+
+/* su detail */
+#detail:has([formname="su"]) {
+    grid-template-areas:
+        "r1c1 r1c2 r1c3"
+        "r2c1 r2c2 r2c3"
+        "r3c1 r3c2 r3c3"
+        "r4c1 r4c2 r4c3"
+        "r5c1 r5c2 ."
+        "r6c1 r6c2 ."
+        "r7c1 r7c2 ."
+        "r8c1 r8c2 ."
+        "r9c1 r9c2 ."
+        "r10c1 r10c2 ."
+        "r11c1 r11c1 r11c1"
+        "r12c1 r12c1 r12c1"
+        "r13c1 r13c1 r13c1"
+        "r14c1 r14c1 r14c1"
+        "r15c1 . .";
+}
+
+#detail:has([formname="su"])>div:has(#id_color) {
+    grid-area: r5c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_composition) {
+    grid-area: r5c2;
+}
+
+#detail:has([formname="su"])>div:has(#id_texture) {
+    grid-area: r6c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_inclusions) {
+    grid-area: r6c2;
+}
+
+#detail:has([formname="su"])>div:has(#id_sameas) {
+    grid-area: r7c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_abuts) {
+    grid-area: r7c2;
+}
+
+#detail:has([formname="su"])>div:has(#id_coveredby) {
+    grid-area: r8c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_covers) {
+    grid-area: r8c2;
+}
+
+#detail:has([formname="su"])>div:has(#id_cutby) {
+    grid-area: r9c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_cuts) {
+    grid-area: r9c2;
+}
+
+#detail:has([formname="su"])>div:has(#id_filledby) {
+    grid-area: r10c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_fills) {
+    grid-area: r10c2;
+}
+
+#detail:has([formname="su"])>div:has(#id_description) {
+    grid-area: r11c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_interpretation) {
+    grid-area: r12c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_photos) {
+    grid-area: r13c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_photogrammetrynumbers) {
+    grid-area: r14c1;
+}
+
+#detail:has([formname="su"])>div:has(#id_voided) {
+    grid-area: r15c1;
+}
+
+/* lot detail */
+#detail:has([formname="lot"]) {
+    grid-template-areas:
+        "r1c1 r1c2 r1c3"
+        "r2c1 r2c2 ."
+        "r3c1 r3c1 r3c1"
+        "r4c1 . .";
+}
+
+#detail:has([formname="lot"])>div:has(#id_notes) {
+    grid-area: r3c1;
+}
+
+#detail:has([formname="lot"])>div:has(#id_voided) {
+    grid-area: r4c1;
 }

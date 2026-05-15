@@ -6,13 +6,13 @@
 
 {% block content %}
 <dl>
-    <dt style="columns: 2 400px;">
+    <dt style="columns: 250px 2;">
         <div>Locale</div>
         <div>Area</div>
     </dt>
     {% for item in all_items %}
-    <dd style="columns: 2 400px;">
-        <div><b>{{ item.name }}</b></div>
+    <dd style="columns: 250px 2;" onclick="window.open('/locale/{{ item.id }}')">
+        <div>{{ item.name }}</div>
         <div>{{ item.area }}</div>
     </dd>
     {% endfor %}

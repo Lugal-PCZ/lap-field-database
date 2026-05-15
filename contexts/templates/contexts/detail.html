@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+    <form id="detail" method="post">
+    {% else %}
+    <form id="detail" method="get">
+    {% endif %}
+    {{ form }}
+    </form>
+{% endblock %}

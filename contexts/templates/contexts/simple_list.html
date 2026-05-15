@@ -4,7 +4,7 @@
 <dl>
     <dt>{{ title|slice:":-1" }}</dt>
     {% for item in all_items %}
-    <dd>{{ item.formatted_name }}</dd>
+    <dd><div>{{ item.formatted_name }}</div></dd>
     {% endfor %}
 </dl>
 {% endblock %}
