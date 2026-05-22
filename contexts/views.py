@@ -27,6 +27,8 @@ def build_params(request, params):
 
 
 def simple_list(request, contexttype):
+    title = ""
+    all_items = []
     if contexttype == "seasons":
         title = Season._meta.verbose_name_plural
         all_items = Season.objects.all()
@@ -83,7 +85,7 @@ def locales_list(request, contexttype):
 
 
 def sus_list(request):
-    all_items = SU.objects.exclude(voided=1).prefetch_related(
+    all_items = SU.objects.all().prefetch_related(
         Prefetch(
             "seasons",
             Season.objects.all(),
@@ -118,7 +120,7 @@ def sus_list(request):
 
 
 def lots_list(request):
-    all_items = Lot.objects.exclude(voided=1)
+    all_items = Lot.objects.all()
     params, paramstring = build_params(
         request,
         ["su", "locale", "contents", "season"],
@@ -128,7 +130,10 @@ def lots_list(request):
     if locale := request.GET.get("locale"):
         all_items = all_items.filter(su__locale_id=locale)
     if contents := request.GET.get("contents"):
-        all_items = all_items.filter(contents__iexact=contents)
+        if contents == "None":
+            all_items = all_items.filter(contents__isnull=True)
+        else:
+            all_items = all_items.filter(contents__iexact=contents)
     if season := request.GET.get("season"):
         all_items = all_items.filter(season_id=season)
     p = Paginator(all_items, ITEMSPERPAGE)

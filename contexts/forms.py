@@ -1,5 +1,7 @@
 # from django.forms import ModelForm
 from django import forms
+from django.contrib import admin
+from django.contrib.admin.widgets import AutocompleteSelect
 
 from .models import Locale, Lot, SU
 
@@ -56,6 +58,13 @@ class SUForm(forms.ModelForm):
             "photogrammetrynumbers",
             "voided",
         ]
+        widgets = {
+            "dateassigned": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
+            "locale": AutocompleteSelect(
+                SU._meta.get_field("locale"),
+                admin.site,
+            ),
+        }
 
     def __init__(self, *args, readonly=False, **kwargs):
         super(SUForm, self).__init__(*args, **kwargs)
@@ -65,6 +74,7 @@ class SUForm(forms.ModelForm):
                 self.fields[eachfield].widget.attrs.update(
                     {"readonly": True, "onchange": "form.reset()"}
                 )
+            self.fields["locale"].disabled = True
 
 
 class LotForm(forms.ModelForm):
@@ -79,10 +89,20 @@ class LotForm(forms.ModelForm):
             "notes",
             "voided",
         ]
+        widgets = {
+            "dateassigned": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
+            "su": AutocompleteSelect(
+                Lot._meta.get_field("su"),
+                admin.site,
+            ),
+        }
 
     def __init__(self, *args, readonly=False, **kwargs):
         super(LotForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "lot"
         if readonly:
             for eachfield in self.Meta.fields:
-                self.fields[eachfield].widget.attrs.update({"readonly": True})
+                self.fields[eachfield].widget.attrs.update(
+                    {"readonly": True, "onchange": "form.reset()"}
+                )
+            self.fields["su"].disabled = True
