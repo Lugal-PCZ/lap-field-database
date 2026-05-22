@@ -96,7 +96,7 @@ class Locale(models.Model):
     class Meta:
         db_table = "lap_locales"
         unique_together = ["name", "area"]
-        ordering = [F("name")[1:7]]  # type: ignore
+        ordering = [F("name")[0:7]]  # type: ignore
 
     def __str__(self):
         return self.name
@@ -295,7 +295,7 @@ class SU(models.Model):
         db_table = "lap_sus"
         verbose_name_plural = "SUs"
         ordering = [
-            "number",
+            F("number").asc(nulls_last=True),
             "locus",
             "locale",
         ]
