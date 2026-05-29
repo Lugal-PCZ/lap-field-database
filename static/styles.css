@@ -159,6 +159,17 @@ dd>div.voided {
     width: 25ex;
 }
 
+#subheadspacer {
+    width: 980px;
+}
+
+#editbutton,
+#savebutton {
+    float: right;
+    padding: 3px 10px;
+    font-weight: bold;
+}
+
 #mainmenu {
     width: 500px;
     display: grid;

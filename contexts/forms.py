@@ -6,6 +6,17 @@ from django.contrib.admin.widgets import AutocompleteSelect
 from .models import Locale, Lot, SU
 
 
+def _update_field_behavior(readonly, ref):
+    if readonly:
+        for eachfield in ref.Meta.fields:
+            ref.fields[eachfield].widget.attrs.update({"readonly": True, "onchange": "form.reset()"})
+    else:
+        for eachfield in ref.Meta.fields:
+            ref.fields[eachfield].widget.attrs.update(
+                {"onchange": "document.getElementById('savebutton').disabled=false"}
+            )
+
+
 class LocaleForm(forms.ModelForm):
     class Meta:
         model = Locale
@@ -19,9 +30,7 @@ class LocaleForm(forms.ModelForm):
     def __init__(self, *args, readonly=False, **kwargs):
         super(LocaleForm, self).__init__(*args, **kwargs)
         self.fields["name"].widget.attrs["formname"] = "locale"
-        if readonly:
-            for eachfield in self.Meta.fields:
-                self.fields[eachfield].widget.attrs.update({"readonly": True})
+        _update_field_behavior(readonly, self)
 
 
 class SUForm(forms.ModelForm):
@@ -69,12 +78,7 @@ class SUForm(forms.ModelForm):
     def __init__(self, *args, readonly=False, **kwargs):
         super(SUForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "su"
-        if readonly:
-            for eachfield in self.Meta.fields:
-                self.fields[eachfield].widget.attrs.update(
-                    {"readonly": True, "onchange": "form.reset()"}
-                )
-            self.fields["locale"].disabled = True
+        _update_field_behavior(readonly, self)
 
 
 class LotForm(forms.ModelForm):
@@ -100,9 +104,4 @@ class LotForm(forms.ModelForm):
     def __init__(self, *args, readonly=False, **kwargs):
         super(LotForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "lot"
-        if readonly:
-            for eachfield in self.Meta.fields:
-                self.fields[eachfield].widget.attrs.update(
-                    {"readonly": True, "onchange": "form.reset()"}
-                )
-            self.fields["su"].disabled = True
+        _update_field_behavior(readonly, self)
