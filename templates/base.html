@@ -2,13 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{{ title }}</title>
+<title>LAP - {{ title }}</title>
 <link rel="stylesheet" href="{% static 'styles.css' %}">
 <script src="{% static 'scripts.js' %}"></script>
+<script src="{% static 'lib/FormStorage-master/dist/form-storage.min.js' %}"></script>
 {{ form.media }}
 </head>
 
-<body>
+<body onload="saveForm()">
 <div id="background"></div>
 <div id="header">
     <div id="pagetitle">
@@ -19,7 +20,7 @@
             {% else %}
                 Log In
             {% endif %}
-            <img id="dingir" src="{% static 'dingir.svg' %}"></img>
+            <img id="dingir" src="{% static 'img/dingir.svg' %}"></img>
         </div>
     </div>
     <div id="pagesubhead">
@@ -41,9 +42,9 @@
         {% elif user.is_authenticated and request.path != "/" %}
             <span id="subheadspacer">
                 {% if "/edit/" in request.path %}
-                <button id="savebutton" form="detail" disabled>Save Changes</button>
+                <button id="savebutton" type="submit" form="detail" disabled>Save Changes</button>
                 {% elif "/new/" in request.path %}
-                <button id="savebutton" form="detail" disabled>Save Record</button>
+                <button id="savebutton" type="submit" form="detail" disabled>Save Record</button>
                 {% else %}
                 <button id="editbutton" onclick="window.open('{{ request.path }}edit/', '_self')">Edit</button>
                 {% endif %}
