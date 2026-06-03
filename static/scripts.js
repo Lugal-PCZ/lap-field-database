@@ -5,3 +5,17 @@ function submitCleanURL(form) {
   };
   form.submit();
 }
+
+function saveForm() {
+  const initialState = FormSerializer.serialize(document.getElementById('detail'));
+  localStorage.setItem("initialState", JSON.stringify(initialState));
+}
+
+function checkForm() {
+  const currentState = FormSerializer.serialize(document.getElementById('detail'));
+  if (JSON.stringify(currentState) !== localStorage.getItem("initialState")) {
+    document.getElementById('savebutton').disabled=false;
+  } else {
+    document.getElementById('savebutton').disabled=true;
+  };
+}

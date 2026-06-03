@@ -1,0 +1,35 @@
+{
+  "name": "form-storage-submitter",
+  "version": "0.90.1",
+  "description": "Small library for HTML forms serializing, autosaving, storing them in localStorage and autoclearing after AJAX submit.",
+  "keywords": [
+    "javascript",
+    "html",
+    "form",
+    "forms",
+    "serialization",
+    "autosave"
+  ],
+  "homepage": "https://github.com/XXXXPro/FormSerializer#readme",
+  "bugs": {
+    "url": "https://github.com/XXXXPro/FormSerializer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XXXXPro/FormSerializer.git"
+  },
+  "scripts": {
+    "build": "uglifyjs src/form-storage.js > dist/form-storage.min.js",
+    "prepublishOnly": "npm run build"
+  },
+  "license": "MIT",
+  "author": "4X_Pro",
+  "type": "commonjs",
+  "main": "dist/form-storage.min.js",
+  "directories": {
+    "example": "examples"
+  },
+  "files" : [
+    "dist"
+  ]
+}

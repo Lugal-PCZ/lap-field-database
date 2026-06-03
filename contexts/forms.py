@@ -9,12 +9,10 @@ from .models import Locale, Lot, SU
 def _update_field_behavior(readonly, ref):
     if readonly:
         for eachfield in ref.Meta.fields:
-            ref.fields[eachfield].widget.attrs.update({"readonly": True, "onchange": "form.reset()"})
+            ref.fields[eachfield].widget.attrs.update({"readonly": True, "oninput": "form.reset()"})
     else:
         for eachfield in ref.Meta.fields:
-            ref.fields[eachfield].widget.attrs.update(
-                {"onchange": "document.getElementById('savebutton').disabled=false"}
-            )
+            ref.fields[eachfield].widget.attrs.update({"oninput": "checkForm()"})
 
 
 class LocaleForm(forms.ModelForm):
