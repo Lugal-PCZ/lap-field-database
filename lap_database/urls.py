@@ -21,7 +21,7 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.index),
+    path("", views.mainmenu),
     path("", include("contexts.urls")),
     path("", include("human_remains.urls")),
     path("", include("objects.urls")),

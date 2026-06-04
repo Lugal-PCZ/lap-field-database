@@ -2,9 +2,9 @@
 from django.shortcuts import render
 
 
-def index(request):
+def mainmenu(request):
     return render(
         request,
-        "index.html",
+        "menu.html",
         {"title": "Main Menu"},
     )
