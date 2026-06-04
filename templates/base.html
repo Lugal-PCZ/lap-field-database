@@ -26,7 +26,7 @@
     <div id="pagesubhead">
         {% if count >= 0 %}
             <span id="count">{{ count }} Item{{ count|pluralize }}</span>
-            {% if all_items.paginator %}
+            {% if all_items.paginator and count > 0 %}
                 <span id="paginator"><b>[</b>
                 {% for pagenum in pages %}
                     {% if pagenum == all_items.number %}
