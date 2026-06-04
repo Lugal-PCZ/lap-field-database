@@ -12,7 +12,7 @@
 <body onload="saveForm()">
 <div id="background"></div>
 <div id="header">
-    <div id="pagetitle">
+    <div id="pagetitle" onclick="toggleLogin()">
         <a href="/">LAP FIELD DATABASE</a>: {{ title }}
         <div id="usermenu">
             {% if user.is_authenticated %}

@@ -206,14 +206,14 @@ dd>div.voided {
     margin-bottom: 4px;
 }
 
+#detail label.voided {
+    color: maroon;
+    background-color: lightcoral;
+}
+
 #detail label:has(+ input[type="checkbox"]) {
     display: inline-block;
     margin-top: 10px;
-}
-
-#detail label:has(+ input[type="checkbox"]:checked) {
-    color: maroon;
-    background-color: lightcoral;
 }
 
 #detail input:not([type="checkbox"]),
