@@ -1,5 +1,5 @@
 function submitCleanURL(form) {
-  var controls = form.elements;
+  const controls = form.elements;
   for (var i=0, num=controls.length; i<num; i++) {
     controls[i].disabled = controls[i].value == '';
   };
@@ -26,7 +26,7 @@ function checkForm() {
 }
 
 function toggleVoided() {
-  let labels = document.querySelectorAll('label');
+  const labels = document.querySelectorAll('label');
   if (document.getElementById("id_voided").checked) {
     labels.forEach(label => {
       label.classList.add('voided');
