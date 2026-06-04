@@ -59,6 +59,11 @@ dd>div.voided {
     text-decoration: line-through;
 }
 
+button {
+    padding: 4px 10px;
+    font-weight: bold;
+}
+
 #background {
     position: fixed;
     z-index: -10;
@@ -109,6 +114,41 @@ dd>div.voided {
     margin-left: 12px;
 }
 
+#login {
+    float: right;
+    margin: -1px 12px;
+    padding: 15px 15px 10px 15px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: small;
+    font-weight: bold;
+    color: black;
+    border-color: midnightblue;
+    background-color: white;
+}
+
+#login p {
+    display: flex;
+    margin-bottom: 7px;
+}
+
+#login label {
+    float: left;
+}
+
+#login input {
+    float: right;
+    margin-left: 5px;
+    height: 2.5ex;
+    width: 20ex;
+}
+
+#login button {
+    padding: 3px 10px;
+    float: right;
+}
+
 #pagesubhead {
     height: 3ex;
     font-family: Helvetica, Arial, sans-serif;
@@ -119,7 +159,6 @@ dd>div.voided {
     border-width: 1px;
     border-color: midnightblue;
     padding: 8px 0px 8px 15px;
-    display: flex;
     align-items: center;
     flex-direction: row;
 }
@@ -160,14 +199,14 @@ dd>div.voided {
 }
 
 #subheadspacer {
+    display: block;
     width: 980px;
 }
 
 #editbutton,
 #savebutton {
     float: right;
-    padding: 3px 10px;
-    font-weight: bold;
+    margin-top: -2px;
 }
 
 #mainmenu {

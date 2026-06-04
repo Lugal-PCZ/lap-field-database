@@ -21,6 +21,7 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("", views.mainmenu),
     path("", include("contexts.urls")),
     path("", include("human_remains.urls")),

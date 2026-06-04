@@ -12,9 +12,9 @@
 <body onload="saveForm()">
 <div id="background"></div>
 <div id="header">
-    <div id="pagetitle" onclick="toggleLogin()">
+    <div id="pagetitle">
         <a href="/">LAP FIELD DATABASE</a>: {{ title }}
-        <div id="usermenu">
+        <div id="usermenu" onclick="toggleLogin()">
             {% if user.is_authenticated %}
                 {{ user }}
             {% else %}
@@ -22,6 +22,27 @@
             {% endif %}
             <img id="dingir" src="{% static 'img/dingir.svg' %}"></img>
         </div>
+    </div>
+    <div id="login" hidden>
+    {% if user.is_authenticated %}
+        <form id="logoutform" action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Log Out</button>
+        </form>
+    {% else %}
+        <form id="loginform" action="{% url 'login' %}?next={{ request.path }}" method="post">
+            {% csrf_token %}
+            <p>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username"/>
+            </p>
+            <p>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" />
+            </p>
+            <button type="submit">Log In</button>
+        </form>
+    {% endif %}
     </div>
     <div id="pagesubhead">
         {% if count >= 0 %}

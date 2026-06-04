@@ -1,3 +1,10 @@
+function toggleLogin() {
+  document.getElementById("login").toggleAttribute("hidden");
+  if (document.querySelector("#username")) {
+    document.getElementById("username").focus();
+  };
+}
+
 function submitCleanURL(form) {
   const controls = form.elements;
   for (var i=0, num=controls.length; i<num; i++) {
