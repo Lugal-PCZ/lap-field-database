@@ -62,13 +62,11 @@
             {% endif %}
         {% elif user.is_authenticated and request.path != "/" %}
             <span id="subheadspacer">
-                {% if "/edit/" in request.path %}
-                <button id="savebutton" type="submit" form="detail" disabled>Save Changes</button>
-                {% elif "/new/" in request.path %}
-                <button id="savebutton" type="submit" form="detail" disabled>Save Record</button>
-                {% else %}
-                <button id="editbutton" onclick="window.open('{{ request.path }}edit/', '_self')">Edit</button>
-                {% endif %}
+                <button id="savebutton" type="submit" form="detail" disabled>
+                    {% if "/new/" in request.path %}Save Record
+                    {% else %}Save Changes
+                    {% endif %}
+                </button>
             </span>
         {% endif %}
         <form id="filters" method="get">

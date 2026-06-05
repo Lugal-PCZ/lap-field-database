@@ -12,7 +12,7 @@ from .models import Area, Locale, Lot, Season, SU
 ITEMSPERPAGE = 100
 
 
-def build_params(request, params):
+def _build_params(request, params):
     paramdict = {}
     for each_param in params:
         paramdict[each_param] = request.GET.get(each_param)
@@ -61,7 +61,7 @@ def locales_list(request, contexttype):
         title = "Surface Findspots"
         method = "Surface Find"
     all_items = Locale.objects.filter(method=method)
-    params, paramstring = build_params(request, ["area"])
+    params, paramstring = _build_params(request, ["area"])
     if area := params["area"]:
         all_items = all_items.filter(area_id=area)
     p = Paginator(all_items, ITEMSPERPAGE)
@@ -92,7 +92,7 @@ def sus_list(request):
             to_attr="season_list",
         )
     )
-    params, paramstring = build_params(request, ["locale", "type", "season"])
+    params, paramstring = _build_params(request, ["locale", "type", "season"])
     if locale := params["locale"]:
         all_items = all_items.filter(locale_id=locale)
     if type := params["type"]:
@@ -121,7 +121,7 @@ def sus_list(request):
 
 def lots_list(request):
     all_items = Lot.objects.all()
-    params, paramstring = build_params(
+    params, paramstring = _build_params(
         request,
         ["su", "locale", "contents", "season"],
     )
@@ -160,22 +160,19 @@ def lots_list(request):
 
 
 def locale_detail(request, id=None):
-    if id:
-        locale = Locale.objects.filter(id=id).first()
     if request.path.endswith("/new/"):
         context = {
             "title": "New Locale",
             "form": LocaleForm(),
         }
-    elif request.path.endswith("/edit/"):
-        context = {
-            "title": "Edit Locale",
-            "form": LocaleForm(instance=locale),
-        }
     else:
+        locale = Locale.objects.filter(id=id).first()
+        editable = False
+        if str(request.user) != "AnonymousUser":
+            editable = True
         context = {
             "title": "Locale Details",
-            "form": LocaleForm(instance=locale, readonly=True),
+            "form": LocaleForm(instance=locale, editable=editable),
         }
     return render(
         request,
@@ -185,22 +182,19 @@ def locale_detail(request, id=None):
 
 
 def su_detail(request, id=None):
-    if id:
-        su = SU.objects.filter(id=id).first()
     if request.path.endswith("/new/"):
         context = {
             "title": "New Stratigraphic Unit",
             "form": SUForm(),
         }
-    elif request.path.endswith("/edit/"):
-        context = {
-            "title": "Edit Stratigraphic Unit",
-            "form": SUForm(instance=su),
-        }
     else:
+        su = SU.objects.filter(id=id).first()
+        editable = False
+        if str(request.user) != "AnonymousUser":
+            editable = True
         context = {
             "title": "Stratigraphic Unit Details",
-            "form": SUForm(instance=su, readonly=True),
+            "form": SUForm(instance=su, editable=editable),
         }
     return render(
         request,
@@ -210,22 +204,19 @@ def su_detail(request, id=None):
 
 
 def lot_detail(request, id=None):
-    if id:
-        lot = Lot.objects.filter(id=id).first()
     if request.path.endswith("/new/"):
         context = {
             "title": "New Lot",
             "form": LotForm(),
         }
-    elif request.path.endswith("/edit/"):
-        context = {
-            "title": "Edit Lot",
-            "form": LotForm(instance=lot),
-        }
     else:
+        lot = Lot.objects.filter(id=id).first()
+        editable = False
+        if str(request.user) != "AnonymousUser":
+            editable = True
         context = {
             "title": "Lot Details",
-            "form": LotForm(instance=lot, readonly=True),
+            "form": LotForm(instance=lot, editable=editable),
         }
     return render(
         request,
