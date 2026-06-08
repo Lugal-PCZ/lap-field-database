@@ -28,7 +28,9 @@ function checkForm() {
     } else {
       document.getElementById('savebutton').disabled=true;
     };
-    toggleVoided();
+    if (document.querySelector("#id_voided")) {
+      toggleVoided();
+    }
   };
 }
 
