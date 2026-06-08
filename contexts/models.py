@@ -74,6 +74,7 @@ class Locale(models.Model):
     ]
     name = models.CharField(
         max_length=100,
+        unique=True,
         null=False,
     )
     area = models.ForeignKey(
@@ -95,7 +96,6 @@ class Locale(models.Model):
 
     class Meta:
         db_table = "lap_locales"
-        unique_together = ["name", "area"]
         ordering = [F("name")[0:7]]  # type: ignore
 
     def __str__(self):
@@ -301,9 +301,7 @@ class SU(models.Model):
         ]
 
     def __str__(self):
-        if str(self.locus).startswith(
-            "Wall"
-        ):  # special case for a handful of contexts that were named "Wall n"
+        if str(self.locus).startswith("Wall"):  # special case for a handful of contexts that were named "Wall n"
             return f"{self.locus}"
         elif self.locus:
             return f"Locus {self.locus}"
