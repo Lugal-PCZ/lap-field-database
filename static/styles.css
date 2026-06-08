@@ -225,13 +225,12 @@ button {
 
 #detail * {
     margin-left: 10px;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: large;
 }
 
 #detail label {
     display: block;
     font-weight: bold;
+    font-size: large;
     font-family: Helvetica, Arial, sans-serif;
     color: midnightblue;
     background-color: lightsteelblue;
@@ -257,7 +256,20 @@ button {
 #detail input:not([type="checkbox"]),
 #detail textarea,
 #detail select {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: large;
     width: calc(100% - 13px)
+}
+
+#detail .errorlist {
+    color: maroon;
+    background-color: lightcoral;
+    font-weight: bold;
+    font-size: small;
+    font-family: Helvetica, Arial, sans-serif;
+    list-style-type: none;
+    padding: 3px 0px;
+    margin-top: 2px;
 }
 
 #detail .select2 * {
@@ -273,7 +285,6 @@ button {
 
 /* Custom Detail Views Follow */
 
-/* locale detail */
 #detail:has([formname="locale"]) {
     grid-template-areas:
         "r1c1 r1c2 r1c3"

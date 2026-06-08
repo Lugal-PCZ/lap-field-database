@@ -7,7 +7,6 @@ from .models import Locale, Lot, SU
 
 
 def _update_field_behavior(editable, ref):
-    print(f">>> {editable} <<<")
     if editable:
         for eachfield in ref.Meta.fields:
             ref.fields[eachfield].widget.attrs.update({"oninput": "checkForm()"})
@@ -26,7 +25,7 @@ class LocaleForm(forms.ModelForm):
             "notes",
         ]
 
-    def __init__(self, *args, editable, **kwargs):
+    def __init__(self, *args, editable=False, **kwargs):
         super(LocaleForm, self).__init__(*args, **kwargs)
         self.fields["name"].widget.attrs["formname"] = "locale"
         _update_field_behavior(editable, self)
@@ -74,7 +73,7 @@ class SUForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, *args, editable, **kwargs):
+    def __init__(self, *args, editable=False, **kwargs):
         super(SUForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "su"
         _update_field_behavior(editable, self)
@@ -100,7 +99,7 @@ class LotForm(forms.ModelForm):
             ),
         }
 
-    def __init__(self, *args, editable, **kwargs):
+    def __init__(self, *args, editable=False, **kwargs):
         super(LotForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "lot"
         _update_field_behavior(editable, self)

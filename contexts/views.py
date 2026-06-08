@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Prefetch
 from django.shortcuts import render
@@ -160,20 +161,32 @@ def lots_list(request):
 
 
 def locale_detail(request, id=None):
-    if request.path.endswith("/new/"):
-        context = {
-            "title": "New Locale",
-            "form": LocaleForm(),
-        }
-    else:
+    context = {}
+    locale = None
+    if not request.path.endswith("/new/"):
         locale = Locale.objects.filter(id=id).first()
-        editable = False
-        if str(request.user) != "AnonymousUser":
-            editable = True
-        context = {
-            "title": "Locale Details",
-            "form": LocaleForm(instance=locale, editable=editable),
-        }
+    editable = False
+    if str(request.user) != "AnonymousUser":
+        editable = True
+    if request.method == "POST":
+        form = LocaleForm(request.POST, instance=locale, editable=editable)
+        if form.is_valid():
+            form.save()
+            context = {
+                "title": "Locale Saved",
+                "form": form,
+            }
+        else:
+            context = {
+                "title": "Locale Not Saved",
+                "form": form,
+            }
+    else:
+        context["form"] = LocaleForm(instance=locale, editable=editable)
+        if request.path.endswith("/new/"):
+            context["title"] = "New Locale"
+        else:
+            context["title"] = "Locale Details"
     return render(
         request,
         "contexts/detail.html",
@@ -182,16 +195,16 @@ def locale_detail(request, id=None):
 
 
 def su_detail(request, id=None):
+    editable = False
+    if str(request.user) != "AnonymousUser":
+        editable = True
     if request.path.endswith("/new/"):
         context = {
             "title": "New Stratigraphic Unit",
-            "form": SUForm(),
+            "form": SUForm(editable=editable),
         }
     else:
         su = SU.objects.filter(id=id).first()
-        editable = False
-        if str(request.user) != "AnonymousUser":
-            editable = True
         context = {
             "title": "Stratigraphic Unit Details",
             "form": SUForm(instance=su, editable=editable),
@@ -204,16 +217,16 @@ def su_detail(request, id=None):
 
 
 def lot_detail(request, id=None):
+    editable = False
+    if str(request.user) != "AnonymousUser":
+        editable = True
     if request.path.endswith("/new/"):
         context = {
             "title": "New Lot",
-            "form": LotForm(),
+            "form": LotForm(editable=editable),
         }
     else:
         lot = Lot.objects.filter(id=id).first()
-        editable = False
-        if str(request.user) != "AnonymousUser":
-            editable = True
         context = {
             "title": "Lot Details",
             "form": LotForm(instance=lot, editable=editable),
