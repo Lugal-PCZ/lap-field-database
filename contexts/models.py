@@ -88,7 +88,7 @@ class Locale(models.Model):
         max_length=20,
         choices=METHOD_CHOICES,
         null=False,
-        default="Excavation",
+        default="Scraping",
     )
     notes = models.TextField(
         null=True,

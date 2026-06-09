@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Prefetch
 from django.shortcuts import render
@@ -163,33 +162,36 @@ def lots_list(request):
 # Detail views start here
 
 
-def locale_detail(request, id=None):
+def _detail_view(request, id, model, form):
     context = {}
-    locale = None
+    instance = None
     if not request.path.endswith("/new/"):
-        locale = Locale.objects.filter(id=id).first()
+        instance = model.objects.filter(id=id).first()
     editable = False
     if str(request.user) != "AnonymousUser":
         editable = True
     if request.method == "POST":
-        form = LocaleForm(request.POST, instance=locale, editable=editable)
+        form = form(request.POST, instance=instance, editable=editable)
         if form.is_valid():
             form.save()
             context = {
-                "title": "Locale Saved",
+                "title": f"{model.__name__} Saved",
                 "form": form,
             }
         else:
             context = {
-                "title": "Locale Not Saved",
+                "title": f"{model.__name__} Not Saved",
                 "form": form,
             }
     else:
-        context["form"] = LocaleForm(instance=locale, editable=editable)
+        context["form"] = form(instance=instance, editable=editable)
         if request.path.endswith("/new/"):
-            context["title"] = "New Locale"
+            context["title"] = f"New {model.__name__}"
         else:
-            context["title"] = "Locale Details"
+            context["title"] = f"{model.__name__} Details"
+    return context
+
+
 def locale_detail(request, id=None):
     context = _detail_view(request, id, Locale, LocaleForm)
     context["newitemlink"] = "/locale/new/"
