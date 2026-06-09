@@ -82,6 +82,7 @@ class Locale(models.Model):
         on_delete=models.PROTECT,
         related_name="locales",
         null=False,
+        default=7,  # Area H
     )
     method = models.CharField(
         max_length=20,
