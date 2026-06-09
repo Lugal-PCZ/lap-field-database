@@ -72,6 +72,7 @@ def locales_list(request, contexttype):
         pagenum = 1
     context = {
         "title": title,
+        "newitemlink": "/locale/new/",
         "count": p.count,
         "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),  # type: ignore
         "all_items": p.page(pagenum),
@@ -107,6 +108,7 @@ def sus_list(request):
         pagenum = 1
     context = {
         "title": "Stratigraphic Units",
+        "newitemlink": "/su/new/",
         "count": p.count,
         "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),  # type: ignore
         "all_items": p.page(pagenum),
@@ -144,6 +146,7 @@ def lots_list(request):
         pagenum = 1
     context = {
         "title": "Lots",
+        "newitemlink": "/lot/new/",
         "count": p.count,
         "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),  # type: ignore
         "all_items": p.page(pagenum),
@@ -187,6 +190,9 @@ def locale_detail(request, id=None):
             context["title"] = "New Locale"
         else:
             context["title"] = "Locale Details"
+def locale_detail(request, id=None):
+    context = _detail_view(request, id, Locale, LocaleForm)
+    context["newitemlink"] = "/locale/new/"
     return render(
         request,
         "contexts/detail.html",
@@ -195,20 +201,8 @@ def locale_detail(request, id=None):
 
 
 def su_detail(request, id=None):
-    editable = False
-    if str(request.user) != "AnonymousUser":
-        editable = True
-    if request.path.endswith("/new/"):
-        context = {
-            "title": "New Stratigraphic Unit",
-            "form": SUForm(editable=editable),
-        }
-    else:
-        su = SU.objects.filter(id=id).first()
-        context = {
-            "title": "Stratigraphic Unit Details",
-            "form": SUForm(instance=su, editable=editable),
-        }
+    context = _detail_view(request, id, SU, SUForm)
+    context["newitemlink"] = "/su/new/"
     return render(
         request,
         "contexts/detail.html",
@@ -217,20 +211,8 @@ def su_detail(request, id=None):
 
 
 def lot_detail(request, id=None):
-    editable = False
-    if str(request.user) != "AnonymousUser":
-        editable = True
-    if request.path.endswith("/new/"):
-        context = {
-            "title": "New Lot",
-            "form": LotForm(editable=editable),
-        }
-    else:
-        lot = Lot.objects.filter(id=id).first()
-        context = {
-            "title": "Lot Details",
-            "form": LotForm(instance=lot, editable=editable),
-        }
+    context = _detail_view(request, id, Lot, LotForm)
+    context["newitemlink"] = "/lot/new/"
     return render(
         request,
         "contexts/detail.html",

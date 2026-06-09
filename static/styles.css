@@ -163,6 +163,14 @@ button {
     flex-direction: row;
 }
 
+#pagesubhead button {
+    margin-top: -4px;
+}
+
+#newbutton {
+    margin-right: 12px;
+}
+
 #count {
     font-size: large;
     font-weight: bold;
@@ -172,8 +180,7 @@ button {
 }
 
 #currentpage {
-    padding-left: 2px;
-    padding-right: 2px;
+    padding: 1px 3px;
     color: whitesmoke;
     background-color: midnightblue;
     border-radius: 4px;
@@ -195,7 +202,7 @@ button {
 
 #filters select {
     margin-left: 3px;
-    width: 25ex;
+    width: 20ex;
 }
 
 #subheadspacer {
@@ -205,7 +212,6 @@ button {
 
 #savebutton {
     float: right;
-    margin-top: -2px;
 }
 
 #mainmenu {

@@ -11,7 +11,7 @@
         <div>Area</div>
     </dt>
     {% for item in all_items %}
-    <dd style="columns: 250px 2;" onclick="window.open('/locale/{{ item.id }}')">
+    <dd style="columns: 250px 2;" onclick="window.open('/locale/{{ item.id }}', '_self')">
         <div>{{ item.name }}</div>
         <div>{{ item.area }}</div>
     </dd>
