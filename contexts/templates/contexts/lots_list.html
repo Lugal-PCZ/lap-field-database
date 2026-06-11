@@ -14,7 +14,7 @@
         <div>Season</div>
     </dt>
     {% for item in all_items %}
-    <dd style="columns: 200px 5;" onclick="window.open('/lot/{{ item.id }}')">
+    <dd style="columns: 200px 5;" onclick="window.open('/lot/{{ item.id }}', '_self')">
         {% if item.voided %}
         <div class="voided">{{ item }}</div>
         <div class="voided">{{ item.su }}</div>
