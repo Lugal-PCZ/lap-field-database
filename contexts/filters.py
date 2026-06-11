@@ -50,9 +50,7 @@ class LotFilters(forms.Form):
     contents = forms.ModelChoiceField(
         label="Contents",
         empty_label="all",
-        queryset=Lot.objects.values_list("contents", flat=True)
-        .order_by("contents")
-        .distinct(),  # type: ignore
+        queryset=Lot.objects.values_list("contents", flat=True).order_by("contents").distinct(),  # type: ignore
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
     season = forms.ModelChoiceField(
