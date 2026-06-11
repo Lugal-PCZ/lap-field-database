@@ -1,5 +1,7 @@
+import re
+
 from django.core.paginator import Paginator
-from django.db.models import Prefetch
+from django.db.models import F, Prefetch
 from django.shortcuts import render
 
 from .filters import SUFilters, LocaleFilters, LotFilters
@@ -60,7 +62,7 @@ def locales_list(request, contexttype):
     elif contexttype == "surface_findspots":
         title = "Surface Findspots"
         method = "Surface Find"
-    all_items = Locale.objects.filter(method=method)
+    all_items = Locale.objects.filter(method=method).order_by(F("name")[0:6])
     params, paramstring = _build_params(request, ["area"])
     if area := params["area"]:
         all_items = all_items.filter(area_id=area)
@@ -165,6 +167,7 @@ def lots_list(request):
 def _detail_view(request, id, model, form):
     context = {}
     instance = None
+    newrecordcreated = False
     if not request.path.endswith("/new/"):
         instance = model.objects.filter(id=id).first()
     editable = False
@@ -173,12 +176,19 @@ def _detail_view(request, id, model, form):
     if request.method == "POST":
         form = form(request.POST, instance=instance, editable=editable)
         if form.is_valid():
-            form.save()
+            new_record = form.save()
             context = {
                 "title": f"{model.__name__} Saved",
                 "form": form,
             }
+            if new_record.pk != id:  # a new record was created
+                newrecordcreated = new_record.pk
         else:
+            for eacherror in form.non_field_errors():
+                form.add_error(
+                    re.match("This (.*) already", eacherror).group(1),
+                    eacherror,
+                )
             context = {
                 "title": f"{model.__name__} Not Saved",
                 "form": form,
@@ -189,12 +199,14 @@ def _detail_view(request, id, model, form):
             context["title"] = f"New {model.__name__}"
         else:
             context["title"] = f"{model.__name__} Details"
-    return context
+    return newrecordcreated, context
 
 
 def locale_detail(request, id=None):
-    context = _detail_view(request, id, Locale, LocaleForm)
+    newpk, context = _detail_view(request, id, Locale, LocaleForm)
     context["newitemlink"] = "/locale/new/"
+    if newpk:
+        print(f">>> {newpk} <<<")
     return render(
         request,
         "contexts/detail.html",
@@ -203,7 +215,7 @@ def locale_detail(request, id=None):
 
 
 def su_detail(request, id=None):
-    context = _detail_view(request, id, SU, SUForm)
+    newpk, context = _detail_view(request, id, SU, SUForm)
     context["newitemlink"] = "/su/new/"
     return render(
         request,
@@ -213,7 +225,7 @@ def su_detail(request, id=None):
 
 
 def lot_detail(request, id=None):
-    context = _detail_view(request, id, Lot, LotForm)
+    newpk, context = _detail_view(request, id, Lot, LotForm)
     context["newitemlink"] = "/lot/new/"
     return render(
         request,

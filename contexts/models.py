@@ -1,7 +1,12 @@
 from django.db import models
 from django.db.models import F
+from django.db.models.functions import Lower
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
+
+
+date = str(timezone.now().date())
+year = str(timezone.now().year)
 
 
 class Season(models.Model):
@@ -13,12 +18,11 @@ class Season(models.Model):
     ]
     name = models.CharField(
         max_length=5,
-        unique=True,
         null=False,
     )
     year = models.IntegerField(
         validators=[MinValueValidator(2019), MaxValueValidator(2030)],
-        default=timezone.now().year,
+        default=year,
         null=False,
     )
     timeofyear = models.CharField(
@@ -32,6 +36,13 @@ class Season(models.Model):
         db_table = "lap_seasons"
         verbose_name_plural = "Seasons"
         ordering = ["id"]
+        constraints = [
+            models.UniqueConstraint(
+                Lower("name"),
+                name="unique_season_name",
+                violation_error_message="This name already exists.",
+            )
+        ]
 
     def __str__(self):
         return self.name
@@ -43,12 +54,10 @@ class Season(models.Model):
 class Area(models.Model):
     name = models.CharField(
         max_length=30,
-        unique=True,
         null=False,
     )
     shortname = models.CharField(
         max_length=5,
-        unique=True,
         null=True,
         blank=True,
     )
@@ -57,6 +66,18 @@ class Area(models.Model):
         db_table = "lap_areas"
         verbose_name_plural = "Areas"
         ordering = ["name"]
+        constraints = [
+            models.UniqueConstraint(
+                Lower("name"),
+                name="unique_area_name",
+                violation_error_message="This name already exists.",
+            ),
+            models.UniqueConstraint(
+                Lower("shortname"),
+                name="unique_area_shortname",
+                violation_error_message="This shortname already exists.",
+            ),
+        ]
 
     def __str__(self):
         return self.name
@@ -74,7 +95,6 @@ class Locale(models.Model):
     ]
     name = models.CharField(
         max_length=100,
-        unique=True,
         null=False,
     )
     area = models.ForeignKey(
@@ -97,7 +117,13 @@ class Locale(models.Model):
 
     class Meta:
         db_table = "lap_locales"
-        ordering = [F("name")[0:7]]  # type: ignore
+        constraints = [
+            models.UniqueConstraint(
+                Lower("name"),
+                name="unique_locale_name",
+                violation_error_message="This name already exists.",
+            ),
+        ]
 
     def __str__(self):
         return self.name
@@ -112,12 +138,10 @@ class Locale(models.Model):
 class SUPrefix(models.Model):
     prefix = models.CharField(
         max_length=2,
-        unique=True,
         null=False,
     )
     feature = models.CharField(
         max_length=20,
-        unique=True,
         null=False,
     )
 
@@ -125,6 +149,18 @@ class SUPrefix(models.Model):
         db_table = "lap_suprefixes"
         verbose_name_plural = "SU Prefixes"
         ordering = ["prefix"]
+        constraints = [
+            models.UniqueConstraint(
+                Lower("prefix"),
+                name="unique_prefix_prefix",
+                violation_error_message="This prefix already exists.",
+            ),
+            models.UniqueConstraint(
+                Lower("feature"),
+                name="unique_prefix_feature",
+                violation_error_message="This feature already exists.",
+            ),
+        ]
 
     def __str__(self):
         return self.feature
@@ -135,13 +171,11 @@ class SUPrefix(models.Model):
 
 class SU(models.Model):
     number = models.IntegerField(
-        unique=True,
         null=True,
         verbose_name="SU",
     )
     locus = models.CharField(
         max_length=10,
-        unique=True,
         null=True,
         blank=True,
         verbose_name="1LAP/3LAP Locus",
@@ -155,11 +189,11 @@ class SU(models.Model):
     seasons = models.ManyToManyField(
         Season,
         verbose_name="Season(s)",
-        default=Season.objects.last(),
+        default=Season.objects.last,
     )
     dateassigned = models.DateField(
         null=False,
-        default=timezone.now().date,
+        default=date,
         verbose_name="Date Assigned",
     )
     recordedby = models.ForeignKey(
@@ -300,6 +334,18 @@ class SU(models.Model):
             "locus",
             "locale",
         ]
+        constraints = [
+            models.UniqueConstraint(
+                "number",
+                name="unique_su_number",
+                violation_error_message="This number already exists.",
+            ),
+            models.UniqueConstraint(
+                Lower("locus"),
+                name="unique_su_locus",
+                violation_error_message="This locus already exists.",
+            ),
+        ]
 
     def __str__(self):
         if str(self.locus).startswith("Wall"):  # special case for a handful of contexts that were named "Wall n"
@@ -321,15 +367,14 @@ class Lot(models.Model):
         ("baz", "baz"),
     ]
     number = models.CharField(
-        max_length=8,
+        max_length=9,
         default=Season.objects.reverse()[0].name,
-        unique=True,
         null=False,
     )
     season = models.ForeignKey(
         Season,
         on_delete=models.PROTECT,
-        default=Season.objects.last(),
+        default=Season.objects.reverse()[0].id,
         null=False,
     )
     su = models.ForeignKey(
@@ -340,7 +385,7 @@ class Lot(models.Model):
     )
     dateassigned = models.DateField(
         null=False,
-        default=timezone.now().date,
+        default=date,
         verbose_name="Date Assigned",
     )
     contents = models.CharField(
@@ -362,6 +407,13 @@ class Lot(models.Model):
         db_table = "lap_lots"
         verbose_name_plural = "Lots"
         ordering = ["number"]
+        constraints = [
+            models.UniqueConstraint(
+                Lower("number"),
+                name="unique_lot_number",
+                violation_error_message="This number already exists.",
+            )
+        ]
 
     def __str__(self):
         return self.number
