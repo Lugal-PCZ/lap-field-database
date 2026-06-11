@@ -368,13 +368,13 @@ class Lot(models.Model):
     ]
     number = models.CharField(
         max_length=9,
-        default=Season.objects.reverse()[0].name,
+        default=Season.objects.last,
         null=False,
     )
     season = models.ForeignKey(
         Season,
         on_delete=models.PROTECT,
-        default=Season.objects.reverse()[0].id,
+        default=Season.objects.last,
         null=False,
     )
     su = models.ForeignKey(
