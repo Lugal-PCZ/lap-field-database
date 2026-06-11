@@ -68,7 +68,7 @@ class SUForm(forms.ModelForm):
         widgets = {
             "dateassigned": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
             "locale": AutocompleteSelect(
-                SU._meta.get_field("locale"),
+                SU._meta.get_field("locale"),  # type: ignore
                 admin.site,
             ),
         }
@@ -94,7 +94,7 @@ class LotForm(forms.ModelForm):
         widgets = {
             "dateassigned": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
             "su": AutocompleteSelect(
-                Lot._meta.get_field("su"),
+                Lot._meta.get_field("su"),  # type: ignore
                 admin.site,
             ),
         }
