@@ -17,13 +17,29 @@ function saveForm() {
   if (document.querySelector("#detail")) {
     const initialState = FormSerializer.serialize(document.getElementById('detail'));
     localStorage.setItem("initialState", JSON.stringify(initialState));
+    localStorage.setItem("okToChangeLapIdentifier", "false")
   };
 }
 
 function checkForm() {
   if (document.querySelector("#detail")) {
     const currentState = FormSerializer.serialize(document.getElementById('detail'));
+    const savedState = JSON.parse(localStorage.getItem("initialState"))
     if (JSON.stringify(currentState) !== localStorage.getItem("initialState")) {
+      if (currentState.name != savedState.name && localStorage.getItem("okToChangeLapIdentifier") === "false") {
+        if (confirm("Are you sure that you want to change this record’s name?")) {
+          localStorage.setItem("okToChangeLapIdentifier", "true");
+        } else {
+          document.getElementById("id_name").value = savedState.name;
+        };
+      };
+      if (currentState.number != savedState.number && localStorage.getItem("okToChangeLapIdentifier") === "false") {
+        if (confirm("Are you sure that you want to change this record’s number?")) {
+          localStorage.setItem("okToChangeLapIdentifier", "true");
+        } else {
+          document.getElementById("id_number").value = savedState.number;
+        };
+      };
       document.getElementById('savebutton').disabled=false;
     } else {
       document.getElementById('savebutton').disabled=true;
