@@ -2,7 +2,8 @@ import re
 
 from django.core.paginator import Paginator
 from django.db.models import F, Prefetch
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
 
 from .filters import SUFilters, LocaleFilters, LotFilters
 from .forms import LocaleForm, LotForm, SUForm
@@ -167,7 +168,7 @@ def lots_list(request):
 def _detail_view(request, id, model, form):
     context = {}
     instance = None
-    newrecordcreated = False
+    newrecordid = None
     if not request.path.endswith("/new/"):
         instance = model.objects.filter(id=id).first()
     editable = False
@@ -182,7 +183,7 @@ def _detail_view(request, id, model, form):
                 "form": form,
             }
             if new_record.pk != id:  # a new record was created
-                newrecordcreated = new_record.pk
+                newrecordid = new_record.pk
         else:
             for eacherror in form.non_field_errors():
                 form.add_error(
@@ -199,14 +200,15 @@ def _detail_view(request, id, model, form):
             context["title"] = f"New {model.__name__}"
         else:
             context["title"] = f"{model.__name__} Details"
-    return newrecordcreated, context
+    return newrecordid, context
 
 
 def locale_detail(request, id=None):
     newpk, context = _detail_view(request, id, Locale, LocaleForm)
-    context["newitemlink"] = "/locale/new/"
     if newpk:
-        print(f">>> {newpk} <<<")
+        messages.info(request, "New Locale Created")
+        return redirect(f"/locale/{newpk}/")
+    context["newitemlink"] = "/locale/new/"
     return render(
         request,
         "contexts/detail.html",
@@ -216,6 +218,8 @@ def locale_detail(request, id=None):
 
 def su_detail(request, id=None):
     newpk, context = _detail_view(request, id, SU, SUForm)
+    if newpk:
+        return redirect(f"/su/{newpk}/")
     context["newitemlink"] = "/su/new/"
     return render(
         request,
@@ -226,6 +230,8 @@ def su_detail(request, id=None):
 
 def lot_detail(request, id=None):
     newpk, context = _detail_view(request, id, Lot, LotForm)
+    if newpk:
+        return redirect(f"/lot/{newpk}/")
     context["newitemlink"] = "/lot/new/"
     return render(
         request,

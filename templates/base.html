@@ -9,7 +9,13 @@
 {{ form.media }}
 </head>
 
-<body onload="saveForm()">
+<body onload="
+{% if messages %}
+{% for message in messages %}
+alert('{{ message.message }}');
+{% endfor %}
+{%  endif %}
+saveForm()">
 <div id="background"></div>
 <div id="header">
     <div id="pagetitle">
