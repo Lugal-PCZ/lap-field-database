@@ -1,12 +1,8 @@
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Q
 from django.db.models.functions import Lower
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
-
-
-date = str(timezone.now().date())
-year = str(timezone.now().year)
 
 
 class Season(models.Model):
@@ -22,9 +18,9 @@ class Season(models.Model):
     )
     year = models.IntegerField(
         validators=[MinValueValidator(2019), MaxValueValidator(2030)],
-        default=year,
+        default=int(timezone.now().year),
         null=False,
-    )
+    )  # type: ignore
     timeofyear = models.CharField(
         max_length=6,
         choices=TIME_OF_YEAR_CHOICES,
@@ -102,7 +98,7 @@ class Locale(models.Model):
         on_delete=models.PROTECT,
         related_name="locales",
         null=False,
-        default=7,  # Area H
+        default=Area.objects.filter(Q(name="Area H")).last(),
     )
     method = models.CharField(
         max_length=20,
@@ -130,7 +126,7 @@ class Locale(models.Model):
 
     def formatted_name(self):
         if self.name.startswith("Trench"):
-            return f"{self.area.shortname}_{self.name}"
+            return f"{self.area.shortname}_{self.name}"  # type: ignore
         else:
             return self.name
 
@@ -189,11 +185,11 @@ class SU(models.Model):
     seasons = models.ManyToManyField(
         Season,
         verbose_name="Season(s)",
-        default=Season.objects.last,
+        default=Season.objects.last(),
     )
     dateassigned = models.DateField(
         null=False,
-        default=date,
+        default=timezone.now().date(),
         verbose_name="Date Assigned",
     )
     recordedby = models.ForeignKey(
@@ -368,13 +364,13 @@ class Lot(models.Model):
     ]
     number = models.CharField(
         max_length=9,
-        default=Season.objects.last,
+        default=Season.objects.last(),  # type: ignore
         null=False,
-    )
+    )  # type: ignore
     season = models.ForeignKey(
         Season,
         on_delete=models.PROTECT,
-        default=Season.objects.last,
+        default=Season.objects.last(),
         null=False,
     )
     su = models.ForeignKey(
@@ -385,7 +381,7 @@ class Lot(models.Model):
     )
     dateassigned = models.DateField(
         null=False,
-        default=date,
+        default=timezone.now().date(),
         verbose_name="Date Assigned",
     )
     contents = models.CharField(
