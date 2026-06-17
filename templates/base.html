@@ -20,12 +20,14 @@ saveForm()">
 <div id="header">
     <div id="pagetitle">
         <a href="/">LAP FIELD DATABASE</a>: {{ title }}
-        <div id="usermenu" onclick="toggleLogin()">
+        <div id="popupmenus">
+            <div onclick="toggleLogin()">
             {% if user.is_authenticated %}
                 {{ user }}
             {% else %}
                 Log In
             {% endif %}
+            </div>
             <img id="dingir" src="{% static 'img/dingir.svg' %}"></img>
         </div>
     </div>
