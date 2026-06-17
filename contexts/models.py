@@ -189,7 +189,7 @@ class SU(models.Model):
     )
     dateassigned = models.DateField(
         null=False,
-        default=timezone.now().date(),
+        default=timezone.now,
         verbose_name="Date Assigned",
     )
     recordedby = models.ForeignKey(
@@ -381,7 +381,7 @@ class Lot(models.Model):
     )
     dateassigned = models.DateField(
         null=False,
-        default=timezone.now().date(),
+        default=timezone.now,
         verbose_name="Date Assigned",
     )
     contents = models.CharField(
