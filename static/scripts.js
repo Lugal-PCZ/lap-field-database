@@ -17,7 +17,11 @@ function saveForm() {
   if (document.querySelector("#detail")) {
     const initialState = FormSerializer.serialize(document.getElementById('detail'));
     localStorage.setItem("initialState", JSON.stringify(initialState));
-    localStorage.setItem("okToChangeLapIdentifier", "false")
+    if (window.location.href.includes("/new/")) {
+      localStorage.setItem("okToChangeLapIdentifier", "true")
+    } else {
+      localStorage.setItem("okToChangeLapIdentifier", "false")
+    };
   };
 }
 
