@@ -4,7 +4,7 @@
     <form id="detail" method="post">
     {% csrf_token %}
     {% for field in form %}
-        <div class="form-group">
+        <div class="form-group" style="grid-area: {{ field.name }}">
             {{ field.label_tag }}
             {{ field }}
             {% if field.errors %}
