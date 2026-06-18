@@ -437,7 +437,7 @@ def _detail_view(request, id, model, form):
                 "form": form,
             }
     else:
-        context["form"] = form(instance=instance, editable=editable)
+        context["form"] = form(instance=instance, editable=editable, user=request.user)
         if request.path.endswith("/new/"):
             context["title"] = f"New {model.__name__}"
         else:

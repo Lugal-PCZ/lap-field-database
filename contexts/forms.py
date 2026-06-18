@@ -74,8 +74,10 @@ class SUForm(forms.ModelForm):
         }
 
     def __init__(self, *args, editable=False, **kwargs):
+        self.user = kwargs.pop("user", None)
         super(SUForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "su"
+        self.fields["recordedby"].initial = self.user.id
         _update_field_behavior(editable, self)
 
 
