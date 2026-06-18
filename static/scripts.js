@@ -23,7 +23,7 @@ function submitCleanURL(form) {
   form.submit();
 }
 
-function saveForm() {
+function cacheForm() {
   if (document.querySelector("#detail")) {
     const initialState = FormSerializer.serialize(document.getElementById('detail'));
     localStorage.setItem("initialState", JSON.stringify(initialState));
@@ -65,14 +65,16 @@ function checkForm() {
 }
 
 function toggleVoided() {
-  const labels = document.querySelectorAll('label');
-  if (document.getElementById("id_voided").checked) {
-    labels.forEach(label => {
-      label.classList.add('voided');
-    });
-  } else {
-    labels.forEach(label => {
-      label.classList.remove('voided');
-    });
+  if (document.querySelector("#id_voided")) {
+    const labels = document.querySelectorAll('label');
+    if (document.getElementById("id_voided").checked) {
+      labels.forEach(label => {
+        label.classList.add('voided');
+      });
+    } else {
+      labels.forEach(label => {
+        label.classList.remove('voided');
+      });
+    };
   };
 }

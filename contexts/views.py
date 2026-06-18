@@ -394,7 +394,7 @@ def lots_list_export(request):
                 record,
                 record.su,
                 record.su.locale,
-                record.contents,
+                contents,
                 record.dateassigned,
                 record.season,
                 record.notes,
