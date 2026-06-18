@@ -168,7 +168,7 @@ class SUPrefix(models.Model):
 class SU(models.Model):
     number = models.IntegerField(
         null=True,
-        verbose_name="SU",
+        verbose_name="SU Number",
     )
     locus = models.CharField(
         max_length=10,
@@ -196,6 +196,7 @@ class SU(models.Model):
         "accounts.CustomUser",
         null=False,
         on_delete=models.PROTECT,
+        verbose_name="Recorded By",
     )
     elevationtop = models.CharField(
         max_length=50,
