@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block downloadpanel %}
+{% include "contexts/download_list.html" %}
+{% endblock %}
+
 {% block content %}
 <dl>
     <dt>{{ title|slice:":-1" }}</dt>

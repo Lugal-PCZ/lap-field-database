@@ -1,7 +1,17 @@
 function toggleLogin() {
-  document.getElementById("login").toggleAttribute("hidden");
+  if (document.querySelector("#downloadpanel")) {
+    document.getElementById("downloadpanel").hidden = true;
+  };
+  document.getElementById("loginpanel").toggleAttribute("hidden");
   if (document.querySelector("#username")) {
     document.getElementById("username").focus();
+  };
+}
+
+function toggleDownloadPanel() {
+  if (document.querySelector("#downloadpanel")) {
+    document.getElementById("loginpanel").hidden = true;
+    document.getElementById("downloadpanel").toggleAttribute("hidden");
   };
 }
 

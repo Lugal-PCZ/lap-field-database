@@ -39,6 +39,7 @@ dt {
 }
 
 dd {
+    cursor: pointer;
     padding: 8px 15px 8px 10px;
 }
 
@@ -108,15 +109,21 @@ button {
     font-weight: bold;
 }
 
+#popupmenus > * {
+    cursor: pointer;
+}
+
 #dingir {
     height: 36px;
     width: 36px;
     margin-left: 12px;
 }
 
-#login {
-    float: right;
-    margin: -1px 63px;
+#loginpanel,
+#downloadpanel {
+    position: fixed;
+    right: 0;
+    margin-top: -1px;
     padding: 15px 15px 10px 15px;
     border-style: solid;
     border-width: 1px;
@@ -128,23 +135,44 @@ button {
     background-color: white;
 }
 
-#login p {
+#downloadpanel {
+    margin-right: 15px;
+}
+
+#downloadpanel a {
+    display: flex;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+}
+
+#csvicon {
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
+}
+
+#loginpanel {
+    margin-right: 59px;
+}
+
+#loginpanel p {
     display: flex;
     margin-bottom: 7px;
 }
 
-#login label {
+#loginpanel label {
     float: left;
 }
 
-#login input {
+#loginpanel input {
     float: right;
     margin-left: 5px;
     height: 2.5ex;
     width: 20ex;
 }
 
-#login button {
+#loginpanel button {
     padding: 3px 10px;
     float: right;
 }

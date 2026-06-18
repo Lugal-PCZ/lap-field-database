@@ -1,0 +1,7 @@
+{% load static %}
+<div id="downloadpanel" hidden>
+    <a href="export/{% querystring %}" onclick="this.parentElement.hidden=true">
+        Download These<br>{{ title }}
+        <img id="csvicon" src="{% static 'img/csv_icon.svg' %}" />
+    </a>
+</div>

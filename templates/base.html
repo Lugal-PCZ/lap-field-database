@@ -28,10 +28,10 @@ saveForm()">
                 Log In
             {% endif %}
             </div>
-            <img id="dingir" src="{% static 'img/dingir.svg' %}"></img>
+            <img id="dingir" src="{% static 'img/dingir.svg' %}" onclick="toggleDownloadPanel()" />
         </div>
     </div>
-    <div id="login" hidden>
+    <div id="loginpanel" hidden>
     {% if user.is_authenticated %}
         <form id="logoutform" action="{% url 'logout' %}" method="post">
             {% csrf_token %}
@@ -52,6 +52,8 @@ saveForm()">
         </form>
     {% endif %}
     </div>
+    {% block downloadpanel %}
+    {% endblock %}
     <div id="pagesubhead">
         {% if count >= 0 %}
             {% if newitemlink and user.is_authenticated %}

@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block downloadpanel %}
+{% include "contexts/download_list.html" %}
+{% endblock %}
+
 {% block filters %}
 {{ form.as_p }}
 {% endblock %}
@@ -7,7 +11,7 @@
 {% block content %}
 <dl>
     <dt style="columns: 200px 4;">
-        <div>SU or Locus</div>
+        <div>SU or 1LAP/3LAP Locus</div>
         <div>Locale</div>
         <div>Feature Type</div>
         <div>Season(s)</div>
