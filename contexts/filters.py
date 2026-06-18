@@ -9,7 +9,7 @@ class LocaleFilters(forms.Form):
         label="Area",
         empty_label="all",
         queryset=Area.objects.all(),
-        widget=forms.Select(attrs={"onchange": "this.form.submit()"}),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
 
 
