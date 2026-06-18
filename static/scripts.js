@@ -55,8 +55,10 @@ function checkForm() {
         };
       };
       document.getElementById('savebutton').disabled=false;
+      document.getElementById('newbutton').disabled=true;
     } else {
       document.getElementById('savebutton').disabled=true;
+      document.getElementById('newbutton').disabled=false;
     };
     if (document.querySelector("#id_voided")) {
       toggleVoided();
