@@ -1,9 +1,72 @@
-# from django.forms import ModelForm
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
+from django.db.models import Q
 
-from .models import Locale, Lot, SU
+from .models import Area, Locale, Lot, Season, SU, SUPrefix
+
+
+# List View Filters
+
+
+class LocaleFilters(forms.Form):
+    area = forms.ModelChoiceField(
+        label="Area",
+        empty_label="all",
+        queryset=Area.objects.all(),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+
+
+class SUFilters(forms.Form):
+    locale = forms.ModelChoiceField(
+        label="Locale",
+        empty_label="all",
+        queryset=Locale.objects.all(),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    type = forms.ModelChoiceField(
+        label="Feature Type",
+        empty_label="all",
+        queryset=SUPrefix.objects.all(),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    season = forms.ModelChoiceField(
+        label="Season",
+        empty_label="all",
+        queryset=Season.objects.all(),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+
+
+class LotFilters(forms.Form):
+    su = forms.ModelChoiceField(
+        label="SU",
+        empty_label="all",
+        queryset=SU.objects.filter(Q(number__isnull=False) | Q(locus__isnull=False)),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    locale = forms.ModelChoiceField(
+        label="Locale",
+        empty_label="all",
+        queryset=Locale.objects.all(),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    contents = forms.ModelChoiceField(
+        label="Contents",
+        empty_label="all",
+        queryset=Lot.objects.values_list("contents", flat=True).order_by("contents").distinct(),  # type: ignore
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    season = forms.ModelChoiceField(
+        label="Season",
+        empty_label="all",
+        queryset=Season.objects.all(),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+
+
+# Detail View Forms
 
 
 def _update_field_behavior(editable, ref):
