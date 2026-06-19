@@ -18,20 +18,16 @@
         <div>Season</div>
     </dt>
     {% for item in all_items %}
+    {% if item.voided %}
+    <dd style="columns: 200px 5;" class="voided" onclick="window.open('/lot/{{ item.id }}', '_self')">
+    {% else %}
     <dd style="columns: 200px 5;" onclick="window.open('/lot/{{ item.id }}', '_self')">
-        {% if item.voided %}
-        <div class="voided">{{ item }}</div>
-        <div class="voided">{{ item.su }}</div>
-        <div class="voided">{{ item.su.locale }}</div>
-        <div class="voided">{{ item.contents|default:"-" }}</div>
-        <div class="voided">{{ item.season }}</div>
-        {% else %}
+    {% endif %}
         <div>{{ item }}</div>
         <div>{{ item.su }}</div>
         <div>{{ item.su.locale }}</div>
         <div>{{ item.contents|default:"-" }}</div>
         <div>{{ item.season }}</div>
-        {% endif %}
     </dd>
     {% endfor %}
 </dl>

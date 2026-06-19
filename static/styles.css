@@ -55,7 +55,7 @@ dd>div:first-child {
     font-weight: bold;
 }
 
-dd>div.voided {
+dd.voided>div {
     color: red;
     text-decoration: line-through;
 }
@@ -109,7 +109,7 @@ button {
     font-weight: bold;
 }
 
-#popupmenus > * {
+#popupmenus>* {
     cursor: pointer;
 }
 
