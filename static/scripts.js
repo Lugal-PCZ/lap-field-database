@@ -80,3 +80,12 @@ function toggleVoided() {
     };
   };
 }
+
+function loadLocale() {
+  const su_id = document.getElementById("id_su").value;
+  fetch(`/ajax/load_locale/?su_id=${su_id}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById("id_locale").value = data[0].name;
+    });
+}

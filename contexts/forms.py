@@ -171,6 +171,7 @@ class LotForm(forms.ModelForm):
         user = kwargs.pop("user", None)
         super(LotForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "lot"
+        self.fields["su"].widget.attrs["onChange"] = f"loadLocale()"
         if self.instance and hasattr(self.instance, "su"):
             self.fields["locale"].initial = self.instance.su.locale
         _update_field_behavior(editable, self)
