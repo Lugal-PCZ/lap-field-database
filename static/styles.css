@@ -349,8 +349,8 @@ button {
 /* lot detail */
 #detail:has([formname="lot"]) {
     grid-template-areas:
-        "number su contents"
-        "dateassigned season ."
+        "number su locale"
+        "dateassigned season contents"
         "notes notes notes"
         "voided . .";
 }

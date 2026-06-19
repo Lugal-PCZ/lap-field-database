@@ -83,6 +83,8 @@ class SUForm(forms.ModelForm):
 
 
 class LotForm(forms.ModelForm):
+    locale = forms.CharField(required=False, disabled=True)
+
     class Meta:
         model = Lot
         fields = [
@@ -106,4 +108,6 @@ class LotForm(forms.ModelForm):
         user = kwargs.pop("user", None)
         super(LotForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "lot"
+        if self.instance and hasattr(self.instance, "su"):
+            self.fields["locale"].initial = self.instance.su.locale
         _update_field_behavior(editable, self)
