@@ -137,10 +137,18 @@ class SUForm(forms.ModelForm):
             ),
         }
 
+    def clean_number(self):
+        if self.cleaned_data["number"] == 0:
+            self.fields["number"].required = False
+            self.cleaned_data["number"] = None
+        return self.cleaned_data["number"]
+
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)
         super(SUForm, self).__init__(*args, **kwargs)
         self.fields["number"].widget.attrs["formname"] = "su"
+        if not self.instance.number:
+            self.fields["number"].widget.attrs["value"] = 0
         self.fields["recordedby"].initial = user
         _update_field_behavior(editable, self)
 
