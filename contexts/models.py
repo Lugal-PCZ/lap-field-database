@@ -17,9 +17,9 @@ class Season(models.Model):
         null=False,
     )
     year = models.IntegerField(
-        validators=[MinValueValidator(2019), MaxValueValidator(2030)],
         default=int(timezone.now().year),
         null=False,
+        validators=[MinValueValidator(2019), MaxValueValidator(2030)],
     )  # type: ignore
     timeofyear = models.CharField(
         max_length=6,
@@ -169,6 +169,7 @@ class SU(models.Model):
     number = models.IntegerField(
         null=True,
         verbose_name="SU Number",
+        validators=[MinValueValidator(0)],
     )
     locus = models.CharField(
         max_length=10,
