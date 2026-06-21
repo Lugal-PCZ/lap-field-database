@@ -11,7 +11,7 @@
 {% block content %}
 <dl>
     <dt style="columns: 200px 4;">
-        <div>SU or 1LAP/3LAP Locus</div>
+        <div>SU or 1/3LAP Locus</div>
         <div>Locale</div>
         <div>Feature Type</div>
         <div>Season(s)</div>
@@ -25,7 +25,7 @@
             <div>{{ item }}</div>
             <div>{{ item.locale }}</div>
             <div>{{ item.prefix|default:"-" }}</div>
-            <div>{{ item.season_list|join:", " }}</div>
+            <div>{{ item.seasons_list|join:", " }}</div>
     </dd>
     {% endfor %}
 </dl>

@@ -10,18 +10,18 @@
 
 {% block content %}
 <dl>
-    <dt style="columns: 200px 5;">
+    <dt style="columns: 5;">
         <div>Lot</div>
-        <div>SU or 1LAP/3LAP Locus</div>
+        <div>SU or 1/3LAP Locus</div>
         <div>Locale</div>
         <div>Contents</div>
         <div>Season</div>
     </dt>
     {% for item in all_items %}
     {% if item.voided %}
-    <dd style="columns: 200px 5;" class="voided" onclick="window.open('/lot/{{ item.id }}', '_self')">
+    <dd style="columns: 5;" class="voided" onclick="window.open('/lot/{{ item.id }}', '_self')">
     {% else %}
-    <dd style="columns: 200px 5;" onclick="window.open('/lot/{{ item.id }}', '_self')">
+    <dd style="columns: 5;" onclick="window.open('/lot/{{ item.id }}', '_self')">
     {% endif %}
         <div>{{ item }}</div>
         <div>{{ item.su }}</div>

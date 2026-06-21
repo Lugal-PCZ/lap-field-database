@@ -57,10 +57,33 @@ def locales_list(request, contexttype):
     elif contexttype == "surface_findspots":
         title = "Surface Findspots"
         method = "Surface Find"
-    all_items = Locale.objects.filter(method=method).order_by(F("name")[0:6])
+    all_items = (
+        Locale.objects.prefetch_related(
+            Prefetch(
+                "sus",
+                queryset=SU.objects.prefetch_related(
+                    Prefetch(
+                        "seasons",
+                        queryset=Season.objects.all(),
+                        to_attr="seasons_list",
+                    )
+                ),
+                to_attr="sus_list",
+            )
+        )
+        .filter(method=method)
+        .order_by(F("name")[0:6], "id")
+    )
     params, paramstring = _build_params(request, ["area"])
     if area := params["area"]:
         all_items = all_items.filter(area_id=area)
+    for each_item in all_items:
+        seasons = set()
+        for each_su in each_item.sus_list:
+            seasons.add(each_su.seasons.values_list()[0][1])
+        seasons = list(seasons)
+        seasons.sort()
+        each_item.seasons_list = seasons
     p = Paginator(all_items, ITEMSPERPAGE)
     if pagenum := request.GET.get("p"):
         pagenum = int(pagenum) if int(pagenum) <= p.num_pages else p.num_pages
@@ -83,11 +106,11 @@ def locales_list(request, contexttype):
 
 
 def sus_list(request):
-    all_items = SU.objects.all().prefetch_related(
+    all_items = SU.objects.prefetch_related(
         Prefetch(
             "seasons",
-            Season.objects.all(),
-            to_attr="season_list",
+            queryset=Season.objects.all(),
+            to_attr="seasons_list",
         )
     )
     params, paramstring = _build_params(request, ["locale", "type", "season"])

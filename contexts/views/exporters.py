@@ -79,10 +79,34 @@ def locales_list_export(request, contexttype):
     elif contexttype == "surface_findspots":
         headers = {"Content-Disposition": 'attachment; filename="LAP Surface Findspots.csv"'}
         method = "Surface Find"
-    all_items = Locale.objects.filter(method=method).order_by(F("name")[0:6])
+    # all_items = Locale.objects.filter(method=method).order_by(F("name")[0:6])
+    all_items = (
+        Locale.objects.prefetch_related(
+            Prefetch(
+                "sus",
+                queryset=SU.objects.prefetch_related(
+                    Prefetch(
+                        "seasons",
+                        queryset=Season.objects.all(),
+                        to_attr="seasons_list",
+                    )
+                ),
+                to_attr="sus_list",
+            )
+        )
+        .filter(method=method)
+        .order_by(F("name")[0:6], "id")
+    )
     params, paramstring = _build_params(request, ["area"])
     if area := params["area"]:
         all_items = all_items.filter(area_id=area)
+    for each_item in all_items:
+        seasons = set()
+        for each_su in each_item.sus_list:
+            seasons.add(each_su.seasons.values_list()[0][1])
+        seasons = list(seasons)
+        seasons.sort()
+        each_item.seasons_list = seasons
     response = HttpResponse(
         content_type="text/csv",
         headers=headers,
@@ -94,6 +118,7 @@ def locales_list_export(request, contexttype):
             "Name",
             "Area",
             "Method",
+            "Season(s)",
             "Notes",
         ]
     )
@@ -103,6 +128,7 @@ def locales_list_export(request, contexttype):
                 record,
                 record.area,
                 record.method,
+                ", ".join(record.seasons_list),
                 record.notes,
             ]
         )
@@ -132,7 +158,7 @@ def sus_list_export(request):
     writer = csv.writer(response)
     writer.writerow(
         [
-            "SU or 1LAP/3LAP Locus",
+            "SU or 1/3LAP Locus",
             "Locale",
             "Date Assigned",
             "Recorded By",
@@ -230,7 +256,7 @@ def lots_list_export(request):
     writer.writerow(
         [
             "Lot",
-            "SU or 1LAP/3LAP Locus",
+            "SU or 1/3LAP Locus",
             "Locale",
             "Contents",
             "Date Assigned",

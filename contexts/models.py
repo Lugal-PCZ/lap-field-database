@@ -175,7 +175,7 @@ class SU(models.Model):
         max_length=10,
         null=True,
         blank=True,
-        verbose_name="1LAP/3LAP Locus",
+        verbose_name="1/3LAP Locus",
     )
     locale = models.ForeignKey(
         Locale,

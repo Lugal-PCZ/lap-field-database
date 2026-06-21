@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
-from django.db.models import Q
+from django.db.models import Prefetch, Q
 
 from .models import Area, Locale, Lot, Season, SU, SUPrefix
 
@@ -16,6 +16,12 @@ class LocaleFilters(forms.Form):
         queryset=Area.objects.all(),
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
+    # season = forms.ModelChoiceField(
+    #     label="Season",
+    #     empty_label="all",
+    #     queryset=Season.objects.all(),
+    #     widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    # )
 
 
 class SUFilters(forms.Form):
@@ -79,6 +85,12 @@ def _update_field_behavior(editable, ref):
 
 
 class LocaleForm(forms.ModelForm):
+    seasons_list = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Season(s)",
+    )
+
     class Meta:
         model = Locale
         fields = [
@@ -92,6 +104,21 @@ class LocaleForm(forms.ModelForm):
         user = kwargs.pop("user", None)
         super(LocaleForm, self).__init__(*args, **kwargs)
         self.fields["name"].widget.attrs["formname"] = "locale"
+        if self.instance and hasattr(self.instance, "sus"):
+            sus = self.instance.sus.prefetch_related(
+                Prefetch(
+                    "seasons",
+                    queryset=Season.objects.all(),
+                    to_attr="seasons_list",
+                )
+            )
+            seasons = set()
+            for each_su in sus:
+                for each_season in each_su.seasons_list:
+                    seasons.add(str(each_season))
+            seasons = list(seasons)
+            seasons.sort()
+            self.fields["seasons_list"].widget.attrs["value"] = ", ".join(seasons)
         _update_field_behavior(editable, self)
 
 
@@ -154,7 +181,10 @@ class SUForm(forms.ModelForm):
 
 
 class LotForm(forms.ModelForm):
-    locale = forms.CharField(required=False, disabled=True)
+    locale = forms.CharField(
+        required=False,
+        disabled=True,
+    )
 
     class Meta:
         model = Lot
@@ -168,7 +198,10 @@ class LotForm(forms.ModelForm):
             "voided",
         ]
         widgets = {
-            "dateassigned": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
+            "dateassigned": forms.DateInput(
+                attrs={"type": "date"},
+                format="%Y-%m-%d",
+            ),
             "su": AutocompleteSelect(
                 Lot._meta.get_field("su"),  # type: ignore
                 admin.site,

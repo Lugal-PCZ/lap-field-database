@@ -323,6 +323,7 @@ button {
 #detail:has([formname="locale"]) {
     grid-template-areas:
         "name area method"
+        "seasons_list . ."
         "notes notes notes"
 }
 
