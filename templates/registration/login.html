@@ -1,3 +1,4 @@
-<h1>
-Login incorrect. Please try again.
-</h1>
+<script>
+  alert("Login incorrect. Please check your credentials and try again.");
+  window.open("{{ request.GET.next }}", "_self")
+</script>
