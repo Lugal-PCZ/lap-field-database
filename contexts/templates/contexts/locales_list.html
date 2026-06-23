@@ -10,13 +10,13 @@
 
 {% block content %}
 <dl>
-    <dt style="columns: 3;">
+    <dt style="grid-template-columns: minmax(300px, min-content) 1fr 1fr;">
         <div>Locale</div>
         <div>Area</div>
         <div>Season(s)</div>
     </dt>
     {% for item in all_items %}
-    <dd style="columns: 3;" onclick="window.open('/locale/{{ item.id }}', '_self')">
+    <dd style="grid-template-columns: minmax(300px, min-content) 1fr 1fr;" onclick="window.open('/locale/{{ item.id }}', '_self')">
         <div>{{ item.name }}</div>
         <div>{{ item.area }}</div>
         <div>{{ item.seasons_list|join:", " }}</div>

@@ -10,7 +10,7 @@
 
 {% block content %}
 <dl>
-    <dt style="columns: 5;">
+    <dt style="grid-template-columns: repeat(5, 1fr);">
         <div>Lot</div>
         <div>SU or 1/3LAP Locus</div>
         <div>Locale</div>
@@ -18,11 +18,7 @@
         <div>Season</div>
     </dt>
     {% for item in all_items %}
-    {% if item.voided %}
-    <dd style="columns: 5;" class="voided" onclick="window.open('/lot/{{ item.id }}', '_self')">
-    {% else %}
-    <dd style="columns: 5;" onclick="window.open('/lot/{{ item.id }}', '_self')">
-    {% endif %}
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(5, 1fr);" onclick="window.open('/lot/{{ item.id }}', '_self')">
         <div>{{ item }}</div>
         <div>{{ item.su }}</div>
         <div>{{ item.su.locale }}</div>

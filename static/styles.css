@@ -25,6 +25,7 @@ dl {
 }
 
 dt {
+    display: grid;
     font-size: large;
     font-weight: bold;
     font-family: Helvetica, Arial, sans-serif;
@@ -33,14 +34,28 @@ dt {
     border-bottom-style: solid;
     border-width: 1px;
     border-color: midnightblue;
-    padding-left: 8px;
-    padding-right: 15px;
     column-rule: 1px solid;
 }
 
 dd {
+    display: grid;
     cursor: pointer;
-    padding: 8px 15px 8px 10px;
+}
+
+dt>div,
+dd>div {
+    padding-left: 10px;
+    padding-right: 15px;
+}
+
+dt>div {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+dd>div {
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 dd:nth-child(odd) {

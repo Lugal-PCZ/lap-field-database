@@ -10,22 +10,18 @@
 
 {% block content %}
 <dl>
-    <dt style="columns: 200px 4;">
+    <dt style="grid-template-columns: repeat(4, 1fr);">
         <div>SU or 1/3LAP Locus</div>
         <div>Locale</div>
         <div>Feature Type</div>
         <div>Season(s)</div>
     </dt>
     {% for item in all_items %}
-    {% if item.voided %}
-    <dd style="columns: 200px 4;" class="voided" onclick="window.open('/su/{{ item.id }}', '_self')">
-    {% else %}
-    <dd style="columns: 200px 4;" onclick="window.open('/su/{{ item.id }}', '_self')">
-    {% endif %}
-            <div>{{ item }}</div>
-            <div>{{ item.locale }}</div>
-            <div>{{ item.prefix|default:"-" }}</div>
-            <div>{{ item.seasons_list|join:", " }}</div>
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(4, 1fr);"  onclick="window.open('/su/{{ item.id }}', '_self')">
+        <div>{{ item }}</div>
+        <div>{{ item.locale }}</div>
+        <div>{{ item.prefix|default:"-" }}</div>
+        <div>{{ item.seasons_list|join:", " }}</div>
     </dd>
     {% endfor %}
 </dl>

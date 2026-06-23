@@ -6,9 +6,9 @@
 
 {% block content %}
 <dl>
-    <dt>{{ title|slice:":-1" }}</dt>
+    <dt style="grid-template-columns: 200px;"><div>{{ title|slice:":-1" }}</div></dt>
     {% for item in all_items %}
-    <dd><div>{{ item.formatted_name }}</div></dd>
+    <dd style="grid-template-columns: 200px;"><div>{{ item.formatted_name }}</div></dd>
     {% endfor %}
 </dl>
 {% endblock %}
