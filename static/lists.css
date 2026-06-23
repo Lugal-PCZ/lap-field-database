@@ -1,0 +1,116 @@
+dl {
+    margin-top: 15px;
+    margin-left: 15px;
+    width: max-content;
+    border-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+    background-color: white;
+    z-index: 0;
+}
+
+dt {
+    display: grid;
+    font-size: large;
+    font-weight: bold;
+    font-family: Helvetica, Arial, sans-serif;
+    color: midnightblue;
+    background-color: lightsteelblue;
+    border-bottom-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+    column-rule: 1px solid;
+}
+
+dd {
+    display: grid;
+    cursor: pointer;
+}
+
+dt>div,
+dd>div {
+    padding-left: 10px;
+    padding-right: 15px;
+}
+
+dt>div {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+dd>div {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+dd:nth-child(odd) {
+    background-color: aliceblue;
+}
+
+dd:hover {
+    background-color: rgb(223, 234, 246);
+}
+
+dd>div:first-child {
+    font-weight: bold;
+}
+
+dd.voided>div {
+    color: red;
+    text-decoration: line-through;
+}
+
+#csvicon {
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
+}
+
+#count {
+    font-size: large;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    margin-right: 12px;
+    vertical-align: top;
+}
+
+#currentpage {
+    padding: 1px 3px;
+    color: whitesmoke;
+    background-color: midnightblue;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+#filters {
+    display: inline;
+}
+
+#filters label {
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+#filters p {
+    display: inline;
+}
+
+#filters select {
+    margin-left: 3px;
+    width: 20ex;
+}
+
+#subheadspacer {
+    display: block;
+    width: 980px;
+}
+
+#mainmenu {
+    width: 500px;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+}
+
+#newbutton {
+    margin-right: 12px;
+}
