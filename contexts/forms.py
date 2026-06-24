@@ -223,6 +223,9 @@ class LotForm(forms.ModelForm):
             "voided",
         ]
         widgets = {
+            "number": forms.TextInput(
+                attrs={"pattern": r"^\d{1,2}LAP\d{3}$"},
+            ),
             "dateassigned": forms.DateInput(
                 attrs={"type": "date"},
                 format="%Y-%m-%d",
