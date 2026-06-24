@@ -90,6 +90,12 @@ class LocaleForm(forms.ModelForm):
         disabled=True,
         label="Season(s)",
     )
+    sus_list = forms.CharField(
+        required=False,
+        disabled=True,
+        label="SUs",
+        widget=forms.Textarea,
+    )
 
     class Meta:
         model = Locale
@@ -105,7 +111,7 @@ class LocaleForm(forms.ModelForm):
         super(LocaleForm, self).__init__(*args, **kwargs)
         self.fields["name"].widget.attrs["formname"] = "locale"
         if self.instance and hasattr(self.instance, "sus"):
-            sus = self.instance.sus.prefetch_related(
+            related_sus = self.instance.sus.prefetch_related(
                 Prefetch(
                     "seasons",
                     queryset=Season.objects.all(),
@@ -113,16 +119,27 @@ class LocaleForm(forms.ModelForm):
                 )
             )
             seasons = set()
-            for each_su in sus:
+            sus = set()
+            for each_su in related_sus:
                 for each_season in each_su.seasons_list:
                     seasons.add(str(each_season))
+                sus.add(str(each_su))
             seasons = list(seasons)
             seasons.sort()
-            self.fields["seasons_list"].widget.attrs["value"] = ", ".join(seasons)
+            self.fields["seasons_list"].widget.attrs["value"] = "; ".join(seasons)
+            sus = list(sus)
+            sus.sort()
+            self.fields["sus_list"].initial = "; ".join(sus)
         _update_field_behavior(editable, self)
 
 
 class SUForm(forms.ModelForm):
+    lots_list = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Lots",
+    )
+
     class Meta:
         model = SU
         fields = [
@@ -177,6 +194,14 @@ class SUForm(forms.ModelForm):
         if not self.instance.number:
             self.fields["number"].widget.attrs["value"] = 0
         self.fields["recordedby"].initial = user
+        if self.instance.pk:
+            related_lots = self.instance.lot_set.values()
+            lots = set()
+            for each_lot in related_lots:
+                lots.add(each_lot["number"])
+            lots = list(lots)
+            lots.sort()
+            self.fields["lots_list"].widget.attrs["value"] = "; ".join(lots)
         _update_field_behavior(editable, self)
 
 

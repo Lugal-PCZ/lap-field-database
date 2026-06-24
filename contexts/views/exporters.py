@@ -128,7 +128,7 @@ def locales_list_export(request, contexttype):
                 record,
                 record.area,
                 record.method,
-                ", ".join(record.seasons_list),
+                "; ".join(record.seasons_list),
                 record.notes,
             ]
         )
@@ -201,7 +201,7 @@ def sus_list_export(request):
                 record.locale,
                 record.dateassigned,
                 record.recordedby,
-                ", ".join(seasons),
+                "; ".join(seasons),
                 record.prefix,
                 record.architecturalfeatures,
                 record.architecturaltechnique,
