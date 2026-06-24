@@ -45,6 +45,13 @@
     width: calc(100% - 13px)
 }
 
+#detail input[type="text"],
+#detail textarea {
+    padding-left: 6px;
+    padding-right: 10px;
+    width: calc(100% - 29px)
+}
+
 #detail .errorlist {
     color: maroon;
     background-color: lightcoral;
