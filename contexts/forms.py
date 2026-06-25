@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
-from django.db.models import Prefetch, Q
+from django.db.models import F, Prefetch, Q
 
 from .models import Area, Locale, Lot, Season, SU, SUPrefix
 
@@ -16,12 +16,12 @@ class LocaleFilters(forms.Form):
         queryset=Area.objects.all(),
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
-    # season = forms.ModelChoiceField(
-    #     label="Season",
-    #     empty_label="all",
-    #     queryset=Season.objects.all(),
-    #     widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
-    # )
+    season = forms.ModelChoiceField(
+        label="Season",
+        empty_label="all",
+        queryset=Season.objects.all(),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
 
 
 class SUFilters(forms.Form):
@@ -55,7 +55,7 @@ class LotFilters(forms.Form):
     locale = forms.ModelChoiceField(
         label="Locale",
         empty_label="all",
-        queryset=Locale.objects.all(),
+        queryset=Locale.objects.all().order_by(F("name")[0:6], "id"),  # type: ignore
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
     contents = forms.ModelChoiceField(

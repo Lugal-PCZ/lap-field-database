@@ -30,17 +30,17 @@ def simple_list_export(request, contexttype):
         writer = csv.writer(response)
         writer.writerow(
             [
+                "Name",
                 "Year",
                 "Time of Year",
-                "Name",
             ]
         )
         for record in Season.objects.all():
             writer.writerow(
                 [
+                    record.name,
                     record.year,
                     record.timeofyear,
-                    record.name,
                 ]
             )
     elif contexttype == "areas":
@@ -79,9 +79,10 @@ def locales_list_export(request, contexttype):
     elif contexttype == "surface_findspots":
         headers = {"Content-Disposition": 'attachment; filename="LAP Surface Findspots.csv"'}
         method = "Surface Find"
-    # all_items = Locale.objects.filter(method=method).order_by(F("name")[0:6])
-    all_items = (
-        Locale.objects.prefetch_related(
+    unfiltered_items = (
+        Locale.objects.filter(method=method)
+        .order_by(F("name")[0:6], "id")  # type: ignore
+        .prefetch_related(
             Prefetch(
                 "sus",
                 queryset=SU.objects.prefetch_related(
@@ -94,19 +95,28 @@ def locales_list_export(request, contexttype):
                 to_attr="sus_list",
             )
         )
-        .filter(method=method)
-        .order_by(F("name")[0:6], "id")
     )
-    params, paramstring = _build_params(request, ["area"])
+    params, paramstring = _build_params(request, ["area", "season"])
+    for each_item in unfiltered_items:
+        seasons = []
+        seasons_list = set()
+        for each_su in each_item.sus_list:  # type: ignore
+            seasons.append(each_su.seasons.values()[0]["id"])
+            seasons_list.add(each_su.seasons.values()[0]["name"])
+        seasons_list = list(seasons_list)
+        seasons_list.sort()
+        each_item.seasons = seasons  # type: ignore
+        each_item.seasons_list = seasons_list  # type: ignore
+    filtered_items = unfiltered_items
     if area := params["area"]:
-        all_items = all_items.filter(area_id=area)
-    for each_item in all_items:
-        seasons = set()
-        for each_su in each_item.sus_list:
-            seasons.add(each_su.seasons.values_list()[0][1])
-        seasons = list(seasons)
-        seasons.sort()
-        each_item.seasons_list = seasons
+        filtered_items = [item for item in filtered_items if item.area_id == int(area)]  # type: ignore
+    if season := params["season"]:
+        refiltered_items = []
+        for each_item in filtered_items:
+            print(each_item.seasons)  # type: ignore
+            if int(season) in each_item.seasons:  # type: ignore
+                refiltered_items.append(each_item)
+        filtered_items = refiltered_items
     response = HttpResponse(
         content_type="text/csv",
         headers=headers,
@@ -119,16 +129,21 @@ def locales_list_export(request, contexttype):
             "Area",
             "Method",
             "Season(s)",
+            "SUs",
             "Notes",
         ]
     )
-    for record in all_items:
+    for record in filtered_items:
+        sus = []
+        for each_su in record.sus_list:  # type: ignore
+            sus.append(str(each_su))
         writer.writerow(
             [
                 record,
                 record.area,
                 record.method,
                 ", ".join(record.seasons_list),  # type: ignore
+                ", ".join(sus),  # type: ignore
                 record.notes,
             ]
         )
@@ -136,20 +151,28 @@ def locales_list_export(request, contexttype):
 
 
 def sus_list_export(request):
-    all_items = SU.objects.all().prefetch_related(
+    unfiltered_items = SU.objects.prefetch_related(
         Prefetch(
             "seasons",
-            Season.objects.all(),
-            to_attr="season_list",
+            queryset=Season.objects.all(),
+            to_attr="seasons_list",
         )
     )
     params, paramstring = _build_params(request, ["locale", "type", "season"])
+    filtered_items = unfiltered_items
     if locale := params["locale"]:
-        all_items = all_items.filter(locale_id=locale)
+        filtered_items = [item for item in filtered_items if item.locale_id == int(locale)]  # type: ignore
     if type := params["type"]:
-        all_items = all_items.filter(prefix_id=type)
+        filtered_items = [item for item in filtered_items if item.prefix_id == int(type)]  # type: ignore
     if season := params["season"]:
-        all_items = all_items.filter(seasons__id=season)
+        refiltered_items = []
+        for each_item in filtered_items:
+            seasons = []
+            for each_season in each_item.seasons_list:  # type: ignore
+                seasons.append(each_season.id)
+            if int(season) in seasons:
+                refiltered_items.append(each_item)
+        filtered_items = refiltered_items
     response = HttpResponse(
         content_type="text/csv",
         headers={"Content-Disposition": 'attachment; filename="LAP Stratigraphic Units.csv"'},
@@ -183,15 +206,20 @@ def sus_list_export(request):
             "Fills",
             "Description",
             "Interpretation",
+            "Lots",
             "Photos",
             "Photogrammetry Numbers",
             "Voided",
         ]
     )
-    for record in all_items:
+    for record in filtered_items:
         seasons = []
-        for each_season in record.season_list:
+        for each_season in record.seasons_list:  # type: ignore
             seasons.append(str(each_season))
+        # print(record.lot_set.values())
+        lots = []
+        for each_lot in record.lot_set.values():  # type: ignore
+            lots.append(each_lot["number"])
         voided = ""
         if record.voided:
             voided = "VOID"
@@ -222,6 +250,7 @@ def sus_list_export(request):
                 record.fills,
                 record.description,
                 record.interpretation,
+                ", ".join(lots),
                 record.photos,
                 record.photogrammetrynumbers,
                 voided,
@@ -231,22 +260,20 @@ def sus_list_export(request):
 
 
 def lots_list_export(request):
-    all_items = Lot.objects.all()
-    params, paramstring = _build_params(
-        request,
-        ["su", "locale", "contents", "season"],
-    )
-    if su := request.GET.get("su"):
-        all_items = all_items.filter(su_id=su)
-    if locale := request.GET.get("locale"):
-        all_items = all_items.filter(su__locale_id=locale)
-    if contents := request.GET.get("contents"):
+    unfiltered_items = Lot.objects.all()
+    params, paramstring = _build_params(request, ["su", "locale", "contents", "season"])
+    filtered_items = unfiltered_items
+    if su := params["su"]:
+        filtered_items = [item for item in filtered_items if item.su_id == int(su)]  # type: ignore
+    if locale := params["locale"]:
+        filtered_items = [item for item in filtered_items if item.su.locale_id == int(locale)]  # type: ignore
+    if contents := params["contents"]:
         if contents == "None":
-            all_items = all_items.filter(contents__isnull=True)
+            filtered_items = [item for item in filtered_items if item.contents == None]
         else:
-            all_items = all_items.filter(contents__iexact=contents)
-    if season := request.GET.get("season"):
-        all_items = all_items.filter(season_id=season)
+            filtered_items = [item for item in filtered_items if str(item.contents).upper() == contents.upper()]
+    if season := params["season"]:
+        filtered_items = [item for item in filtered_items if item.season.id == int(season)]  # type: ignore
     response = HttpResponse(
         content_type="text/csv",
         headers={"Content-Disposition": 'attachment; filename="LAP Lots.csv"'},
@@ -265,7 +292,7 @@ def lots_list_export(request):
             "Voided",
         ]
     )
-    for record in all_items:
+    for record in filtered_items:
         contents = record.contents
         if not record.contents:
             contents = "-"

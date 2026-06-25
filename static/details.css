@@ -86,8 +86,8 @@
     grid-template-areas:
         "name area method"
         "seasons_list . ."
-        "notes notes notes"
         "sus_list sus_list sus_list"
+        "notes notes notes"
 }
 
 /* SUs */
@@ -105,9 +105,9 @@
         "filledby fills ."
         "description description description"
         "interpretation interpretation interpretation"
+        "lots_list lots_list lots_list"
         "photos photos photos"
         "photogrammetrynumbers photogrammetrynumbers photogrammetrynumbers"
-        "lots_list lots_list lots_list"
         "voided . .";
 }
 
