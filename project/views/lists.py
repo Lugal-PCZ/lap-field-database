@@ -22,6 +22,6 @@ def simple_list(request, contexttype):
     }
     return render(
         request,
-        "contexts/simple_list.html",
+        "project/simple_list.html",
         context,
     )
