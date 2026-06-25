@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
 from django.db.models import F, Prefetch, Q
 
-from .models import Area, Locale, Lot, Season, SU, SUPrefix
-
+from project.models import Area, Season
+from .models import Locale, Lot, SU, SUPrefix
 
 # List View Filters
 

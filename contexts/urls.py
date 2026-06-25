@@ -16,7 +16,5 @@ urlpatterns = [
     path("lots/export/", exporters.lots_list_export),
     path("lot/new/", details.lot_detail),
     path("lot/<int:id>/", details.lot_detail),
-    path("<str:contexttype>/", lists.simple_list),
-    path("<str:contexttype>/export/", exporters.simple_list_export),
     path("ajax/load_locale/", ajax.load_locale),
 ]

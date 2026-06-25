@@ -2,8 +2,9 @@ from django.core.paginator import Paginator
 from django.db.models import F, Prefetch
 from django.shortcuts import render
 
+from project.models import Season
+from ..models import Locale, Lot, SU
 from ..forms import SUFilters, LocaleFilters, LotFilters
-from ..models import Area, Locale, Lot, Season, SU
 
 
 ITEMSPERPAGE = 100
@@ -21,27 +22,6 @@ def _build_params(request, params):
     if paramlist:
         paramstring = f"&{'&'.join(paramlist)}"
     return paramdict, paramstring
-
-
-def simple_list(request, contexttype):
-    title = ""
-    all_items = []
-    if contexttype == "seasons":
-        title = Season._meta.verbose_name_plural
-        all_items = Season.objects.all()
-    elif contexttype == "areas":
-        title = Area._meta.verbose_name_plural
-        all_items = Area.objects.all()
-    context = {
-        "title": title,
-        "count": len(all_items),
-        "all_items": all_items,
-    }
-    return render(
-        request,
-        "contexts/simple_list.html",
-        context,
-    )
 
 
 def locales_list(request, contexttype):

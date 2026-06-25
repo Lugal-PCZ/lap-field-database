@@ -1,14 +1,6 @@
 from django.contrib import admin
 
-from .models import Area, Locale, Lot, Season, SU, SUPrefix
-
-
-@admin.register(Area)
-class AreaAdmin(admin.ModelAdmin):
-    list_display = [
-        "name",
-        "shortname",
-    ]
+from .models import Locale, Lot, SU, SUPrefix
 
 
 @admin.register(Locale)
@@ -46,15 +38,6 @@ class LotAdmin(admin.ModelAdmin):
     ]
     autocomplete_fields = [
         "su",
-    ]
-
-
-@admin.register(Season)
-class SeasonAdmin(admin.ModelAdmin):
-    list_display = [
-        "name",
-        "year",
-        "timeofyear",
     ]
 
 

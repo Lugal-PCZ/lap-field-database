@@ -24,6 +24,9 @@ dt {
 
 dd {
     display: grid;
+}
+
+dd[onclick] {
     cursor: pointer;
 }
 
