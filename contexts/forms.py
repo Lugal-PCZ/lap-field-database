@@ -126,10 +126,10 @@ class LocaleForm(forms.ModelForm):
                 sus.add(str(each_su))
             seasons = list(seasons)
             seasons.sort()
-            self.fields["seasons_list"].widget.attrs["value"] = "; ".join(seasons)
+            self.fields["seasons_list"].widget.attrs["value"] = ", ".join(seasons)
             sus = list(sus)
             sus.sort()
-            self.fields["sus_list"].initial = "; ".join(sus)
+            self.fields["sus_list"].initial = ", ".join(sus)
         _update_field_behavior(editable, self)
 
 
@@ -201,7 +201,7 @@ class SUForm(forms.ModelForm):
                 lots.add(each_lot["number"])
             lots = list(lots)
             lots.sort()
-            self.fields["lots_list"].widget.attrs["value"] = "; ".join(lots)
+            self.fields["lots_list"].widget.attrs["value"] = ", ".join(lots)
         _update_field_behavior(editable, self)
 
 

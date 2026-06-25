@@ -86,7 +86,7 @@ class SUAdmin(admin.ModelAdmin):
 
     @admin.display(description="Season(s)")
     def season_list(self, obj):
-        return "; ".join([season.name for season in obj.seasons.all()])
+        return ", ".join([season.name for season in obj.seasons.all()])
 
 
 @admin.register(SUPrefix)
