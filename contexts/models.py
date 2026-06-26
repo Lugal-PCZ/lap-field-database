@@ -257,7 +257,7 @@ class SU(models.Model):
         db_table = "lap_sus"
         verbose_name_plural = "SUs"
         ordering = [
-            F("number").asc(nulls_last=True),
+            F("number").asc(nulls_first=True),
             "locus",
             "locale",
         ]

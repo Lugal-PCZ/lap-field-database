@@ -50,9 +50,7 @@ class SUAdmin(admin.ModelAdmin):
         return ", ".join([season.name for season in obj.seasons.all()])
 
     def get_search_results(self, request, queryset, search_term):
-        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        queryset = queryset.exclude(locale__method="Survey")
-        return queryset, use_distinct
+        return queryset.exclude(locale__method="Survey").exclude(locus__isnull=False), False
 
 
 @admin.register(SUPrefix)
