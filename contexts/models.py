@@ -278,6 +278,6 @@ class SU(models.Model):
         elif self.prefix:
             return f"SU {self.prefix.prefix}.{self.number}"
         elif self.number is None:
-            return "SU 0"
+            return f"SU 0 ({self.locale})"
         else:
             return f"SU {self.number}"
