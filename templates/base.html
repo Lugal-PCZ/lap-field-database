@@ -83,6 +83,7 @@ cacheForm(); toggleVoided()">
                     {% else %}Save Changes
                     {% endif %}
                 </button>
+                <button id="discardchangesbutton" form="detail" onclick="document.getElementById('detail').reset(); checkForm()" disabled>Discard Changes</button>
             </span>
         {% endif %}
         <form id="filters" method="get">
