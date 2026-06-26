@@ -56,7 +56,7 @@ class LotFilters(forms.Form):
     locale = forms.ModelChoiceField(
         label="Locale",
         empty_label="all",
-        queryset=Locale.objects.all().order_by(F("name")[0:6], "id"),  # type: ignore
+        queryset=Locale.objects.all(),
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
     contents = forms.ModelChoiceField(

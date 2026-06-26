@@ -45,6 +45,10 @@ class Locale(models.Model):
                 violation_error_message="This name already exists.",
             ),
         ]
+        ordering = [
+            F("name")[0:6],  # type: ignore
+            "id",
+        ]
 
     def __str__(self):
         return self.name

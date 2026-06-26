@@ -34,21 +34,17 @@ def locales_list_export(request, contexttype):
     elif contexttype == "surface_findspots":
         headers = {"Content-Disposition": 'attachment; filename="LAP Surface Findspots.csv"'}
         method = "Surface Find"
-    unfiltered_items = (
-        Locale.objects.filter(method=method)
-        .order_by(F("name")[0:6], "id")  # type: ignore
-        .prefetch_related(
-            Prefetch(
-                "sus",
-                queryset=SU.objects.prefetch_related(
-                    Prefetch(
-                        "seasons",
-                        queryset=Season.objects.all(),
-                        to_attr="seasons_list",
-                    )
-                ),
-                to_attr="sus_list",
-            )
+    unfiltered_items = Locale.objects.filter(method=method).prefetch_related(
+        Prefetch(
+            "sus",
+            queryset=SU.objects.prefetch_related(
+                Prefetch(
+                    "seasons",
+                    queryset=Season.objects.all(),
+                    to_attr="seasons_list",
+                )
+            ),
+            to_attr="sus_list",
         )
     )
     params, paramstring = _build_params(request, ["area", "season"])
