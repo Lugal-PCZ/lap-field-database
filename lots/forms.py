@@ -1,0 +1,91 @@
+from django import forms
+from django.contrib import admin
+from django.contrib.admin.widgets import AutocompleteSelect
+from django.db.models import F, Q
+
+from project.models import Season
+from contexts.models import Locale, SU
+from .models import Lot
+
+
+# List View Filters
+
+
+class LotFilters(forms.Form):
+    su = forms.ModelChoiceField(
+        label="SU",
+        empty_label="all",
+        queryset=SU.objects.filter(Q(number__isnull=False) | Q(locus__isnull=False)),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    locale = forms.ModelChoiceField(
+        label="Locale",
+        empty_label="all",
+        queryset=Locale.objects.all().order_by(F("name")[0:6], "id"),  # type: ignore
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    contents = forms.ModelChoiceField(
+        label="Contents",
+        empty_label="all",
+        queryset=Lot.objects.values_list("contents", flat=True).order_by("contents").distinct(),  # type: ignore
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    season = forms.ModelChoiceField(
+        label="Season",
+        empty_label="all",
+        queryset=Season.objects.all(),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+
+
+# Detail View Forms
+
+
+def _update_field_behavior(editable, ref):
+    if editable:
+        for eachfield in ref.Meta.fields:
+            ref.fields[eachfield].widget.attrs.update({"oninput": "checkForm()"})
+    else:
+        for eachfield in ref.Meta.fields:
+            ref.fields[eachfield].widget.attrs.update({"editable": True, "oninput": "form.reset()"})
+
+
+class LotForm(forms.ModelForm):
+    locale = forms.CharField(
+        required=False,
+        disabled=True,
+    )
+
+    class Meta:
+        model = Lot
+        fields = [
+            "number",
+            "su",
+            "contents",
+            "dateassigned",
+            "season",
+            "notes",
+            "voided",
+        ]
+        widgets = {
+            "number": forms.TextInput(
+                attrs={"pattern": r"^\d{1,2}LAP\d{3}$"},
+            ),
+            "dateassigned": forms.DateInput(
+                attrs={"type": "date"},
+                format="%Y-%m-%d",
+            ),
+            "su": AutocompleteSelect(
+                Lot._meta.get_field("su"),  # type: ignore
+                admin.site,
+            ),
+        }
+
+    def __init__(self, *args, editable=False, **kwargs):
+        user = kwargs.pop("user", None)
+        super(LotForm, self).__init__(*args, **kwargs)
+        self.fields["number"].widget.attrs["formname"] = "lot"
+        self.fields["su"].widget.attrs["onChange"] = f"loadLocale()"
+        if self.instance and hasattr(self.instance, "su"):
+            self.fields["locale"].initial = self.instance.su.locale
+        _update_field_behavior(editable, self)

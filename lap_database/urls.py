@@ -25,8 +25,9 @@ urlpatterns = [
     path("", views.mainmenu),
     path("", include("project.urls")),
     path("", include("contexts.urls")),
-    path("", include("human_remains.urls")),
+    path("", include("lots.urls")),
     path("", include("objects.urls")),
-    path("", include("pottery.urls")),
     path("", include("samples.urls")),
+    path("", include("pottery.urls")),
+    path("", include("human_remains.urls")),
 ]

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ajax, details, exporters, lists
+from .views import details, exporters, lists
 
 
 urlpatterns = [
@@ -10,11 +10,6 @@ urlpatterns = [
     path("locale/<int:id>/", details.locale_detail),
     path("stratigraphic_units/", lists.sus_list),
     path("stratigraphic_units/export/", exporters.sus_list_export),
-    path("su/new/", details.su_detail),
-    path("su/<int:id>/", details.su_detail),
-    path("lots/", lists.lots_list),
-    path("lots/export/", exporters.lots_list_export),
-    path("lot/new/", details.lot_detail),
-    path("lot/<int:id>/", details.lot_detail),
-    path("ajax/load_locale/", ajax.load_locale),
+    path("stratigraphic_unit/new/", details.su_detail),
+    path("stratigraphic_unit/<int:id>/", details.su_detail),
 ]

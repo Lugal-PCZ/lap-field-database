@@ -3,8 +3,8 @@ from django.db.models import F, Prefetch
 from django.shortcuts import render
 
 from project.models import Season
-from ..models import Locale, Lot, SU
-from ..forms import SUFilters, LocaleFilters, LotFilters
+from ..models import Locale, SU
+from ..forms import SUFilters, LocaleFilters
 
 
 ITEMSPERPAGE = 100
@@ -71,7 +71,6 @@ def locales_list(request, contexttype):
     if season := params["season"]:
         refiltered_items = []
         for each_item in filtered_items:
-            print(each_item.seasons)  # type: ignore
             if int(season) in each_item.seasons:  # type: ignore
                 refiltered_items.append(each_item)
         filtered_items = refiltered_items
@@ -126,7 +125,7 @@ def sus_list(request):
         pagenum = 1
     context = {
         "title": "Stratigraphic Units",
-        "newitemlink": "/su/new/",
+        "newitemlink": "/stratigraphic_unit/new/",
         "count": p.count,
         "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),  # type: ignore
         "all_items": p.page(pagenum),
@@ -136,41 +135,5 @@ def sus_list(request):
     return render(
         request,
         "contexts/sus_list.html",
-        context,
-    )
-
-
-def lots_list(request):
-    unfiltered_items = Lot.objects.all()
-    params, paramstring = _build_params(request, ["su", "locale", "contents", "season"])
-    filtered_items = unfiltered_items
-    if su := params["su"]:
-        filtered_items = [item for item in filtered_items if item.su_id == int(su)]  # type: ignore
-    if locale := params["locale"]:
-        filtered_items = [item for item in filtered_items if item.su.locale_id == int(locale)]  # type: ignore
-    if contents := params["contents"]:
-        if contents == "None":
-            filtered_items = [item for item in filtered_items if item.contents == None]
-        else:
-            filtered_items = [item for item in filtered_items if str(item.contents).upper() == contents.upper()]
-    if season := params["season"]:
-        filtered_items = [item for item in filtered_items if item.season.id == int(season)]  # type: ignore
-    p = Paginator(filtered_items, ITEMSPERPAGE)
-    if pagenum := request.GET.get("p"):
-        pagenum = int(pagenum) if int(pagenum) <= p.num_pages else p.num_pages
-    else:
-        pagenum = 1
-    context = {
-        "title": "Lots",
-        "newitemlink": "/lot/new/",
-        "count": p.count,
-        "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),  # type: ignore
-        "all_items": p.page(pagenum),
-        "params": paramstring,
-        "form": LotFilters(initial=params),
-    }
-    return render(
-        request,
-        "contexts/lots_list.html",
         context,
     )

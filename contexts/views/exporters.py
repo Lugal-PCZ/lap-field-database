@@ -3,7 +3,8 @@ import codecs, csv
 from django.http import HttpResponse
 from django.db.models import F, Prefetch
 
-from ..models import Locale, Lot, SU
+from ..models import Locale, SU
+from project.models import Season
 
 
 def _build_params(request, params):
@@ -67,7 +68,6 @@ def locales_list_export(request, contexttype):
     if season := params["season"]:
         refiltered_items = []
         for each_item in filtered_items:
-            print(each_item.seasons)  # type: ignore
             if int(season) in each_item.seasons:  # type: ignore
                 refiltered_items.append(each_item)
         filtered_items = refiltered_items
@@ -170,7 +170,6 @@ def sus_list_export(request):
         seasons = []
         for each_season in record.seasons_list:  # type: ignore
             seasons.append(str(each_season))
-        # print(record.lot_set.values())
         lots = []
         for each_lot in record.lot_set.values():  # type: ignore
             lots.append(each_lot["number"])
@@ -207,61 +206,6 @@ def sus_list_export(request):
                 ", ".join(lots),
                 record.photos,
                 record.photogrammetrynumbers,
-                voided,
-            ]
-        )
-    return response
-
-
-def lots_list_export(request):
-    unfiltered_items = Lot.objects.all()
-    params, paramstring = _build_params(request, ["su", "locale", "contents", "season"])
-    filtered_items = unfiltered_items
-    if su := params["su"]:
-        filtered_items = [item for item in filtered_items if item.su_id == int(su)]  # type: ignore
-    if locale := params["locale"]:
-        filtered_items = [item for item in filtered_items if item.su.locale_id == int(locale)]  # type: ignore
-    if contents := params["contents"]:
-        if contents == "None":
-            filtered_items = [item for item in filtered_items if item.contents == None]
-        else:
-            filtered_items = [item for item in filtered_items if str(item.contents).upper() == contents.upper()]
-    if season := params["season"]:
-        filtered_items = [item for item in filtered_items if item.season.id == int(season)]  # type: ignore
-    response = HttpResponse(
-        content_type="text/csv",
-        headers={"Content-Disposition": 'attachment; filename="LAP Lots.csv"'},
-    )
-    response.write(codecs.BOM_UTF8)
-    writer = csv.writer(response)
-    writer.writerow(
-        [
-            "Lot",
-            "SU or 1/3LAP Locus",
-            "Locale",
-            "Contents",
-            "Date Assigned",
-            "Season",
-            "Notes",
-            "Voided",
-        ]
-    )
-    for record in filtered_items:
-        contents = record.contents
-        if not record.contents:
-            contents = "-"
-        voided = ""
-        if record.voided:
-            voided = "VOID"
-        writer.writerow(
-            [
-                record,
-                record.su,
-                record.su.locale,
-                contents,
-                record.dateassigned,
-                record.season,
-                record.notes,
                 voided,
             ]
         )

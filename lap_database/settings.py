@@ -40,10 +40,11 @@ INSTALLED_APPS = [
     "accounts",
     "project",
     "contexts",
-    "human_remains",
+    "lots",
     "objects",
-    "pottery",
     "samples",
+    "pottery",
+    "human_remains",
 ]
 
 MIDDLEWARE = [

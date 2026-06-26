@@ -1,10 +1,9 @@
 import re
 
-from django.contrib import messages
 from django.shortcuts import redirect, render
 
-from ..models import Locale, SU
-from ..forms import LocaleForm, SUForm
+from ..models import Lot
+from ..forms import LotForm
 
 
 def _detail_view(request, id, model, form):
@@ -45,24 +44,11 @@ def _detail_view(request, id, model, form):
     return newrecordid, context
 
 
-def locale_detail(request, id=None):
-    newpk, context = _detail_view(request, id, Locale, LocaleForm)
+def lot_detail(request, id=None):
+    newpk, context = _detail_view(request, id, Lot, LotForm)
     if newpk:
-        messages.info(request, "New Locale Created")
-        return redirect(f"/locale/{newpk}/")
-    context["newitemlink"] = "/locale/new/"
-    return render(
-        request,
-        "contexts/details.html",
-        context,
-    )
-
-
-def su_detail(request, id=None):
-    newpk, context = _detail_view(request, id, SU, SUForm)
-    if newpk:
-        return redirect(f"/stratigraphic_unit/{newpk}/")
-    context["newitemlink"] = "/stratigraphic_unit/new/"
+        return redirect(f"/lot/{newpk}/")
+    context["newitemlink"] = "/lot/new/"
     return render(
         request,
         "contexts/details.html",

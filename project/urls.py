@@ -4,6 +4,8 @@ from .views import exporters, lists
 
 
 urlpatterns = [
-    path("<str:contexttype>/", lists.simple_list),
-    path("<str:contexttype>/export/", exporters.simple_list_export),
+    path("seasons/", lists.seasons_list),
+    path("seasons/export/", exporters.seasons_list_export),
+    path("areas/", lists.areas_list),
+    path("areas/export/", exporters.areas_list_export),
 ]

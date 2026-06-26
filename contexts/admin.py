@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Locale, Lot, SU, SUPrefix
+from .models import Locale, SU, SUPrefix
 
 
 @admin.register(Locale)
@@ -16,28 +16,6 @@ class LocaleAdmin(admin.ModelAdmin):
     ]
     search_fields = [
         "name",
-    ]
-
-
-@admin.register(Lot)
-class LotAdmin(admin.ModelAdmin):
-    list_display = [
-        "number",
-        "su",
-        "su__locale",
-        "contents",
-        "season",
-    ]
-    list_filter = [
-        "season",
-        "contents",
-        "su__locale",
-    ]
-    search_fields = [
-        "number",
-    ]
-    autocomplete_fields = [
-        "su",
     ]
 
 

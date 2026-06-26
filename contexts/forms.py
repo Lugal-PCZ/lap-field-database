@@ -4,7 +4,8 @@ from django.contrib.admin.widgets import AutocompleteSelect
 from django.db.models import F, Prefetch, Q
 
 from project.models import Area, Season
-from .models import Locale, Lot, SU, SUPrefix
+from .models import Locale, SU, SUPrefix
+from lots.models import Lot
 
 # List View Filters
 
@@ -119,16 +120,14 @@ class LocaleForm(forms.ModelForm):
                 )
             )
             seasons = set()
-            sus = set()
+            sus = []
             for each_su in related_sus:
                 for each_season in each_su.seasons_list:
                     seasons.add(str(each_season))
-                sus.add(str(each_su))
+                sus.append(str(each_su))
             seasons = list(seasons)
             seasons.sort()
             self.fields["seasons_list"].widget.attrs["value"] = ", ".join(seasons)
-            sus = list(sus)
-            sus.sort()
             self.fields["sus_list"].initial = ", ".join(sus)
         _update_field_behavior(editable, self)
 
@@ -202,45 +201,4 @@ class SUForm(forms.ModelForm):
             lots = list(lots)
             lots.sort()
             self.fields["lots_list"].widget.attrs["value"] = ", ".join(lots)
-        _update_field_behavior(editable, self)
-
-
-class LotForm(forms.ModelForm):
-    locale = forms.CharField(
-        required=False,
-        disabled=True,
-    )
-
-    class Meta:
-        model = Lot
-        fields = [
-            "number",
-            "su",
-            "contents",
-            "dateassigned",
-            "season",
-            "notes",
-            "voided",
-        ]
-        widgets = {
-            "number": forms.TextInput(
-                attrs={"pattern": r"^\d{1,2}LAP\d{3}$"},
-            ),
-            "dateassigned": forms.DateInput(
-                attrs={"type": "date"},
-                format="%Y-%m-%d",
-            ),
-            "su": AutocompleteSelect(
-                Lot._meta.get_field("su"),  # type: ignore
-                admin.site,
-            ),
-        }
-
-    def __init__(self, *args, editable=False, **kwargs):
-        user = kwargs.pop("user", None)
-        super(LotForm, self).__init__(*args, **kwargs)
-        self.fields["number"].widget.attrs["formname"] = "lot"
-        self.fields["su"].widget.attrs["onChange"] = f"loadLocale()"
-        if self.instance and hasattr(self.instance, "su"):
-            self.fields["locale"].initial = self.instance.su.locale
         _update_field_behavior(editable, self)
