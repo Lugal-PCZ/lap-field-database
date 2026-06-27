@@ -43,7 +43,7 @@ def lots_list_export(request):
     writer.writerow(
         [
             "Lot",
-            "SU or 1/3LAP Locus",
+            "SU or 1LAP/3LAP Locus",
             "Locale",
             "Contents",
             "Date Assigned",

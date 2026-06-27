@@ -193,6 +193,7 @@ class SUForm(forms.ModelForm):
         if not self.instance.number:
             self.fields["number"].widget.attrs["value"] = 0
         self.fields["recordedby"].initial = user
+        self.fields["locus"].disabled = True
         if self.instance.pk:
             related_lots = self.instance.lot_set.values()
             lots = set()

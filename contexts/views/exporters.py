@@ -131,7 +131,7 @@ def sus_list_export(request):
     writer = csv.writer(response)
     writer.writerow(
         [
-            "SU or 1/3LAP Locus",
+            "SU or 1LAP/3LAP Locus",
             "Locale",
             "Date Assigned",
             "Recorded By",
