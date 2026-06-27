@@ -3,6 +3,7 @@
 <html>
 <head>
 <title>LAP - {{ title }}</title>
+<link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
 <link rel="stylesheet" href="{% static 'base.css' %}">
 <link rel="stylesheet" href="{% static 'lists.css' %}">
 <link rel="stylesheet" href="{% static 'details.css' %}">
@@ -17,7 +18,7 @@
 alert('{{ message.message }}');
 {% endfor %}
 {%  endif %}
-cacheForm(); toggleVoided()">
+cacheForm(); toggleVoided();">
 <div id="background"></div>
 <div id="header">
     <div id="pagetitle">
@@ -83,7 +84,7 @@ cacheForm(); toggleVoided()">
                     {% else %}Save Changes
                     {% endif %}
                 </button>
-                <button id="discardchangesbutton" form="detail" onclick="document.getElementById('detail').reset(); checkForm()" disabled>Discard Changes</button>
+                <button id="discardchangesbutton" form="detail" type="reset" onclick="resetForm()" disabled>Discard Changes</button>
             </span>
         {% endif %}
         <form id="filters" method="get">

@@ -27,12 +27,38 @@ function cacheForm() {
   if (document.querySelector("#detail")) {
     const initialState = FormSerializer.serialize(document.getElementById('detail'));
     localStorage.setItem("initialState", JSON.stringify(initialState));
+    const selectfields = document.querySelectorAll("select");
+    selectfields.forEach(field => {
+      if (field.selectedIndex === -1) {
+        localStorage.setItem(field.id, "")
+      } else {
+        localStorage.setItem(field.id, field.options[field.selectedIndex].innerHTML)
+      }
+    });
     if (window.location.href.includes("/new/")) {
       localStorage.setItem("okToChangeLapIdentifier", "true")
     } else {
       localStorage.setItem("okToChangeLapIdentifier", "false")
     };
   };
+}
+
+function resetForm() {
+  if (document.querySelector("#detail")) {
+    document.getElementById("detail").reset();
+    const autocompletefields = document.querySelectorAll(".select2-selection__rendered");
+    autocompletefields.forEach(field => {
+      const target_field = `id_${field.id.split("_")[1].split("-")[0]}`
+      field.removeAttribute("title");
+      field.innerHTML = localStorage.getItem(target_field);
+    });
+  };
+  document.getElementById('savebutton').disabled=true;
+  document.getElementById('discardchangesbutton').disabled=true;
+  document.getElementById('newbutton').disabled=false;
+  if (document.querySelector("#id_voided")) {
+    toggleVoided();
+  }
 }
 
 function checkForm() {

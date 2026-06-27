@@ -74,7 +74,12 @@
     background-color: white;
 }
 
-#savebutton {
+#discardchangesbutton {
+    margin-right: 10px;
+}
+
+#savebutton,
+#discardchangesbutton {
     float: right;
 }
 

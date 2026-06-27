@@ -6,6 +6,7 @@
 body {
     background-color: whitesmoke;
     font-family: 'Times New Roman', Times, serif;
+    min-width: 1150px;
 }
 
 a {
