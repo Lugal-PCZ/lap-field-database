@@ -63,7 +63,7 @@ button {
     font-weight: bold;
 }
 
-#popupmenus>* {
+#popupmenus>div {
     cursor: pointer;
 }
 
@@ -71,6 +71,10 @@ button {
     height: 36px;
     width: 36px;
     margin-left: 12px;
+}
+
+#pagetitle:has(~ #downloadpanel) #popupmenus>#dingir {
+    cursor: pointer;
 }
 
 #loginpanel,
