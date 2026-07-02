@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.db.models import F, Prefetch
 from django.shortcuts import render
 
-from project.models import Season
+from lapinfo.models import Season
 from ..models import Locale, SU
 from ..forms import SUFilters, LocaleFilters
 
@@ -37,17 +37,21 @@ def locales_list(request, contexttype):
     elif contexttype == "surface_findspots":
         title = "Surface Findspots"
         method = "Surface Find"
-    unfiltered_items = Locale.objects.filter(method=method).prefetch_related(
-        Prefetch(
-            "sus",
-            queryset=SU.objects.prefetch_related(
-                Prefetch(
-                    "seasons",
-                    queryset=Season.objects.all(),
-                    to_attr="seasons_list",
-                )
-            ),
-            to_attr="sus_list",
+    unfiltered_items = (
+        Locale.objects.filter(method=method)
+        .order_by(F("name")[0:6], "id")  # type: ignore
+        .prefetch_related(
+            Prefetch(
+                "sus",
+                queryset=SU.objects.prefetch_related(
+                    Prefetch(
+                        "seasons",
+                        queryset=Season.objects.all(),
+                        to_attr="seasons_list",
+                    )
+                ),
+                to_attr="sus_list",
+            )
         )
     )
     params, paramstring = _build_params(request, ["area", "season"])

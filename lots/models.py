@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.functions import Lower
 from django.utils import timezone
 
-from project.models import Season
+from lapinfo.models import Season
 from contexts.models import SU
 
 
@@ -14,13 +14,13 @@ class Lot(models.Model):
     ]
     number = models.CharField(
         max_length=9,
-        default=Season.objects.last(),  # type: ignore
+        default=Season.objects.last().name,  # type: ignore
         null=False,
     )  # type: ignore
     season = models.ForeignKey(
         Season,
         on_delete=models.PROTECT,
-        default=Season.objects.last(),
+        default=Season.objects.last().pk,
         null=False,
     )
     su = models.ForeignKey(

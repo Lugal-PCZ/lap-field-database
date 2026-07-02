@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.db.models import F, Prefetch
 
 from ..models import Locale, SU
-from project.models import Season
+from lapinfo.models import Season
 
 
 def _build_params(request, params):
@@ -34,17 +34,21 @@ def locales_list_export(request, contexttype):
     elif contexttype == "surface_findspots":
         headers = {"Content-Disposition": 'attachment; filename="LAP Surface Findspots.csv"'}
         method = "Surface Find"
-    unfiltered_items = Locale.objects.filter(method=method).prefetch_related(
-        Prefetch(
-            "sus",
-            queryset=SU.objects.prefetch_related(
-                Prefetch(
-                    "seasons",
-                    queryset=Season.objects.all(),
-                    to_attr="seasons_list",
-                )
-            ),
-            to_attr="sus_list",
+    unfiltered_items = (
+        Locale.objects.filter(method=method)
+        .order_by(F("name")[0:6], "id")  # type: ignore
+        .prefetch_related(
+            Prefetch(
+                "sus",
+                queryset=SU.objects.prefetch_related(
+                    Prefetch(
+                        "seasons",
+                        queryset=Season.objects.all(),
+                        to_attr="seasons_list",
+                    )
+                ),
+                to_attr="sus_list",
+            )
         )
     )
     params, paramstring = _build_params(request, ["area", "season"])

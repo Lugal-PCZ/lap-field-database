@@ -4,7 +4,9 @@ from django.db.models.functions import Lower
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 
-from project.models import Area, Season
+from django_advance_thumbnail import AdvanceThumbnailField
+
+from lapinfo.models import Area, Season
 
 
 class Locale(models.Model):
@@ -23,7 +25,7 @@ class Locale(models.Model):
         on_delete=models.PROTECT,
         related_name="locales",
         null=False,
-        default=Area.objects.filter(Q(name="Area H")).last(),
+        default=Area.objects.filter(Q(name="Area H")).last().pk,
     )
     method = models.CharField(
         max_length=20,
@@ -46,8 +48,7 @@ class Locale(models.Model):
             ),
         ]
         ordering = [
-            F("name")[0:6],  # type: ignore
-            "id",
+            "name",
         ]
 
     def __str__(self):
@@ -115,7 +116,7 @@ class SU(models.Model):
     seasons = models.ManyToManyField(
         Season,
         verbose_name="Season(s)",
-        default=Season.objects.last(),
+        default=Season.objects.last().pk,
     )
     dateassigned = models.DateField(
         null=False,
@@ -251,6 +252,18 @@ class SU(models.Model):
     voided = models.BooleanField(
         null=False,
         default=False,
+    )
+    tracing = models.FileField(
+        upload_to="uploads/sus/tracings/",
+        null=True,
+        blank=True,
+    )
+    tracing_onscreen = AdvanceThumbnailField(
+        source_field="tracing",
+        upload_to="uploads/sus/tracings/onscreen/",
+        size=(310, 310),
+        null=True,
+        blank=True,
     )
 
     class Meta:

@@ -1,70 +1,70 @@
 import re
 
-from django.contrib import messages
 from django.shortcuts import redirect, render
 
 from ..models import Locale, SU
 from ..forms import LocaleForm, SUForm
 
 
-def _detail_view(request, id, model, form):
-    context = {}
+def locale_detail(request, id=None):
+    context = {"newitemlink": "/locale/new/"}
+    context["title"] = "Locale Details"
+    if request.path.endswith("/new/"):
+        context["title"] = "New Locale"
     instance = None
-    newrecordid = None
     if not request.path.endswith("/new/"):
-        instance = model.objects.filter(id=id).first()
+        instance = Locale.objects.filter(id=id).first()
     editable = False
     if str(request.user) != "AnonymousUser":
         editable = True
+    context["form"] = LocaleForm(instance=instance, editable=editable, user=request.user)  # type: ignore
     if request.method == "POST":
-        form = form(request.POST, instance=instance, editable=editable)
+        form = LocaleForm(request.POST, request.FILES, instance=instance, editable=editable, user=request.user)
         if form.is_valid():
-            new_record = form.save()
-            context = {
-                "title": f"{model.__name__} Saved",
-                "form": form,
-            }
-            if new_record.pk != id:  # a new record was created
-                newrecordid = new_record.pk
+            record = form.save()
+            if record.pk == id:  # a record was updated
+                return redirect(request.path)
+            if record.pk != id:  # a new record was created
+                id = record.pk
+                return redirect(request.path.replace("/new/", f"/{record.pk}/"))
         else:
             for eacherror in form.non_field_errors():
                 form.add_error(
-                    re.match("This (.*) already", eacherror).group(1),
+                    re.match("This (.*) already", eacherror).group(1),  # type: ignore
                     eacherror,
                 )
-            context = {
-                "title": f"{model.__name__} Not Saved",
-                "form": form,
-            }
-    else:
-        context["form"] = form(instance=instance, editable=editable, user=request.user)
-        if request.path.endswith("/new/"):
-            context["title"] = f"New {model.__name__}"
-        else:
-            context["title"] = f"{model.__name__} Details"
-    return newrecordid, context
-
-
-def locale_detail(request, id=None):
-    newpk, context = _detail_view(request, id, Locale, LocaleForm)
-    if newpk:
-        messages.info(request, "New Locale Created")
-        return redirect(f"/locale/{newpk}/")
-    context["newitemlink"] = "/locale/new/"
-    return render(
-        request,
-        "contexts/details.html",
-        context,
-    )
+            context["form"] = form  # type: ignore
+            return render(request, "details.html", context)
+    return render(request, "details.html", context)
 
 
 def su_detail(request, id=None):
-    newpk, context = _detail_view(request, id, SU, SUForm)
-    if newpk:
-        return redirect(f"/stratigraphic_unit/{newpk}/")
-    context["newitemlink"] = "/stratigraphic_unit/new/"
-    return render(
-        request,
-        "contexts/details.html",
-        context,
-    )
+    context = {"newitemlink": "/stratigraphic_unit/new/"}
+    context["title"] = "SU Details"
+    if request.path.endswith("/new/"):
+        context["title"] = "New SU"
+    instance = None
+    if not request.path.endswith("/new/"):
+        instance = SU.objects.filter(id=id).first()
+    editable = False
+    if str(request.user) != "AnonymousUser":
+        editable = True
+    context["form"] = SUForm(instance=instance, editable=editable, user=request.user)  # type: ignore
+    if request.method == "POST":
+        form = SUForm(request.POST, request.FILES, instance=instance, editable=editable, user=request.user)
+        if form.is_valid():
+            record = form.save()
+            if record.pk == id:  # a record was updated
+                return redirect(request.path)
+            if record.pk != id:  # a new record was created
+                id = record.pk
+                return redirect(request.path.replace("/new/", f"/{record.pk}/"))
+        else:
+            for eacherror in form.non_field_errors():
+                form.add_error(
+                    re.match("This (.*) already", eacherror).group(1),  # type: ignore
+                    eacherror,
+                )
+            context["form"] = form  # type: ignore
+            return render(request, "details.html", context)
+    return render(request, "details.html", context)

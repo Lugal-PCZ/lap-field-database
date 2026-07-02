@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
 from django.db.models import F, Q
 
-from project.models import Season
+from lapinfo.models import Season
 from contexts.models import Locale, SU
 from .models import Lot
 
@@ -21,7 +21,7 @@ class LotFilters(forms.Form):
     locale = forms.ModelChoiceField(
         label="Locale",
         empty_label="all",
-        queryset=Locale.objects.all(),
+        queryset=Locale.objects.all().order_by(F("name")[0:6], "id"),  # type: ignore
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
     contents = forms.ModelChoiceField(

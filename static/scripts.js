@@ -35,6 +35,10 @@ function cacheForm() {
         localStorage.setItem(field.id, field.options[field.selectedIndex].innerHTML)
       }
     });
+    const filefields = document.querySelectorAll('input[type="file"]');
+    filefields.forEach(field => {
+      localStorage.setItem(field.id, field.value);
+    });
     if (window.location.href.includes("/new/")) {
       localStorage.setItem("okToChangeLapIdentifier", "true")
     } else {
@@ -63,9 +67,16 @@ function resetForm() {
 
 function checkForm() {
   if (document.querySelector("#detail")) {
-    const currentState = FormSerializer.serialize(document.getElementById('detail'));
     const savedState = JSON.parse(localStorage.getItem("initialState"))
-    if (JSON.stringify(currentState) !== localStorage.getItem("initialState")) {
+    const currentState = FormSerializer.serialize(document.getElementById('detail'));
+    var changedFileFields = false;
+    const filefields = document.querySelectorAll('input[type="file"]');
+    filefields.forEach(field => {
+      if (localStorage.getItem(field.id) !== field.value) {
+        changedFileFields = true;
+      };
+    });
+    if (JSON.stringify(currentState) !== localStorage.getItem("initialState") || changedFileFields) {
       if (currentState.name != savedState.name && localStorage.getItem("okToChangeLapIdentifier") === "false") {
         if (confirm("Are you sure that you want to change this record’s name?")) {
           localStorage.setItem("okToChangeLapIdentifier", "true");
@@ -116,4 +127,9 @@ function loadLocale() {
     .then(data => {
       document.getElementById("id_locale").value = data[0].name;
     });
+}
+
+function showImage(thewidget, original) {
+  const image = thewidget;
+  new Viewer(image, {url(image) {return original}, title: false, navbar: false, toolbar: false,});
 }

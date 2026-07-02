@@ -3,7 +3,8 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
 from django.db.models import F, Prefetch, Q
 
-from project.models import Area, Season
+from templates.widgets.widgets import CustomImageWidget
+from lapinfo.models import Area, Season
 from .models import Locale, SU, SUPrefix
 from lots.models import Lot
 
@@ -29,7 +30,7 @@ class SUFilters(forms.Form):
     locale = forms.ModelChoiceField(
         label="Locale",
         empty_label="all",
-        queryset=Locale.objects.all(),
+        queryset=Locale.objects.all().order_by(F("name")[0:6], "id"),  # type: ignore
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
     type = forms.ModelChoiceField(
@@ -56,7 +57,7 @@ class LotFilters(forms.Form):
     locale = forms.ModelChoiceField(
         label="Locale",
         empty_label="all",
-        queryset=Locale.objects.all(),
+        queryset=Locale.objects.all().order_by(F("name")[0:6], "id"),  # type: ignore
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
     contents = forms.ModelChoiceField(
@@ -111,7 +112,7 @@ class LocaleForm(forms.ModelForm):
         user = kwargs.pop("user", None)
         super(LocaleForm, self).__init__(*args, **kwargs)
         self.fields["name"].widget.attrs["formname"] = "locale"
-        if self.instance and hasattr(self.instance, "sus"):
+        if self.instance.pk:
             related_sus = self.instance.sus.prefetch_related(
                 Prefetch(
                     "seasons",
@@ -149,6 +150,7 @@ class SUForm(forms.ModelForm):
             "recordedby",
             "seasons",
             "prefix",
+            "tracing",
             "architecturalfeatures",
             "architecturaltechnique",
             "elevationtop",
@@ -173,10 +175,18 @@ class SUForm(forms.ModelForm):
             "voided",
         ]
         widgets = {
-            "dateassigned": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
+            "dateassigned": forms.DateInput(
+                attrs={"type": "date"},
+                format="%Y-%m-%d",
+            ),
             "locale": AutocompleteSelect(
                 SU._meta.get_field("locale"),  # type: ignore
                 admin.site,
+            ),
+            "tracing": CustomImageWidget(
+                attrs={
+                    "accept": ".jpg,.jpeg",
+                },
             ),
         }
 
@@ -194,6 +204,8 @@ class SUForm(forms.ModelForm):
             self.fields["number"].widget.attrs["value"] = 0
         self.fields["recordedby"].initial = user
         self.fields["locus"].disabled = True
+        self.fields["tracing"].widget.attrs["onscreen"] = f"/{str(self.instance.tracing_onscreen)}"
+        self.fields["tracing"].widget.attrs["user"] = str(user)
         if self.instance.pk:
             related_lots = self.instance.lot_set.values()
             lots = set()

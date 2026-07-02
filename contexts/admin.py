@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import F
 
 from .models import Locale, SU, SUPrefix
 
@@ -16,6 +17,10 @@ class LocaleAdmin(admin.ModelAdmin):
     ]
     search_fields = [
         "name",
+    ]
+    ordering = [
+        F("name")[0:6],
+        "id",
     ]
 
     def get_search_results(self, request, queryset, search_term):

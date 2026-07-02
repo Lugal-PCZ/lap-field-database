@@ -1,4 +1,7 @@
-from django.shortcuts import render
+import re
+
+from django.contrib import messages
+from django.shortcuts import redirect, render
 
 
 def mainmenu(request):

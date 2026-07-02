@@ -11,6 +11,17 @@
     margin-left: 10px;
 }
 
+#detail .form-group>div {
+    margin-left: 0px;
+}
+
+#detail label,
+#detail img {
+    border-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+}
+
 #detail label {
     display: block;
     font-weight: bold;
@@ -18,9 +29,6 @@
     font-family: Helvetica, Arial, sans-serif;
     color: midnightblue;
     background-color: lightsteelblue;
-    border-style: solid;
-    border-width: 1px;
-    border-color: midnightblue;
     padding-left: 8px;
     padding-right: 15px;
     margin-top: 15px;
@@ -100,8 +108,10 @@
     grid-template-areas:
         "number locus locale"
         "dateassigned recordedby seasons"
-        "prefix architecturalfeatures architecturaltechnique"
-        "elevationtop elevationbottom dimensions"
+        "prefix dimensions ."
+        "elevationtop elevationbottom ."
+        "tracing . ."
+        "architecturalfeatures architecturaltechnique ."
         "color composition ."
         "texture inclusions ."
         "sameas abuts ."

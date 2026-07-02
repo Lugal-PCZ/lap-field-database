@@ -1,0 +1,15 @@
+{% if widget.is_initial %}
+    <div>
+        <img src="/static/{{ widget.attrs.onscreen|cut:"/uploads/" }}" id="onscreen" onmousedown="showImage(this, '/static/{{ widget.value.url|cut:"/uploads/" }}')">
+    </div>
+    {% if widget.attrs.user != "AnonymousUser" %}
+        <div>
+            <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}" onclick="checkForm()"> Clear
+        </div>
+    {% endif %}
+{% endif %}
+{% if widget.attrs.user != "AnonymousUser" %}
+    <div>
+        <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} >
+    </div>
+{% endif %}
