@@ -8,8 +8,8 @@ urlpatterns = [
     path("locales/<str:contexttype>/export/", exporters.locales_list_export),
     path("locale/new/", details.locale_detail),
     path("locale/<int:id>/", details.locale_detail),
-    path("stratigraphic_units/", lists.sus_list),
-    path("stratigraphic_units/export/", exporters.sus_list_export),
-    path("stratigraphic_unit/new/", details.su_detail),
-    path("stratigraphic_unit/<int:id>/", details.su_detail),
+    path("sus/", lists.sus_list),
+    path("sus/export/", exporters.sus_list_export),
+    path("su/new/", details.su_detail),
+    path("su/<int:id>/", details.su_detail),
 ]

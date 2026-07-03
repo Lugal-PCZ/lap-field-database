@@ -125,7 +125,7 @@ def sus_list(request):
         pagenum = 1
     context = {
         "title": "Stratigraphic Units",
-        "newitemlink": "/stratigraphic_unit/new/",
+        "newitemlink": "/su/new/",
         "count": p.count,
         "pages": p.get_elided_page_range(pagenum, on_each_side=2, on_ends=1),  # type: ignore
         "all_items": p.page(pagenum),

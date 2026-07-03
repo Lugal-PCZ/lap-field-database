@@ -17,7 +17,7 @@
         <div>Season(s)</div>
     </dt>
     {% for item in all_items %}
-    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(4, 1fr);"  onclick="window.open('/stratigraphic_unit/{{ item.id }}', '_self')">
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(4, 1fr);"  onclick="window.open('/su/{{ item.id }}', '_self')">
         <div>{{ item }}</div>
         <div>{{ item.locale }}</div>
         <div>{{ item.prefix|default:"-" }}</div>
