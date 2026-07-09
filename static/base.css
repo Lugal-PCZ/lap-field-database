@@ -79,7 +79,7 @@ button {
 
 #loginpanel,
 #downloadpanel {
-    position: fixed;
+    position: absolute;
     right: 0;
     margin-top: -1px;
     padding: 15px 15px 10px 15px;
