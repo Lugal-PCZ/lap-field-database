@@ -1,3 +1,21 @@
+document.addEventListener(
+  'click',
+  function closePanels(event) {
+    if (event.target.parentElement.id !== "popupmenus") {
+      var thepanel = document.getElementById("loginpanel");
+      if (!thepanel.hidden && !thepanel.contains(event.target)) {
+        thepanel.hidden = true;
+      };
+      if (document.querySelector("#downloadpanel")) {
+        var thepanel = document.getElementById("downloadpanel");
+        if (!thepanel.hidden && !thepanel.contains(event.target)) {
+          thepanel.hidden = true;
+        };
+      };
+    }
+  },
+);
+
 function toggleLogin() {
   if (document.querySelector("#downloadpanel")) {
     document.getElementById("downloadpanel").hidden = true;

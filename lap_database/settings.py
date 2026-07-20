@@ -25,7 +25,11 @@ SECRET_KEY = "django-insecure-)mtr1qou-zls!7+#e@#gnyy4jvvo5*%)b5$qv5(8ex8&-^-#ou
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "lap-database.local",
+]
 
 
 # Application definition
