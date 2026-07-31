@@ -43,6 +43,7 @@ def lots_list(request):
     else:
         pagenum = 1
     context = {
+        "view": "list",
         "title": "Lots",
         "newitemlink": "/lot/new/",
         "count": p.count,

@@ -104,6 +104,10 @@ def locales_list_export(request, contexttype):
     return response
 
 
+def locale_detail_export(request, id):
+    pass
+
+
 def sus_list_export(request):
     unfiltered_items = SU.objects.prefetch_related(
         Prefetch(
@@ -210,3 +214,7 @@ def sus_list_export(request):
             ]
         )
     return response
+
+
+def su_detail_export(request, id):
+    pass

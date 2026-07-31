@@ -72,3 +72,7 @@ def lots_list_export(request):
             ]
         )
     return response
+
+
+def lot_detail_export(request, id):
+    pass

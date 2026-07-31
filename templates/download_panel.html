@@ -1,7 +1,13 @@
 {% load static %}
 <div id="downloadpanel" hidden>
+    {% if view == "list" %}
     <a href="export/{% querystring %}" onclick="this.parentElement.hidden=true">
         Download These<br>{{ title }}
-        <img id="csvicon" src="{% static 'img/csv_icon.svg' %}" />
+        <img class="downloadicon" src="{% static 'img/csv_icon.svg' %}" />
+    {% elif view == "detail" %}
+    <a href="{{ request.path }}export/" onclick="this.parentElement.hidden=true">
+        Download This<br>{{ title|slice:":-8" }}
+        <img class="downloadicon" src="{% static 'img/pdf_icon.svg' %}" />
+    {% endif %}
     </a>
 </div>

@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block downloadpanel %}
+{% include "download_panel.html" %}
+{% endblock %}
+
 {% block content %}
     <form id="detail" method="post" enctype="multipart/form-data">
     {% csrf_token %}

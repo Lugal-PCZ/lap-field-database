@@ -146,3 +146,9 @@ button {
 #pagesubhead button {
     margin-top: -3px;
 }
+
+.downloadicon {
+    height: 30px;
+    width: 30px;
+    margin-left: 10px;
+}

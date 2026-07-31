@@ -8,8 +8,10 @@ urlpatterns = [
     path("locales/<str:contexttype>/export/", exporters.locales_list_export),
     path("locale/new/", details.locale_detail),
     path("locale/<int:id>/", details.locale_detail),
+    path("locale/<int:id>/export/", exporters.locale_detail_export),
     path("sus/", lists.sus_list),
     path("sus/export/", exporters.sus_list_export),
     path("su/new/", details.su_detail),
     path("su/<int:id>/", details.su_detail),
+    path("su/<int:id>/export/", exporters.su_detail_export),
 ]

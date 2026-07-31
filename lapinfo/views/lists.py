@@ -10,6 +10,7 @@ def seasons_list(request):
     title = Season._meta.verbose_name_plural
     all_items = Season.objects.all()
     context = {
+        "view": "list",
         "title": title,
         "count": len(all_items),
         "all_items": all_items,
@@ -25,6 +26,7 @@ def areas_list(request):
     title = Area._meta.verbose_name_plural
     all_items = Area.objects.all()
     context = {
+        "view": "list",
         "title": title,
         "count": len(all_items),
         "all_items": all_items,

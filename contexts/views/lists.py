@@ -80,6 +80,7 @@ def locales_list(request, contexttype):
     else:
         pagenum = 1
     context = {
+        "view": "list",
         "title": title,
         "newitemlink": "/locale/new/",
         "count": p.count,
@@ -124,6 +125,7 @@ def sus_list(request):
     else:
         pagenum = 1
     context = {
+        "view": "list",
         "title": "Stratigraphic Units",
         "newitemlink": "/su/new/",
         "count": p.count,

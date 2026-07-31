@@ -63,12 +63,6 @@ dd.voided>div {
     text-decoration: line-through;
 }
 
-#csvicon {
-    height: 30px;
-    width: 30px;
-    margin-left: 10px;
-}
-
 #count {
     font-size: large;
     font-weight: bold;
