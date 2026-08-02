@@ -1,7 +1,10 @@
-import codecs, csv
+import codecs, csv, io
 
 from django.http import HttpResponse
 from django.db.models import F, Prefetch
+from django.template.loader import render_to_string
+
+from xhtml2pdf import pisa
 
 from ..models import Locale, SU
 from lapinfo.models import Season
@@ -105,7 +108,44 @@ def locales_list_export(request, contexttype):
 
 
 def locale_detail_export(request, id):
-    pass
+    details = (
+        Locale.objects.filter(id=id).prefetch_related(
+            Prefetch(
+                "sus",
+                queryset=SU.objects.prefetch_related(
+                    Prefetch(
+                        "seasons",
+                        queryset=Season.objects.all(),
+                        to_attr="seasons_list",
+                    )
+                ),
+                to_attr="sus_list",
+            )
+        )
+    ).first()
+    seasons = []
+    seasons_list = set()
+    for each_su in details.sus_list:  # type: ignore
+        seasons.append(each_su.seasons.values()[0]["id"])
+        seasons_list.add(each_su.seasons.values()[0]["name"])
+    seasons_list = list(seasons_list)
+    seasons_list.sort()
+    details.seasons = seasons  # type: ignore
+    details.seasons_list = seasons_list  # type: ignore
+    sus = []
+    for each_su in details.sus_list:  # type: ignore
+        sus.append(str(each_su))
+    details.sus_list = sus  # type: ignore
+    context = {
+        "title": f"LAP Locale {details.formatted_name()}",  # type: ignore
+        "locale": details,
+    }
+    template = render_to_string("contexts/locale_pdf.html", context)
+    result = io.BytesIO()
+    pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
+    response = HttpResponse(result.getvalue(), content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="LAP Locale {details.formatted_name()}.pdf"'  # type: ignore
+    return response
 
 
 def sus_list_export(request):

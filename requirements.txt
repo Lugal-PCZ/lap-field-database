@@ -1,2 +1,3 @@
 django
 django-advance-thumbnail
+xhtml2pdf
