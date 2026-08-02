@@ -57,7 +57,7 @@ class SUAdmin(admin.ModelAdmin):
     def feature_type(self, obj):
         return obj.prefix
 
-    @admin.display(description="Season(s)")
+    @admin.display(description="Seasons")
     def season_list(self, obj):
         return ", ".join([season.name for season in obj.seasons.all()])
 

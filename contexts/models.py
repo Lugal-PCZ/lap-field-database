@@ -115,8 +115,7 @@ class SU(models.Model):
     )
     seasons = models.ManyToManyField(
         Season,
-        verbose_name="Season(s)",
-        default=Season.objects.last().pk,
+        default=Season.objects.last().pk,  # type: ignore
     )
     dateassigned = models.DateField(
         null=False,

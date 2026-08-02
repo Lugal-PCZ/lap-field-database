@@ -82,7 +82,7 @@ def locales_list_export(request, contexttype):
             "Name",
             "Area",
             "Method",
-            "Season(s)",
+            "Seasons",
             "SUs",
             "Notes",
         ]
@@ -143,7 +143,7 @@ def sus_list_export(request):
             "Locale",
             "Date Assigned",
             "Recorded By",
-            "Season(s)",
+            "Seasons",
             "Feature Type",
             "Architectural Features",
             "Architectural Technique",

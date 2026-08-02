@@ -90,7 +90,7 @@ class LocaleForm(forms.ModelForm):
     seasons_list = forms.CharField(
         required=False,
         disabled=True,
-        label="Season(s)",
+        label="Seasons",
     )
     sus_list = forms.CharField(
         required=False,

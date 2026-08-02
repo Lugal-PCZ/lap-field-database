@@ -14,7 +14,7 @@
         <div>SU or 1LAP/3LAP Locus</div>
         <div>Locale</div>
         <div>Feature Type</div>
-        <div>Season(s)</div>
+        <div>Seasons</div>
     </dt>
     {% for item in all_items %}
     <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(4, 1fr);"  onclick="window.open('/su/{{ item.id }}', '_self')">
