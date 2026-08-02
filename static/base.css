@@ -101,7 +101,12 @@ button {
     display: flex;
     height: 45px;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+}
+
+#downloadpanel hr {
+    margin-top: 5px;
+    margin-bottom: 3px;
 }
 
 #loginpanel {
