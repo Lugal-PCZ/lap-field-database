@@ -1,0 +1,30 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+{{ pdf_css|safe }}
+</style>
+</head>
+
+<body>
+    <div id="header">
+        {% if lot.voided %}
+        <h1>LAP Lot <span id="voided_record">{{ lot.number }}</span> <span id="voided_warning">VOIDED</span></h1>
+    {% else %}
+        <h1>LAP Lot {{ lot.number }}</h1>
+    {% endif %}
+    <hr>
+    </div>
+    <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
+    
+    <dl>
+        <dt>Number:</dt><dd>{{ lot.number }}</dd>
+        <dt>SU or 1LAP/3LAP Locus:</dt><dd>{{ lot.su }}</dd>
+        <dt>Locale:</dt><dd>{{ lot.su.locale }}</dd>
+        <dt>Date Assigned:</dt><dd>{{ lot.dateassigned|date:"Y-m-d" }}</dd>
+        <dt>Season:</dt><dd>{{ lot.season }}</dd>
+        <dt>Contents:</dt><dd>{{ lot.contents|default:"-" }}</dd>
+        <dt>Notes:</dt><dd>{{ lot.notes|default:"-" }}</dd>
+    </dl>
+</body>
+</html>

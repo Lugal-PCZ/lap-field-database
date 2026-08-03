@@ -14,25 +14,39 @@
         top: 780pt;
     };
 }
+
 body {
     font-family: 'Times New Roman', Times, serif;
     font-size: 12pt;
     line-height: 110%;
 }
+
 h1 {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 18pt;
     font-weight: bold;
     margin-bottom: 0;
 }
+
 dt {
     font-family: Helvetica, Arial, sans-serif;
     font-weight: bold;
 }
+
 dd {
     margin-left: 10pt;
     margin-bottom: 2ex;
 }
+
 #footer {
     text-align: center;
+}
+
+#voided_record {
+    text-decoration: line-through;
+}
+
+#voided_warning {
+    font-size: 14pt;
+    color: red;
 }

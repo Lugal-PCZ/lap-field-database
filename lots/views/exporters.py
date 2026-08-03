@@ -1,6 +1,11 @@
-import codecs, csv
+import codecs, csv, io
+from pathlib import Path
 
+from django.conf import settings
 from django.http import HttpResponse
+from django.template.loader import render_to_string
+
+from xhtml2pdf import pisa
 
 from ..models import Lot
 
@@ -74,5 +79,17 @@ def lots_list_export(request):
     return response
 
 
-def lot_detail_export(request, id):
-    pass
+def lot_details_export(request, id):
+    details = Lot.objects.filter(id=id).first()
+    with open(Path(settings.BASE_DIR / "static/pdfs.css"), "r") as f:
+        pdf_css = f.read()
+    context = {
+        "pdf_css": pdf_css,
+        "lot": details,
+    }
+    template = render_to_string("lots/lot_pdf.html", context)
+    result = io.BytesIO()
+    pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
+    response = HttpResponse(result.getvalue(), content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="LAP Lot {details.number}.pdf"'  # type: ignore
+    return response
