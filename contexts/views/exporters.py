@@ -262,4 +262,33 @@ def sus_list_export(request):
 
 
 def su_details_export(request, id):
-    pass
+    details = (
+        SU.objects.filter(id=id).prefetch_related(
+            Prefetch(
+                "seasons",
+                queryset=Season.objects.all(),
+                to_attr="seasons_list",
+            )
+        )
+    ).first()
+    seasons = []
+    for each_season in details.seasons_list:  # type: ignore
+        seasons.append(str(each_season))
+    details.seasons_list = seasons  # type: ignore
+    lots = []
+    for each_lot in details.lot_set.values():  # type: ignore
+        lots.append(each_lot["number"])
+    lots.sort()
+    with open(Path(settings.BASE_DIR / "static/pdfs.css"), "r") as f:
+        pdf_css = f.read()
+    context = {
+        "pdf_css": pdf_css,
+        "su": details,
+        "lots": lots,
+    }
+    template = render_to_string("contexts/su_pdf.html", context)
+    result = io.BytesIO()
+    pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
+    response = HttpResponse(result.getvalue(), content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="LAP SU {details}.pdf"'  # type: ignore
+    return response

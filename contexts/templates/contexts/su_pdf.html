@@ -1,0 +1,53 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+{{ pdf_css|safe }}
+</style>
+</head>
+
+<body>
+    <div id="header">
+        {% if su.voided %}
+        <h1>LAP Lot <span id="voided_record">{{ su }}</span> <span id="voided_warning">VOIDED</span></h1>
+    {% else %}
+        <h1>LAP Lot {{ su }}</h1>
+    {% endif %}
+    <hr>
+    </div>
+    <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
+    
+    <dl>
+        <dt>SU Number:</dt><dd>{% if su.locus %}-{% else %}{{ su.number|default:"0" }}{% endif %}</dd>
+        <dt>1LAP/3LAP Locus:</dt><dd>{{ su.locus|default:"-" }}</dd>
+        <dt>Locale:</dt><dd>{{ su.locale }}</dd>
+        <dt>Date Assigned:</dt><dd>{{ su.dateassigned|date:"Y-m-d" }}</dd>
+        <dt>Recorded By:</dt><dd>{{ su.recordedby }}</dd>
+        <dt>Seasons:</dt><dd>{{ su.seasons_list|join:", " }}</dd>
+        <dt>Feature Type:</dt><dd>{{ su.prefix|default:"-" }}</dd>
+        <dt>Dimensions:</dt><dd>{{ su.dimensions|default:"-" }}</dd>
+        <dt>Elevation (top):</dt><dd>{{ su.elevationtop|default:"-" }}</dd>
+        <dt>Elevation (bottom):</dt><dd>{{ su.elevationbottom|default:"-" }}</dd>
+        <dt>Tracing:</dt><dd>{{ su.tracing|default:"-" }}</dd>
+        <dt>Architectural Features:</dt><dd>{{ su.architecturalfeatures|default:"-" }}</dd>
+        <dt>Architectural Technique:</dt><dd>{{ su.architecturaltechnique|default:"-" }}</dd>
+        <dt>Color:</dt><dd>{{ su.color|default:"-" }}</dd>
+        <dt>Composition:</dt><dd>{{ su.composition|default:"-" }}</dd>
+        <dt>Texture:</dt><dd>{{ su.texture|default:"-" }}</dd>
+        <dt>Inclusions:</dt><dd>{{ su.inclusions|default:"-" }}</dd>
+        <dt>Abuts:</dt><dd>{{ su.abuts|default:"-" }}</dd>
+        <dt>Same As:</dt><dd>{{ su.sameas|default:"-" }}</dd>
+        <dt>Covered By:</dt><dd>{{ su.coveredby|default:"-" }}</dd>
+        <dt>Covers:</dt><dd>{{ su.covers|default:"-" }}</dd>
+        <dt>Cut By:</dt><dd>{{ su.cutby|default:"-" }}</dd>
+        <dt>Cuts:</dt><dd>{{ su.cuts|default:"-" }}</dd>
+        <dt>Filled By:</dt><dd>{{ su.filledby|default:"-" }}</dd>
+        <dt>Fills:</dt><dd>{{ su.fills|default:"-" }}</dd>
+        <dt>Description:</dt><dd>{{ su.description|default:"-" }}</dd>
+        <dt>Interpretation:</dt><dd>{{ su.interpretation|default:"-" }}</dd>
+        <dt>Lots:</dt><dd>{{ lots|default:"-"|join:", " }}</dd>
+        <dt>Photos:</dt><dd>{{ su.photos|default:"-" }}</dd>
+        <dt>Photogrammetry Numbers:</dt><dd>{{ su.photogrammetrynumbers|default:"-" }}</dd>
+    </dl>
+</body>
+</html>
