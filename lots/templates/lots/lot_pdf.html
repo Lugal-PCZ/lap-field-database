@@ -9,9 +9,9 @@
 <body>
     <div id="header">
         {% if lot.voided %}
-        <h1>LAP Lot <span id="voided_record">{{ lot.number }}</span> <span id="voided_warning">VOIDED</span></h1>
+        <h1>LAP Lot <span id="voided_record">{{ lot }}</span> <span id="voided_warning">VOIDED</span></h1>
     {% else %}
-        <h1>LAP Lot {{ lot.number }}</h1>
+        <h1>LAP Lot {{ lot }}</h1>
     {% endif %}
     <hr>
     </div>
