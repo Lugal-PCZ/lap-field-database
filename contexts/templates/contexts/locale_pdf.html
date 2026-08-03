@@ -1,37 +1,59 @@
 <html>
 <head>
+<meta charset="utf-8">
 <style>
     @page {
         size: a4 portrait;
-        margin: 1cm;
-        @frame header_frame {           /* Static Frame */
-            -pdf-frame-content: header_content;
-            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
-        }
-        @frame content_frame {          /* Content Frame */
-            left: 50pt; width: 512pt; top: 90pt; height: 632pt;
-        }
-        @frame footer_frame {           /* Another static Frame */
-            -pdf-frame-content: footer_content;
-            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
-        }
+        @frame header_frame {
+            -pdf-frame-content: header;
+            margin: 1.5cm;
+        };
+        @frame content_frame {
+            margin: 1.5cm 1.5cm 2cm;
+            top: 2cm;
+        };
+        @frame footer_frame {
+            -pdf-frame-content: footer;
+            margin: 1cm 1.5cm 0;
+            top: 780pt;
+        };
+    }
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 12pt;
+        line-height: 110%;
+    }
+    h1 {
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 18pt;
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+    dt {
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: bold;
+    }
+    dd {
+        margin-left: 10pt;
+        margin-bottom: 2ex;
+    }
+    #footer {
+        text-align: center;
     }
 </style>
 </head>
 
 <body>
-    <!-- Content for Static Frame 'header_frame' -->
-    <div id="header_content">{{ title }}</div>
-
-    <!-- Content for Static Frame 'footer_frame' -->
-    <div id="footer_content">{% now "Y-m-d H:i" %} - Page <pdf:pagenumber> of <pdf:pagecount></div>
-
-    <!-- HTML Content -->
-    Name: {{ locale.name }}<br>
-    Area: {{ locale.area }}<br>
-    Method: {{ locale.method }}<br>
-    Seasons: {% if not locale.seasons_list %}-{% else %}{{ locale.seasons_list|join:", "  }}{% endif %}<br>
-    SUs: {% if not locale.sus_list %}-{% else %}{{ locale.sus_list|join:", "  }}{% endif %}<br>
-    Notes: {% if not locale.notes %}-{% else %}{{ locale.notes }}{% endif %}
+    <div id="header"><h1>LAP Locale {{ locale.formatted_name }}</h1><hr></div>
+    <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
+    
+    <dl>
+        <dt>Name:</dt><dd>{{ locale.name }}</dd>
+        <dt>Area:</dt><dd>{{ locale.area }}</dd>
+        <dt>Method:</dt><dd>{{ locale.method }}</dd>
+        <dt>Seasons:</dt><dd>{% if not locale.seasons_list %}-{% else %}{{ locale.seasons_list|join:", "  }}{% endif %}</dd>
+        <dt>SUs:</dt><dd>{% if not locale.sus_list %}-{% else %}{{ locale.sus_list|join:", "  }}{% endif %}</dd>
+        <dt>Notes:</dt><dd>{% if not locale.notes %}-{% else %}{{ locale.notes|escape|linebreaksbr }}{% endif %}</dd>
+    </dl>
 </body>
 </html>

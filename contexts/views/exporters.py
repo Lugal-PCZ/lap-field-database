@@ -137,7 +137,7 @@ def locale_detail_export(request, id):
         sus.append(str(each_su))
     details.sus_list = sus  # type: ignore
     context = {
-        "title": f"LAP Locale {details.formatted_name()}",  # type: ignore
+        "formatted_name": details.formatted_name(),  # type: ignore
         "locale": details,
     }
     template = render_to_string("contexts/locale_pdf.html", context)
