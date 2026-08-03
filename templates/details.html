@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <form id="detail" method="post" enctype="multipart/form-data">
+    <form id="details" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% for field in form %}
         <div class="form-group" style="grid-area: {{ field.name }}">

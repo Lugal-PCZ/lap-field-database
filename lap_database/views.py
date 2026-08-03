@@ -13,7 +13,7 @@ def mainmenu(request):
 
 def lap_form_handler(request, model, form, id):
     context = {"newitemlink": f"/{model.__name__.lower()}/new/"}
-    context["view"] = "detail"
+    context["view"] = "details"
     context["title"] = f"{model.__name__} Details"
     if request.path.endswith("/new/"):
         context["title"] = f"New {model.__name__}"

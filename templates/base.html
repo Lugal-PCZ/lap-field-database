@@ -82,12 +82,12 @@ cacheForm(); toggleVoided();">
         {% elif user.is_authenticated and request.path != "/" %}
             <span id="subheadspacer">
                 <button id="newbutton" type="button" onclick="window.open('{{ newitemlink }}', '_self')">+</button>
-                <button id="savebutton" type="submit" form="detail" disabled>
+                <button id="savebutton" type="submit" form="details" disabled>
                     {% if "/new/" in request.path %}Save Record
                     {% else %}Save Changes
                     {% endif %}
                 </button>
-                <button id="discardchangesbutton" form="detail" type="reset" onclick="resetForm()" disabled>Discard Changes</button>
+                <button id="discardchangesbutton" form="details" type="reset" onclick="resetForm()" disabled>Discard Changes</button>
             </span>
         {% endif %}
         <form id="filters" method="get">

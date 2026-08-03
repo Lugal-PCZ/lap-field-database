@@ -74,7 +74,7 @@ class LotFilters(forms.Form):
     )
 
 
-# Detail View Forms
+# Details View Forms
 
 
 def _update_field_behavior(editable, ref):

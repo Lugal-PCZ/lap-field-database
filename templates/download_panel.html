@@ -4,7 +4,7 @@
     <a href="export/{% querystring %}" onclick="this.parentElement.hidden=true">
         Download CSV of<br>These {{ title }}
         <img class="downloadicon" src="{% static 'img/csv_icon.svg' %}" />
-    {% elif view == "detail" %}
+    {% elif view == "details" %}
     <a href="{{ request.path }}export/" onclick="this.parentElement.hidden=true">
         Download PDF<br>of This {{ title|slice:":-8" }}
         <img class="downloadicon" src="{% static 'img/pdf_icon.svg' %}" />

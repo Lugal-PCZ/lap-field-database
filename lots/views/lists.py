@@ -54,6 +54,6 @@ def lots_list(request):
     }
     return render(
         request,
-        "lots/list.html",
+        "lots/lots_list.html",
         context,
     )

@@ -109,7 +109,7 @@ def locales_list_export(request, contexttype):
     return response
 
 
-def locale_detail_export(request, id):
+def locale_details_export(request, id):
     details = (
         Locale.objects.filter(id=id).prefetch_related(
             Prefetch(
@@ -261,5 +261,5 @@ def sus_list_export(request):
     return response
 
 
-def su_detail_export(request, id):
+def su_details_export(request, id):
     pass

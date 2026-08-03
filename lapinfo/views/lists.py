@@ -17,7 +17,7 @@ def seasons_list(request):
     }
     return render(
         request,
-        "lapinfo/list.html",
+        "lapinfo/info_list.html",
         context,
     )
 
@@ -33,6 +33,6 @@ def areas_list(request):
     }
     return render(
         request,
-        "lapinfo/list.html",
+        "lapinfo/info_list.html",
         context,
     )

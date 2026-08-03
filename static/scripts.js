@@ -42,8 +42,8 @@ function submitCleanURL(form) {
 }
 
 function cacheForm() {
-  if (document.querySelector("#detail")) {
-    const initialState = FormSerializer.serialize(document.getElementById('detail'));
+  if (document.querySelector("#details")) {
+    const initialState = FormSerializer.serialize(document.getElementById("details"));
     localStorage.setItem("initialState", JSON.stringify(initialState));
     const selectfields = document.querySelectorAll("select");
     selectfields.forEach(field => {
@@ -66,8 +66,8 @@ function cacheForm() {
 }
 
 function resetForm() {
-  if (document.querySelector("#detail")) {
-    document.getElementById("detail").reset();
+  if (document.querySelector("#details")) {
+    document.getElementById("details").reset();
     const autocompletefields = document.querySelectorAll(".select2-selection__rendered");
     autocompletefields.forEach(field => {
       const target_field = `id_${field.id.split("_")[1].split("-")[0]}`
@@ -84,9 +84,9 @@ function resetForm() {
 }
 
 function checkForm() {
-  if (document.querySelector("#detail")) {
+  if (document.querySelector("#details")) {
     const savedState = JSON.parse(localStorage.getItem("initialState"))
-    const currentState = FormSerializer.serialize(document.getElementById('detail'));
+    const currentState = FormSerializer.serialize(document.getElementById("details"));
     var changedFileFields = false;
     const filefields = document.querySelectorAll('input[type="file"]');
     filefields.forEach(field => {
