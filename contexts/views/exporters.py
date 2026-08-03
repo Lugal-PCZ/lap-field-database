@@ -1,5 +1,7 @@
 import codecs, csv, io
+from pathlib import Path
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.db.models import F, Prefetch
 from django.template.loader import render_to_string
@@ -136,7 +138,10 @@ def locale_detail_export(request, id):
     for each_su in details.sus_list:  # type: ignore
         sus.append(str(each_su))
     details.sus_list = sus  # type: ignore
+    with open(Path(settings.BASE_DIR / "static/pdfs.css"), "r") as f:
+        pdf_css = f.read()
     context = {
+        "pdf_css": pdf_css,
         "formatted_name": details.formatted_name(),  # type: ignore
         "locale": details,
     }

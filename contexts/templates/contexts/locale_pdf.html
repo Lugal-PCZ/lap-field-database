@@ -2,44 +2,7 @@
 <head>
 <meta charset="utf-8">
 <style>
-    @page {
-        size: a4 portrait;
-        @frame header_frame {
-            -pdf-frame-content: header;
-            margin: 1.5cm;
-        };
-        @frame content_frame {
-            margin: 1.5cm 1.5cm 2cm;
-            top: 2cm;
-        };
-        @frame footer_frame {
-            -pdf-frame-content: footer;
-            margin: 1cm 1.5cm 0;
-            top: 780pt;
-        };
-    }
-    body {
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 12pt;
-        line-height: 110%;
-    }
-    h1 {
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 18pt;
-        font-weight: bold;
-        margin-bottom: 0;
-    }
-    dt {
-        font-family: Helvetica, Arial, sans-serif;
-        font-weight: bold;
-    }
-    dd {
-        margin-left: 10pt;
-        margin-bottom: 2ex;
-    }
-    #footer {
-        text-align: center;
-    }
+{{ pdf_css|safe }}
 </style>
 </head>
 
