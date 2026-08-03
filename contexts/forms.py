@@ -95,7 +95,7 @@ class LocaleForm(forms.ModelForm):
     sus_list = forms.CharField(
         required=False,
         disabled=True,
-        label="SUs",
+        label="SUs and 1LAP/3LAP Loci",
         widget=forms.Textarea,
     )
 

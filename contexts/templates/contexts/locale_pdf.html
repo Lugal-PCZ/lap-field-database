@@ -14,9 +14,9 @@
         <dt>Name:</dt><dd>{{ locale.name }}</dd>
         <dt>Area:</dt><dd>{{ locale.area }}</dd>
         <dt>Method:</dt><dd>{{ locale.method }}</dd>
-        <dt>Seasons:</dt><dd>{% if not locale.seasons_list %}-{% else %}{{ locale.seasons_list|join:", "  }}{% endif %}</dd>
-        <dt>SUs:</dt><dd>{% if not locale.sus_list %}-{% else %}{{ locale.sus_list|join:", "  }}{% endif %}</dd>
-        <dt>Notes:</dt><dd>{% if not locale.notes %}-{% else %}{{ locale.notes|escape|linebreaksbr }}{% endif %}</dd>
+        <dt>Seasons:</dt><dd>{{ locale.seasons_list|default:"-"|join:", " }}</dd>
+        <dt>SUs and 1LAP/3LAP Loci:</dt><dd>{{ locale.sus_list|default:"-"|join:", " }}</dd>
+        <dt>Notes:</dt><dd>{{ locale.notes|default:"-"|escape|linebreaksbr }}</dd>
     </dl>
 </body>
 </html>
