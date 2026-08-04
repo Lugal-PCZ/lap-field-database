@@ -264,6 +264,13 @@ class SU(models.Model):
         null=True,
         blank=True,
     )
+    tracing_pdf = AdvanceThumbnailField(
+        source_field="tracing",
+        upload_to="uploads/sus/tracings/pdf/",
+        size=(600, 600),
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         db_table = "lap_sus"

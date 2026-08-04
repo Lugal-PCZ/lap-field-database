@@ -38,6 +38,10 @@ dd {
     margin-bottom: 2ex;
 }
 
+img {
+    width: 8cm;
+}
+
 #footer {
     text-align: center;
 }

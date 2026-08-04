@@ -28,7 +28,7 @@
         <dt>Dimensions:</dt><dd>{{ su.dimensions|default:"-" }}</dd>
         <dt>Elevation (top):</dt><dd>{{ su.elevationtop|default:"-" }}</dd>
         <dt>Elevation (bottom):</dt><dd>{{ su.elevationbottom|default:"-" }}</dd>
-        <dt>Tracing:</dt><dd>{{ su.tracing|default:"-" }}</dd>
+        <dt>Tracing:</dt><dd>{% if su.tracing %}<img src="{{ su.tracing_pdf }}">{% else %}-{% endif %}</dd>
         <dt>Architectural Features:</dt><dd>{{ su.architecturalfeatures|default:"-" }}</dd>
         <dt>Architectural Technique:</dt><dd>{{ su.architecturaltechnique|default:"-" }}</dd>
         <dt>Color:</dt><dd>{{ su.color|default:"-" }}</dd>
