@@ -17,32 +17,109 @@
     </div>
     <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
     
+    {% comment %}
+        NOTE: Table cells can't span pages, so anything that might run long should be contained in a dl instead.
+    {% endcomment %}
+    <table>
+        <tr>
+            <th>SU Number:</th>
+            <th>1LAP/3LAP Locus:</th>
+            <th>Locale:</th>
+        </tr>
+        <tr>
+            <td>{% if su.locus %}-{% else %}{{ su.number|default:"0" }}{% endif %}</td>
+            <td>{{ su.locus|default:"-" }}</td>
+            <td>{{ su.locale }}</td>
+        </tr>
+        <tr>
+            <th>Date Assigned:</th>
+            <th>Recorded By:</th>
+            <th>Seasons:</th>
+        </tr>
+        <tr>
+            <td>{{ su.dateassigned|date:"Y-m-d" }}</td>
+            <td>{{ su.recordedby }}</td>
+            <td>{{ su.seasons_list|join:", " }}</td>
+        </tr>
+        <tr>
+            <th>Feature Type:</th>
+            <th>Dimensions:</th>
+        </tr>
+        <tr>
+            <td>{{ su.prefix|default:"-" }}</td>
+            <td>{{ su.dimensions|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Elevation (top):</th>
+            <th>Elevation (bottom):</th>
+        </tr>
+        <tr>
+            <td>{{ su.elevationtop|default:"-" }}</td>
+            <td>{{ su.elevationbottom|default:"-" }}</td>
+        </tr>
+    </table>
     <dl>
-        <dt>SU Number:</dt><dd>{% if su.locus %}-{% else %}{{ su.number|default:"0" }}{% endif %}</dd>
-        <dt>1LAP/3LAP Locus:</dt><dd>{{ su.locus|default:"-" }}</dd>
-        <dt>Locale:</dt><dd>{{ su.locale }}</dd>
-        <dt>Date Assigned:</dt><dd>{{ su.dateassigned|date:"Y-m-d" }}</dd>
-        <dt>Recorded By:</dt><dd>{{ su.recordedby }}</dd>
-        <dt>Seasons:</dt><dd>{{ su.seasons_list|join:", " }}</dd>
-        <dt>Feature Type:</dt><dd>{{ su.prefix|default:"-" }}</dd>
-        <dt>Dimensions:</dt><dd>{{ su.dimensions|default:"-" }}</dd>
-        <dt>Elevation (top):</dt><dd>{{ su.elevationtop|default:"-" }}</dd>
-        <dt>Elevation (bottom):</dt><dd>{{ su.elevationbottom|default:"-" }}</dd>
         <dt>Tracing:</dt><dd>{% if su.tracing %}<img src="{{ su.tracing_pdf }}">{% else %}-{% endif %}</dd>
-        <dt>Architectural Features:</dt><dd>{{ su.architecturalfeatures|default:"-" }}</dd>
-        <dt>Architectural Technique:</dt><dd>{{ su.architecturaltechnique|default:"-" }}</dd>
-        <dt>Color:</dt><dd>{{ su.color|default:"-" }}</dd>
-        <dt>Composition:</dt><dd>{{ su.composition|default:"-" }}</dd>
-        <dt>Texture:</dt><dd>{{ su.texture|default:"-" }}</dd>
-        <dt>Inclusions:</dt><dd>{{ su.inclusions|default:"-" }}</dd>
-        <dt>Abuts:</dt><dd>{{ su.abuts|default:"-" }}</dd>
-        <dt>Same As:</dt><dd>{{ su.sameas|default:"-" }}</dd>
-        <dt>Covered By:</dt><dd>{{ su.coveredby|default:"-" }}</dd>
-        <dt>Covers:</dt><dd>{{ su.covers|default:"-" }}</dd>
-        <dt>Cut By:</dt><dd>{{ su.cutby|default:"-" }}</dd>
-        <dt>Cuts:</dt><dd>{{ su.cuts|default:"-" }}</dd>
-        <dt>Filled By:</dt><dd>{{ su.filledby|default:"-" }}</dd>
-        <dt>Fills:</dt><dd>{{ su.fills|default:"-" }}</dd>
+    </dl>
+    <table>
+        <tr>
+            <th>Architectural Features:</th>
+            <th>Architectural Technique:</th>
+        </tr>
+        <tr>
+            <td>{{ su.architecturalfeatures|default:"-" }}</td>
+            <td>{{ su.architecturaltechnique|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Color:</th>
+            <th>Composition:</th>
+        </tr>
+        <tr>
+            <td>{{ su.color|default:"-" }}</td>
+            <td>{{ su.composition|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Texture:</th>
+            <th>Inclusions:</th>
+        </tr>
+        <tr>
+            <td>{{ su.texture|default:"-" }}</td>
+            <td>{{ su.inclusions|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Abuts:</th>
+            <th>Same As:</th>
+        </tr>
+        <tr>
+            <td>{{ su.abuts|default:"-" }}</td>
+            <td>{{ su.sameas|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Covered By:</th>
+            <th>Covers:</th>
+        </tr>
+        <tr>
+            <td>{{ su.coveredby|default:"-" }}</td>
+            <td>{{ su.covers|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Cut By:</th>
+            <th>Cuts:</th>
+        </tr>
+        <tr>
+            <td>{{ su.cutby|default:"-" }}</td>
+            <td>{{ su.cuts|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Filled By:</th>
+            <th>Fills:</th>
+        </tr>
+        <tr>
+            <td>{{ su.filledby|default:"-" }}</td>
+            <td>{{ su.fills|default:"-" }}</td>
+        </tr>
+    </table>
+    <dl>
         <dt>Description:</dt><dd>{{ su.description|default:"-" }}</dd>
         <dt>Interpretation:</dt><dd>{{ su.interpretation|default:"-" }}</dd>
         <dt>Lots:</dt><dd>{{ lots|default:"-"|join:", " }}</dd>

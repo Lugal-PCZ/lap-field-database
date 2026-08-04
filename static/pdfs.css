@@ -18,24 +18,39 @@
 body {
     font-family: 'Times New Roman', Times, serif;
     font-size: 12pt;
-    line-height: 110%;
+    line-height: 120%;
 }
 
 h1 {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 18pt;
     font-weight: bold;
-    margin-bottom: 0;
+    padding-bottom: -6pt;
+}
+
+tr {
+    padding-bottom: 6pt;
+}
+
+th {
+    font-family: Helvetica, Arial, sans-serif;
+    text-align: left;
+    padding-bottom: 0;
+}    
+
+dl {
+    padding-left: -1pt;
+    padding-top: -1pt;
 }
 
 dt {
     font-family: Helvetica, Arial, sans-serif;
     font-weight: bold;
+    padding-bottom: -1pt;
 }
 
 dd {
-    margin-left: 10pt;
-    margin-bottom: 2ex;
+    padding-bottom: 18pt;
 }
 
 img {

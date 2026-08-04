@@ -17,13 +17,34 @@
     </div>
     <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
     
+    {% comment %}
+        NOTE: Table cells can't span pages, so anything that might run long should be contained in a dl instead.
+    {% endcomment %}
+    <table>
+        <tr>
+            <th>Number:</th>
+            <th>SU or 1LAP/3LAP Locus:</th>
+            <th>Locale:</th>
+        </tr>
+        <tr>
+            <td>{{ lot.number }}</td>
+            <td>{{ lot.su }}</td>
+            <td>{{ lot.su.locale }}</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <th>Date Assigned:</th>
+            <th>Season:</th>
+            <th>Contents:</th>
+        </tr>
+        <tr>
+            <td>{{ lot.dateassigned|date:"Y-m-d" }}</td>
+            <td>{{ lot.season }}</td>
+            <td>{{ lot.contents|default:"-" }}</td>
+        </tr>
+    </table>
     <dl>
-        <dt>Number:</dt><dd>{{ lot.number }}</dd>
-        <dt>SU or 1LAP/3LAP Locus:</dt><dd>{{ lot.su }}</dd>
-        <dt>Locale:</dt><dd>{{ lot.su.locale }}</dd>
-        <dt>Date Assigned:</dt><dd>{{ lot.dateassigned|date:"Y-m-d" }}</dd>
-        <dt>Season:</dt><dd>{{ lot.season }}</dd>
-        <dt>Contents:</dt><dd>{{ lot.contents|default:"-" }}</dd>
         <dt>Notes:</dt><dd>{{ lot.notes|default:"-" }}</dd>
     </dl>
 </body>
