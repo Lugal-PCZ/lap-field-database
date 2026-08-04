@@ -298,7 +298,7 @@ class SU(models.Model):
             return f"{self.locus}"
         elif self.locus:
             return f"Locus {self.locus}"
-        elif self.prefix:
+        elif self.prefix and self.number:
             return f"SU {self.prefix.prefix}.{self.number}"
         elif self.number is None:
             return f"SU 0 ({self.locale})"
