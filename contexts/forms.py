@@ -204,6 +204,7 @@ class SUForm(forms.ModelForm):
             self.fields["number"].widget.attrs["value"] = 0
         self.fields["recordedby"].initial = user
         self.fields["locus"].disabled = True
+        self.fields["seasons"].widget.attrs["size"] = Season.objects.all().count()
         self.fields["tracing"].widget.attrs["onscreen"] = f"/{str(self.instance.tracing_onscreen)}"
         self.fields["tracing"].widget.attrs["user"] = str(user)
         if self.instance.pk:
