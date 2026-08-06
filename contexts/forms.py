@@ -108,10 +108,12 @@ class LocaleForm(forms.ModelForm):
             "notes",
         ]
 
+    def form_name(self):
+        return "locale"
+
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)
         super(LocaleForm, self).__init__(*args, **kwargs)
-        self.fields["name"].widget.attrs["formname"] = "locale"
         if self.instance.pk:
             related_sus = self.instance.sus.prefetch_related(
                 Prefetch(
@@ -196,10 +198,12 @@ class SUForm(forms.ModelForm):
             self.cleaned_data["number"] = None
         return self.cleaned_data["number"]
 
+    def form_name(self):
+        return "su"
+
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)
         super(SUForm, self).__init__(*args, **kwargs)
-        self.fields["number"].widget.attrs["formname"] = "su"
         if not self.instance.number:
             self.fields["number"].widget.attrs["value"] = 0
         self.fields["recordedby"].initial = user
