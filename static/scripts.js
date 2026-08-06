@@ -74,13 +74,16 @@ function resetForm() {
       field.removeAttribute("title");
       field.innerHTML = localStorage.getItem(target_field);
     });
+    document.getElementById('savebutton').disabled=true;
+    document.getElementById('discardchangesbutton').disabled=true;
+    document.getElementById('newbutton').disabled=false;
+    if (document.querySelector("#id_voided")) {
+      toggleVoided();
+    };
+    if (document.querySelector("#details").name === "SUForm" && !document.querySelector("#onscreen")) {
+      document.getElementById("id_worldfile").parentElement.hidden = true;
+    };
   };
-  document.getElementById('savebutton').disabled=true;
-  document.getElementById('discardchangesbutton').disabled=true;
-  document.getElementById('newbutton').disabled=false;
-  if (document.querySelector("#id_voided")) {
-    toggleVoided();
-  }
 }
 
 function checkForm() {
@@ -119,7 +122,29 @@ function checkForm() {
     };
     if (document.querySelector("#id_voided")) {
       toggleVoided();
-    }
+    };
+    if (document.querySelector("#details").name === "SUForm") {
+      if (document.getElementById("id_tracing").value || document.querySelector("#onscreen")) {
+        document.getElementById("id_worldfile").parentElement.hidden = false;
+        document.getElementById("id_worldfile").required = true;
+      };
+      if (document.querySelector("#tracing-clear_id") && document.getElementById("tracing-clear_id").checked) {
+        document.getElementById("id_worldfile").required = false;
+      };
+    };
+  };
+}
+
+function hideFields() {
+  if (document.querySelector("#details")) {
+    const form_name = document.querySelector("#details").name;
+    switch (form_name) {
+      case "SUForm":
+        if (!document.querySelector("#onscreen")) {
+          document.getElementById("id_worldfile").parentElement.hidden = true;
+        }
+        break;
+    };
   };
 }
 

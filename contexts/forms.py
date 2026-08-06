@@ -153,6 +153,7 @@ class SUForm(forms.ModelForm):
             "seasons",
             "prefix",
             "tracing",
+            "worldfile",
             "architecturalfeatures",
             "architecturaltechnique",
             "elevationtop",
@@ -189,6 +190,11 @@ class SUForm(forms.ModelForm):
                 attrs={
                     "accept": ".jpg,.jpeg",
                 },
+            ),
+            "worldfile": forms.ClearableFileInput(
+                attrs={
+                    "accept": ".jgw",
+                }
             ),
         }
 

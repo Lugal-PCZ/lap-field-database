@@ -258,18 +258,23 @@ class SU(models.Model):
         blank=True,
     )
     tracing_onscreen = AdvanceThumbnailField(
-        source_field="tracing",
+        source_field="tracing",  # type: ignore
         upload_to="uploads/sus/tracings/onscreen/",
-        size=(310, 310),
+        size=(310, 310),  # type: ignore
         null=True,
         blank=True,
     )
     tracing_pdf = AdvanceThumbnailField(
-        source_field="tracing",
+        source_field="tracing",  # type: ignore
         upload_to="uploads/sus/tracings/pdf/",
-        size=(600, 600),
+        size=(600, 600),  # type: ignore
         null=True,
         blank=True,
+    )
+    worldfile = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name="World File",
     )
 
     class Meta:
