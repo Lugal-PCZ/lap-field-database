@@ -109,7 +109,7 @@ class LocaleForm(forms.ModelForm):
         ]
 
     def form_name(self):
-        return "locale"
+        return "LocaleForm"
 
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)
@@ -199,7 +199,7 @@ class SUForm(forms.ModelForm):
         return self.cleaned_data["number"]
 
     def form_name(self):
-        return "su"
+        return "SUForm"
 
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)

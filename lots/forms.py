@@ -82,7 +82,7 @@ class LotForm(forms.ModelForm):
         }
 
     def form_name(self):
-        return "lot"
+        return "LotForm"
 
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)

@@ -95,7 +95,7 @@
 /* Custom Details View Grids Follow */
 
 /* Locales */
-form[name="locale"] {
+form[name="LocaleForm"] {
     grid-template-areas:
         "name area method"
         "seasons_list . ."
@@ -104,7 +104,7 @@ form[name="locale"] {
 }
 
 /* SUs */
-form[name="su"] {
+form[name="SUForm"] {
     grid-template-areas:
         "number locus locale"
         "dateassigned recordedby seasons"
@@ -127,7 +127,7 @@ form[name="su"] {
 }
 
 /* Lots */
-form[name="lot"] {
+form[name="LotForm"] {
     grid-template-areas:
         "number su locale"
         "dateassigned season contents"
