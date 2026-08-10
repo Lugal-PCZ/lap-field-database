@@ -1,0 +1,10 @@
+{% if widget.attrs.value %}
+    <div id="worldfilecontents">{{ widget.attrs.value|linebreaks }}</div>
+{% endif %}
+<div>
+{% if widget.attrs.user != "AnonymousUser" %}
+    <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} >
+{% else %}
+    <span {% include "django/forms/widgets/attrs.html" %}></span>
+{% endif %}
+</div>

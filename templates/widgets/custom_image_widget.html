@@ -8,8 +8,10 @@
         </div>
     {% endif %}
 {% endif %}
+<div>
 {% if widget.attrs.user != "AnonymousUser" %}
-    <div>
-        <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} >
-    </div>
+    <input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %} >
+{% elif widget.attrs.onscreen == "/" %}
+    <i {% include "django/forms/widgets/attrs.html" %}>(not uploaded)</i>
 {% endif %}
+</div>

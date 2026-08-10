@@ -82,14 +82,25 @@
     background-color: white;
 }
 
+#details #worldfilecontents {
+    margin-left: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: midnightblue;
+}
+
+#details #worldfilecontents p {
+    margin: 3px 7px;
+}
+
 #discardchangesbutton {
     margin-right: 10px;
-}
+}    
 
 #savebutton,
 #discardchangesbutton {
     float: right;
-}
+}    
 
 
 /* Custom Details View Grids Follow */

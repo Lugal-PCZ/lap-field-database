@@ -1,3 +1,4 @@
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import F, Q
 from django.db.models.functions import Lower
@@ -271,10 +272,16 @@ class SU(models.Model):
         null=True,
         blank=True,
     )
-    worldfile = models.TextField(
+    worldfile = models.FileField(
+        storage=FileSystemStorage(location="/tmp/"),
+        max_length=200,
         null=True,
         blank=True,
         verbose_name="World File",
+    )
+    worldfile_contents = models.TextField(
+        null=True,
+        blank=True,
     )
 
     class Meta:
@@ -309,3 +316,12 @@ class SU(models.Model):
             return f"SU 0 ({self.locale})"
         else:
             return f"SU {self.number}"
+
+    def save(self, *args, **kwargs):
+        if not self.tracing:
+            self.worldfile = None
+            self.worldfile_contents = None
+        if self.worldfile:
+            self.worldfile_contents = self.worldfile.read().decode("UTF-8")  # type: ignore
+            self.worldfile = None
+        super(SU, self).save(*args, **kwargs)

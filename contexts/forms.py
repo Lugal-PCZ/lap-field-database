@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
 from django.db.models import F, Prefetch, Q
 
-from templates.widgets.widgets import CustomImageWidget
+from templates.widgets.widgets import CustomImageWidget, CustomWorldfileWidget
 from lapinfo.models import Area, Season
 from .models import Locale, SU, SUPrefix
 from lots.models import Lot
@@ -191,7 +191,7 @@ class SUForm(forms.ModelForm):
                     "accept": ".jpg,.jpeg",
                 },
             ),
-            "worldfile": forms.ClearableFileInput(
+            "worldfile": CustomWorldfileWidget(
                 attrs={
                     "accept": ".jgw",
                 }
@@ -217,6 +217,11 @@ class SUForm(forms.ModelForm):
         self.fields["seasons"].widget.attrs["size"] = Season.objects.all().count()
         self.fields["tracing"].widget.attrs["onscreen"] = f"/{str(self.instance.tracing_onscreen)}"
         self.fields["tracing"].widget.attrs["user"] = str(user)
+        self.fields["worldfile"].widget.attrs["user"] = str(user)
+        if not self.instance.worldfile:
+            self.fields["worldfile"].widget.attrs["initiallyhidden"] = True
+        if self.instance.worldfile_contents:
+            self.fields["worldfile"].widget.attrs["value"] = f"{self.instance.worldfile_contents}"
         if self.instance.pk:
             related_lots = self.instance.lot_set.values()
             lots = set()

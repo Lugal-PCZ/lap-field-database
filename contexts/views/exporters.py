@@ -285,6 +285,7 @@ def su_details_export(request, id):
         "pdf_css": pdf_css,
         "su": details,
         "lots": lots,
+        "filename": str(details.tracing).split("/")[-1],  # type: ignore
     }
     template = render_to_string("contexts/su_pdf.html", context)
     result = io.BytesIO()

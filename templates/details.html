@@ -8,7 +8,7 @@
     <form id="details" name="{{ form.form_name }}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% for field in form %}
-        <div class="form-group" style="grid-area: {{ field.name }}">
+    <div class="form-group" style="grid-area: {{ field.name }}" {% if field.field.widget.attrs.initiallyhidden %}hidden{% endif %}>
             {{ field.label_tag }}
             {{ field }}
             {% if field.errors %}

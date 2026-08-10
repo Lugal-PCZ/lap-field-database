@@ -38,6 +38,10 @@ th {
     padding-bottom: 0;
 }    
 
+td {
+        vertical-align: top;
+}
+
 dl {
     padding-left: -1pt;
     padding-top: -1pt;
@@ -68,4 +72,9 @@ img {
 #voided_warning {
     font-size: 14pt;
     color: red;
+}
+
+.filename {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: small;
 }

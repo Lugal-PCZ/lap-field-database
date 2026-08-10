@@ -80,9 +80,7 @@ function resetForm() {
     if (document.querySelector("#id_voided")) {
       toggleVoided();
     };
-    if (document.querySelector("#details").name === "SUForm" && !document.querySelector("#onscreen")) {
-      document.getElementById("id_worldfile").parentElement.hidden = true;
-    };
+    handleDependentFields();
   };
 }
 
@@ -123,28 +121,23 @@ function checkForm() {
     if (document.querySelector("#id_voided")) {
       toggleVoided();
     };
-    if (document.querySelector("#details").name === "SUForm") {
-      if (document.getElementById("id_tracing").value || document.querySelector("#onscreen")) {
-        document.getElementById("id_worldfile").parentElement.hidden = false;
-        document.getElementById("id_worldfile").required = true;
-      };
-      if (document.querySelector("#tracing-clear_id") && document.getElementById("tracing-clear_id").checked) {
-        document.getElementById("id_worldfile").required = false;
-      };
-    };
+    handleDependentFields();
   };
 }
 
-function hideFields() {
-  if (document.querySelector("#details")) {
-    const form_name = document.querySelector("#details").name;
-    switch (form_name) {
-      case "SUForm":
-        if (!document.querySelector("#onscreen")) {
-          document.getElementById("id_worldfile").parentElement.hidden = true;
-        }
-        break;
-    };
+function handleDependentFields() {
+  switch(document.querySelector("#details").name) {
+    case "SUForm":
+      // there is a tracing displayed
+      if (document.querySelector("#onscreen")) {
+        document.getElementById("id_worldfile").closest("div.form-group").hidden = false;
+      };
+      // a tracing is selected, but not yet saved
+      if (document.querySelector("#id_tracing") && document.getElementById("id_tracing").value) {
+        document.getElementById("id_worldfile").closest("div.form-group").hidden = false;
+        document.getElementById("id_worldfile").required = true;
+      };
+      break;
   };
 }
 

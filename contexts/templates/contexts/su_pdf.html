@@ -58,10 +58,15 @@
             <td>{{ su.elevationbottom|default:"-" }}</td>
         </tr>
     </table>
-    <dl>
-        <dt>Tracing:</dt><dd>{% if su.tracing %}<img src="{{ su.tracing_pdf }}">{% else %}-{% endif %}</dd>
-    </dl>
     <table>
+        <tr>
+            <th>Tracing:</th>
+            <th>World File:</th>
+        </tr>
+        <tr>
+            <td>{% if su.tracing %}<img src="{{ su.tracing_pdf }}"><br><span class="filename">{{ filename }}</span>{% else %}-{% endif %}</td>
+            <td>{{ su.worldfile_contents|default:"-"|linebreaks }}</td>
+        </tr>
         <tr>
             <th>Architectural Features:</th>
             <th>Architectural Technique:</th>
