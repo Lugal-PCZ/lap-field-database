@@ -14,4 +14,5 @@ urlpatterns = [
     path("su/new/", details.su_details),
     path("su/<int:id>/", details.su_details),
     path("su/<int:id>/export/", exporters.su_details_export),
+    path("su/<int:id>/tracing/", exporters.su_tracing_export),
 ]

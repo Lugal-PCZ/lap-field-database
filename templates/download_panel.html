@@ -12,7 +12,7 @@
     </a>
     {% if title == "SU Details" and form.tracing.value %}
     <hr>
-    <a href="{{ request.path }}export/" onclick="this.parentElement.hidden=true">
+    <a href="{{ request.path }}tracing/" onclick="this.parentElement.hidden=true">
         Download Tracing<br>of This SU
         <img class="downloadicon" src="{% static 'img/map_icon.svg' %}" />
     </a>

@@ -1,5 +1,6 @@
-import codecs, csv, io
+import codecs, csv, io, os, shutil
 from pathlib import Path
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -292,4 +293,29 @@ def su_details_export(request, id):
     pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
     response = HttpResponse(result.getvalue(), content_type="application/pdf")
     response["Content-Disposition"] = f'attachment; filename="LAP SU {details}.pdf"'  # type: ignore
+    return response
+
+
+def su_tracing_export(request, id):
+    record = SU.objects.filter(id=id)[0]
+    name = record.tracingexportname()
+    worldfile = str(record.worldfile_contents)
+    if os.path.exists(f"/tmp/{name}.zip"):
+        os.remove(f"/tmp/{name}.zip")
+    shutil.rmtree(f"/tmp/{name}/", ignore_errors=True)
+    os.makedirs(f"/tmp/{name}")
+    shutil.copy(str(record.tracing), f"/tmp/{name}/{name}.jpg")
+    with open(f"/tmp/{name}/{name}.jgw", "w") as f:
+        f.write(worldfile)
+    with ZipFile(f"/tmp/{name}.zip", "w", compression=ZIP_DEFLATED) as f:
+        f.write(f"/tmp/{name}/{name}.jpg", arcname=f"{name}/{name}.jpg")
+        f.write(f"/tmp/{name}/{name}.jgw", arcname=f"{name}/{name}.jgw")
+    with open(f"/tmp/{name}.zip", "rb") as f:
+        response = HttpResponse(
+            f.read(),
+            headers={
+                "Content-Type": "application/zip",
+                "Content-Disposition": f'attachment; filename="{name}.zip"',
+            },
+        )
     return response

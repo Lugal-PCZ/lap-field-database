@@ -307,7 +307,7 @@ class SU(models.Model):
 
     def __str__(self):
         if str(self.locus).startswith("Wall"):  # special case for a handful of contexts that were named "Wall n"
-            return f"{self.locus}"
+            return self.locus
         elif self.locus:
             return f"Locus {self.locus}"
         elif self.prefix and self.number:
@@ -316,6 +316,28 @@ class SU(models.Model):
             return f"SU 0 ({self.locale})"
         else:
             return f"SU {self.number}"
+
+    def tracingexportname(
+        self,
+    ):  # formats names in a manner that's friendly for exports of tracing jpegs and worldfiles
+        if str(self.locus).startswith("Wall"):  # special case for a handful of contexts that were named "Wall n"
+            name = self.locus
+        elif self.locus:
+            name = f"Locus_{self.locus}"
+        elif self.number is None:
+            name = f"SU_0"
+        else:
+            name = f"SU_{self.number}"
+        name = (
+            name.replace(" ", "_")
+            .replace("/", "_")
+            .replace(":", "_")
+            .replace(chr(92), "_")
+            .replace(".", "_")
+            .replace("(", "")
+            .replace(")", "")
+        )
+        return name
 
     def save(self, *args, **kwargs):
         if not self.tracing:
