@@ -19,7 +19,7 @@
         <div>Thumbnail</div>
     </dt>
     {% for item in all_items %}
-    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(6, 1fr);" onclick="window.open('/lot/{{ item.id }}', '_self')">
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(6, 1fr);" onclick="window.open('/object/{{ item.id }}', '_self')">
         <div>{{ item }}</div>
         <div>{{ item.season }}</div>
         <div>{{ item.su.locale }}</div>
