@@ -47,33 +47,6 @@ class SUFilters(forms.Form):
     )
 
 
-class LotFilters(forms.Form):
-    su = forms.ModelChoiceField(
-        label="SU",
-        empty_label="all",
-        queryset=SU.objects.filter(Q(number__isnull=False) | Q(locus__isnull=False)),
-        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
-    )
-    locale = forms.ModelChoiceField(
-        label="Locale",
-        empty_label="all",
-        queryset=Locale.objects.all().order_by(F("name")[0:6], "id"),  # type: ignore
-        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
-    )
-    contents = forms.ModelChoiceField(
-        label="Contents",
-        empty_label="all",
-        queryset=Lot.objects.values_list("contents", flat=True).order_by("contents").distinct(),  # type: ignore
-        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
-    )
-    season = forms.ModelChoiceField(
-        label="Season",
-        empty_label="all",
-        queryset=Season.objects.all(),
-        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
-    )
-
-
 # Details View Forms
 
 

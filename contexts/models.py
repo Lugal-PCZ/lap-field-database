@@ -1,12 +1,13 @@
-from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models import F, Q
 from django.db.models.functions import Lower
+from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 
 from django_advance_thumbnail import AdvanceThumbnailField
 
+from accounts.models import CustomUser
 from lapinfo.models import Area, Season
 
 
@@ -26,7 +27,7 @@ class Locale(models.Model):
         on_delete=models.PROTECT,
         related_name="locales",
         null=False,
-        default=Area.objects.filter(Q(name="Area H")).last().pk,
+        default=Area.objects.filter(Q(name="Area H")).last().pk,  # type: ignore
     )
     method = models.CharField(
         max_length=20,
@@ -124,7 +125,7 @@ class SU(models.Model):
         verbose_name="Date Assigned",
     )
     recordedby = models.ForeignKey(
-        "accounts.CustomUser",
+        CustomUser,
         null=False,
         on_delete=models.PROTECT,
         verbose_name="Recorded By",

@@ -16,11 +16,11 @@ class Lot(models.Model):
         max_length=9,
         default=Season.objects.last().name,  # type: ignore
         null=False,
-    )  # type: ignore
+    )
     season = models.ForeignKey(
         Season,
         on_delete=models.PROTECT,
-        default=Season.objects.last().pk,
+        default=Season.objects.last().pk,  # type: ignore
         null=False,
     )
     su = models.ForeignKey(
