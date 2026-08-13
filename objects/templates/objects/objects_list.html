@@ -10,21 +10,23 @@
 
 {% block content %}
 <dl>
-    <dt style="grid-template-columns: repeat(6, 1fr);">
+    <dt style="grid-template-columns: repeat(7, 1fr);">
         <div>Object</div>
         <div>Season</div>
         <div>Locale</div>
         <div>Type</div>
         <div>Subtype</div>
+        <div>Material</div>
         <div>Thumbnail</div>
     </dt>
     {% for item in all_items %}
-    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(6, 1fr);" onclick="window.open('/object/{{ item.id }}', '_self')">
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(7, 1fr);" onclick="window.open('/object/{{ item.id }}', '_self')">
         <div>{{ item }}</div>
         <div>{{ item.season }}</div>
         <div>{{ item.su.locale }}</div>
         <div>{{ item.objecttype }}</div>
         <div>{{ item.objectsubtype.name|default:"-" }}</div>
+        <div>{{ item.material }}</div>
         <div>(coming soon)</div>
     </dd>
     {% endfor %}

@@ -36,6 +36,12 @@ class ObjectFilters(forms.Form):
         queryset=ObjectSubtype.objects.all(),
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
+    material = forms.ModelChoiceField(
+        label="Material",
+        empty_label="all",
+        queryset=Object.objects.values_list("material", flat=True).order_by("material").distinct(),  # type: ignore
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
 
 
 # Details View Forms
