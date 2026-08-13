@@ -126,18 +126,20 @@ function checkForm() {
 }
 
 function handleDependentFields() {
-  switch(document.querySelector("#details").name) {
-    case "SUForm":
-      // there is a tracing displayed
-      if (document.querySelector("#onscreen")) {
-        document.getElementById("id_worldfile").closest("div.form-group").hidden = false;
-      };
-      // a tracing is selected, but not yet saved
-      if (document.querySelector("#id_tracing") && document.getElementById("id_tracing").value) {
-        document.getElementById("id_worldfile").closest("div.form-group").hidden = false;
-        document.getElementById("id_worldfile").required = true;
-      };
-      break;
+  if (document.querySelector("#details")) {
+    switch(document.getElementById("details").name) {
+      case "SUForm":
+        // there is a tracing displayed
+        if (document.querySelector("#onscreen")) {
+          document.getElementById("id_worldfile").closest("div.form-group").hidden = false;
+        };
+        // a tracing is selected, but not yet saved
+        if (document.querySelector("#id_tracing") && document.getElementById("id_tracing").value) {
+          document.getElementById("id_worldfile").closest("div.form-group").hidden = false;
+          document.getElementById("id_worldfile").required = true;
+        };
+        break;
+    };
   };
 }
 
