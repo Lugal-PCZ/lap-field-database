@@ -226,6 +226,10 @@ class SU(models.Model):
         null=True,
         blank=True,
     )
+    notes = models.TextField(
+        null=True,
+        blank=True,
+    )
     architecturalfeatures = models.CharField(
         max_length=100,
         null=True,

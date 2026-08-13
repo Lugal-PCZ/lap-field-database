@@ -173,6 +173,7 @@ class SUForm(forms.ModelForm):
             "fills",
             "description",
             "interpretation",
+            "notes",
             "photos",
             "photogrammetrynumbers",
             "voided",
