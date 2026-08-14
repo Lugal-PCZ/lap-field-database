@@ -73,6 +73,9 @@ function resetForm() {
       const target_field = `id_${field.id.split("_")[1].split("-")[0]}`
       field.removeAttribute("title");
       field.innerHTML = localStorage.getItem(target_field);
+      if (!localStorage.getItem(target_field)) {
+        document.getElementById(target_field).innerHTML = '';
+      }
     });
     document.getElementById('savebutton').disabled=true;
     document.getElementById('discardchangesbutton').disabled=true;
@@ -81,6 +84,7 @@ function resetForm() {
       toggleVoided();
     };
     handleDependentFields();
+    highlightRequiredSelect2Fields();
   };
 }
 
@@ -122,6 +126,7 @@ function checkForm() {
       toggleVoided();
     };
     handleDependentFields();
+    highlightRequiredSelect2Fields();
   };
 }
 
@@ -139,6 +144,8 @@ function handleDependentFields() {
           document.getElementById("id_worldfile").required = true;
         };
         break;
+      case "ObjectForm":
+        break;
     };
   };
 }
@@ -150,12 +157,25 @@ function toggleVoided() {
       labels.forEach(label => {
         label.classList.add('voided');
       });
+      alert("Be sure to write in the notes why this record is being voided.");
     } else {
       labels.forEach(label => {
         label.classList.remove('voided');
       });
     };
   };
+}
+
+function highlightRequiredSelect2Fields() {
+  const select2widgets = document.querySelectorAll(".select2-selection");
+  select2widgets.forEach(field => {
+    const selectfield = field.closest(".form-group").querySelector("select");
+    if (selectfield.required && !selectfield.querySelector("option")) {
+      field.setAttribute("style", "border-color: red;");
+    } else {
+      field.removeAttribute("style");
+    };
+  });
 }
 
 function loadLocale() {

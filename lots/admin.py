@@ -26,7 +26,4 @@ class LotAdmin(admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        if "/autocomplete/" not in request.get_full_path():
-            return queryset, use_distinct
-        else:
-            return queryset.exclude(voided=True), True
+        return queryset.exclude(voided=True), use_distinct

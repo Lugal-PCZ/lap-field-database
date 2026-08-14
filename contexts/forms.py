@@ -1,12 +1,11 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
-from django.db.models import F, Prefetch, Q
+from django.db.models import F, Prefetch
 
 from templates.widgets.widgets import CustomImageWidget, CustomWorldfileWidget
 from lapinfo.models import Area, Season
 from .models import Locale, SU, SUPrefix
-from lots.models import Lot
 
 # List View Filters
 
