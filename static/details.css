@@ -154,3 +154,30 @@ form[name="LotForm"] {
         "notes notes notes"
         "voided . .";
 }
+
+/* Objects */
+form[name="ObjectForm"] {
+    grid-template-areas:
+        "number excavationnumber ."
+        ". lot season"
+        "area locale su"
+        "excavationdate registrationdate registrar"
+        "objecttype objectsubtype ."
+        "clayslaborsealingmarking sealingfunction ."
+        "bladeserration . ."
+        "material . ."
+        "stonesubtype . ."
+        "metalsubtype . ."
+        "preservation repairedorrepurposed ."
+        "maincolor decoration decorationcolor"
+        "height length width"
+        "thickness . ."
+        "diametermax diametermin diameterholes"
+        "description description description"
+        "notes notes notes"
+        "senttobaghdad . ."
+        "baghdadnumber . ."
+        "tobephotographed photographed ."
+        "tobedrawn drawn ."
+        "voided . .";
+    }

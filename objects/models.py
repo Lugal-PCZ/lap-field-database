@@ -9,6 +9,16 @@ from contexts.models import Locale, SU
 from lots.models import Lot
 
 
+def get_next_object_number():
+    currentseason = Season.objects.last().name  # type: ignore
+    lastnumber = Object.objects.all().order_by("number").last().number  # type: ignore
+    if lastnumber.split("LAP")[0] != currentseason.split("LAP")[0]:
+        nextnumber = f"{currentseason}{int(currentseason.split('LAP')[0]) - 3:02d}000"
+    else:
+        nextnumber = f"{currentseason}{int(lastnumber.split('LAP')[1]) + 1:05d}"
+    return nextnumber
+
+
 class ObjectType(models.Model):
     name = models.CharField(
         max_length=50,
@@ -46,7 +56,10 @@ class ObjectSubtype(models.Model):
         ordering = ["type", "name"]
 
     def __str__(self):
-        return f"{self.type}: {self.name}"
+        return self.name
+
+    def formatted_name(self):
+        return f"{self.name} ({self.type})"
 
 
 class Object(models.Model):
@@ -84,7 +97,6 @@ class Object(models.Model):
         ("Repaired", "Repaired"),
         ("Repurposed", "Repurposed"),
         ("Repurposed and Repaired", "Repurposed and Repaired"),
-        ("(not recorded)", "(not recorded)"),
     ]
     MATERIAL_CHOICES = [
         ("Bitumen", "Bitumen"),
@@ -160,7 +172,6 @@ class Object(models.Model):
         ("Turquoise", "Turquoise"),
         ("White", "White"),
         ("Yellow", "Yellow"),
-        ("(not recorded)", "(not recorded)"),
     ]
     DECORATION_CHOICES = [
         ("Carved", "Carved"),
@@ -172,7 +183,7 @@ class Object(models.Model):
     ]
     number = models.CharField(
         max_length=10,
-        default=Season.objects.last().name,  # type: ignore
+        default=get_next_object_number,
         null=False,
     )
     excavationnumber = models.CharField(
@@ -180,7 +191,6 @@ class Object(models.Model):
         default=Season.objects.last().name,  # type: ignore
         null=False,
         verbose_name="Excavation Number",
-        # TODO: make sure that "N/A" can be entered for incidental surface finds
     )
     season = models.ForeignKey(
         Season,
@@ -206,13 +216,16 @@ class Object(models.Model):
         null=False,
         verbose_name="SU or 1LAP/3LAP Locus",
     )
+    # surfacefind = models.BooleanField(
+    #     null=False,
+    #     default=False,
+    #     # TODO: selecting this in the form should hide the lot field
+    # )
     lot = models.ForeignKey(
         Lot,
         on_delete=models.PROTECT,
-        default=Season.objects.last().name,  # type: ignore
         null=True,
         blank=True,
-        # TODO: if Lot is given, its date must match the excavation date
     )
     excavationdate = models.DateField(
         null=True,
@@ -220,6 +233,7 @@ class Object(models.Model):
         default=timezone.now,
         verbose_name="Excavation Date",
         # TODO: best would be if this auto-populated with the Lot's date
+        # TODO: if Lot is given, this date must match the excavation date
         # TODO: there are many NULLs in the legacy data, so this has to be nullable, but enforce required in the form
     )
     registrationdate = models.DateField(
@@ -254,6 +268,7 @@ class Object(models.Model):
         choices=SEALINGFUNCTION_CHOICES,
         null=True,
         blank=True,
+        verbose_name="Sealing Function",
         # TODO: in the form, this becomes visible and required when subtype is "Sealing"
     )
     clayslaborsealingmarking = models.CharField(
@@ -261,6 +276,7 @@ class Object(models.Model):
         choices=CLAYSLABORSEALINGMARKING_CHOICES,
         null=True,
         blank=True,
+        verbose_name="Clay Slab or Sealing Marking",
         # TODO: in the form, this becomes visible and required when subtype is "Clay Slab" or "Sealing"
     )
     bladeserration = models.CharField(
@@ -268,6 +284,7 @@ class Object(models.Model):
         choices=BLADESERRATION_CHOICES,
         null=True,
         blank=True,
+        verbose_name="Blade Serration",
         # TODO: in the form, this becomes visible and required when subtype is "Blade"
     )
     preservation = models.CharField(
@@ -279,6 +296,7 @@ class Object(models.Model):
         max_length=25,
         choices=REPAIREDORREPURPOSED_CHOICES,
         null=False,
+        verbose_name="Repaired/Repurposed",
     )
     material = models.CharField(
         max_length=20,
@@ -290,6 +308,7 @@ class Object(models.Model):
         choices=STONESUBTYPE_CHOICES,
         null=True,
         blank=True,
+        verbose_name="Stone Subtype",
         # TODO: in the form, this becomes visible and required when material is "Stone"
     )
     metalsubtype = models.CharField(
@@ -297,12 +316,14 @@ class Object(models.Model):
         choices=METALSUBTYPE_CHOICES,
         null=True,
         blank=True,
+        verbose_name="Metal Subtype",
         # TODO: in the form, this becomes visible and required when material is "Metal"
     )
     maincolor = models.CharField(
         max_length=20,
         choices=COLOR_CHOICES,
         null=False,
+        verbose_name="Main Color",
     )
     decoration = models.CharField(
         max_length=20,
@@ -315,6 +336,7 @@ class Object(models.Model):
         choices=COLOR_CHOICES,
         null=True,
         blank=True,
+        verbose_name="Decoration Color",
     )
     height = models.CharField(
         max_length=35,
@@ -340,16 +362,19 @@ class Object(models.Model):
         max_length=35,
         null=True,
         blank=True,
+        verbose_name="Diameter (max)",
     )
     diametermin = models.CharField(
         max_length=35,
         null=True,
         blank=True,
+        verbose_name="Diameter (min)",
     )
     diameterholes = models.CharField(
         max_length=35,
         null=True,
         blank=True,
+        verbose_name="Diameter (holes)",
     )
     description = models.TextField(
         null=True,
@@ -362,16 +387,19 @@ class Object(models.Model):
     senttobaghdad = models.BooleanField(
         null=False,
         default=False,
+        verbose_name="Sent to Baghdad",
     )
     baghdadnumber = models.CharField(
         max_length=10,
         null=True,
         blank=True,
+        verbose_name="Baghdad Number",
         # TODO: in the form, make this required if senttobaghdad is checked
     )
     tobephotographed = models.BooleanField(
         null=False,
         default=False,
+        verbose_name="To Be Photographed",
     )
     photographed = models.BooleanField(
         null=False,
@@ -380,6 +408,7 @@ class Object(models.Model):
     tobedrawn = models.BooleanField(
         null=False,
         default=False,
+        verbose_name="To Be Drawn",
     )
     drawn = models.BooleanField(
         null=False,
@@ -405,10 +434,10 @@ class Object(models.Model):
     def __str__(self):
         return self.number
 
-    def clean(self):
-        if self.locale != self.su.locale:
-            raise ValidationError("The Locale for this SU doesn’t match the Locale entered above.")
-        if self.season != self.lot.season:
-            raise ValidationError("The Season for this Lot doesn’t match the Season entered above.")
-        if self.su != self.lot.su:
-            raise ValidationError("The SU for this Lot doesn’t match the SU entered above.")
+    # def clean(self):
+    #     if self.locale != self.su.locale:
+    #         raise ValidationError("The Locale for this SU doesn’t match the Locale entered above.")
+    #     if self.season != self.lot.season:
+    #         raise ValidationError("The Season for this Lot doesn’t match the Season entered above.")
+    #     if self.su != self.lot.su:
+    #         raise ValidationError("The SU for this Lot doesn’t match the SU entered above.")

@@ -14,9 +14,9 @@
         <div>Object</div>
         <div>Season</div>
         <div>Locale</div>
+        <div>Material</div>
         <div>Type</div>
         <div>Subtype</div>
-        <div>Material</div>
         <div>Thumbnail</div>
     </dt>
     {% for item in all_items %}
@@ -24,9 +24,9 @@
         <div>{{ item }}</div>
         <div>{{ item.season }}</div>
         <div>{{ item.su.locale }}</div>
+        <div>{{ item.material }}</div>
         <div>{{ item.objecttype }}</div>
         <div>{{ item.objectsubtype.name|default:"-" }}</div>
-        <div>{{ item.material }}</div>
         <div>(coming soon)</div>
     </dd>
     {% endfor %}
