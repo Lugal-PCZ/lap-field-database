@@ -194,7 +194,7 @@ class Object(models.Model):
         max_length=12,
         default=Season.objects.last().name,  # type: ignore
         null=False,
-        verbose_name="Excavation Number (or N/A)",
+        verbose_name="Excavation Number",
     )
     season = models.ForeignKey(
         Season,

@@ -138,6 +138,9 @@ class ObjectForm(forms.ModelForm):
                 format="%Y-%m-%d",
             ),
         }
+        labels = {
+            "excavationnumber": "Excavation Number (or N/A)",
+        }
 
     def form_name(self):
         return "ObjectForm"

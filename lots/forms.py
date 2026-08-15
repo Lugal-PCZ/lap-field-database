@@ -80,6 +80,9 @@ class LotForm(forms.ModelForm):
                 admin.site,
             ),
         }
+        labels = {
+            "su": "SU or 1LAP/3LAP Locus",
+        }
 
     def form_name(self):
         return "LotForm"
