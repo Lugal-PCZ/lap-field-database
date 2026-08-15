@@ -51,10 +51,10 @@ class SUFilters(forms.Form):
 
 def _update_field_behavior(editable, ref):
     if editable:
-        for eachfield in ref.Meta.fields:
+        for eachfield in ref.fields:
             ref.fields[eachfield].widget.attrs.update({"oninput": "checkForm()"})
     else:
-        for eachfield in ref.Meta.fields:
+        for eachfield in ref.fields:
             ref.fields[eachfield].widget.attrs.update({"editable": True, "oninput": "form.reset()"})
 
 
