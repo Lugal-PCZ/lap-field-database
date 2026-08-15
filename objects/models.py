@@ -157,6 +157,10 @@ class Object(models.Model):
         ("Lead", "Lead"),
         ("Silver", "Silver"),
     ]
+    SHELLSUBTYPE_CHOICES = [
+        ("Bivalve", "Bivalve"),
+        ("Gastropod", "Gastropod"),
+    ]
     COLOR_CHOICES = [
         ("Beige", "Beige"),
         ("Black", "Black"),
@@ -190,7 +194,7 @@ class Object(models.Model):
         max_length=12,
         default=Season.objects.last().name,  # type: ignore
         null=False,
-        verbose_name="Excavation Number",
+        verbose_name="Excavation Number (or N/A)",
     )
     season = models.ForeignKey(
         Season,
@@ -219,6 +223,7 @@ class Object(models.Model):
     # surfacefind = models.BooleanField(
     #     null=False,
     #     default=False,
+    #     verbose_name = "Surface Find (no Lot)"
     #     # TODO: selecting this in the form should hide the lot field
     # )
     lot = models.ForeignKey(
@@ -230,18 +235,16 @@ class Object(models.Model):
     excavationdate = models.DateField(
         null=True,
         blank=True,
-        default=timezone.now,
+        # default=timezone.now,
         verbose_name="Excavation Date",
         # TODO: best would be if this auto-populated with the Lot's date
         # TODO: if Lot is given, this date must match the excavation date
-        # TODO: there are many NULLs in the legacy data, so this has to be nullable, but enforce required in the form
     )
     registrationdate = models.DateField(
         null=True,
         blank=True,
         default=timezone.now,
         verbose_name="Registration Date",
-        # TODO: there are many NULLs in the legacy data, so this has to be nullable, but enforce required in the form
     )
     registrar = models.ForeignKey(
         CustomUser,
@@ -253,7 +256,6 @@ class Object(models.Model):
         on_delete=models.PROTECT,
         null=False,
         verbose_name="Object Type",
-        # TODO: in the form, make subtype required if the selected type has > 0 subtypes
     )
     objectsubtype = models.ForeignKey(
         ObjectSubtype,
@@ -261,7 +263,6 @@ class Object(models.Model):
         null=True,
         blank=True,
         verbose_name="Object Subtype",
-        # TODO: in the form, filter available subtypes by selected type
     )
     sealingfunction = models.CharField(
         max_length=20,
@@ -269,7 +270,6 @@ class Object(models.Model):
         null=True,
         blank=True,
         verbose_name="Sealing Function",
-        # TODO: in the form, this becomes visible and required when subtype is "Sealing"
     )
     clayslaborsealingmarking = models.CharField(
         max_length=20,
@@ -277,7 +277,6 @@ class Object(models.Model):
         null=True,
         blank=True,
         verbose_name="Clay Slab or Sealing Marking",
-        # TODO: in the form, this becomes visible and required when subtype is "Clay Slab" or "Sealing"
     )
     bladeserration = models.CharField(
         max_length=20,
@@ -285,7 +284,6 @@ class Object(models.Model):
         null=True,
         blank=True,
         verbose_name="Blade Serration",
-        # TODO: in the form, this becomes visible and required when subtype is "Blade"
     )
     preservation = models.CharField(
         max_length=20,
@@ -309,7 +307,6 @@ class Object(models.Model):
         null=True,
         blank=True,
         verbose_name="Stone Subtype",
-        # TODO: in the form, this becomes visible and required when material is "Stone"
     )
     metalsubtype = models.CharField(
         max_length=20,
@@ -317,7 +314,13 @@ class Object(models.Model):
         null=True,
         blank=True,
         verbose_name="Metal Subtype",
-        # TODO: in the form, this becomes visible and required when material is "Metal"
+    )
+    shellsubtype = models.CharField(
+        max_length=20,
+        choices=SHELLSUBTYPE_CHOICES,
+        null=True,
+        blank=True,
+        verbose_name="Shell Subtype",
     )
     maincolor = models.CharField(
         max_length=20,
@@ -394,7 +397,6 @@ class Object(models.Model):
         null=True,
         blank=True,
         verbose_name="Baghdad Number",
-        # TODO: in the form, make this required if senttobaghdad is checked
     )
     tobephotographed = models.BooleanField(
         null=False,
@@ -441,3 +443,7 @@ class Object(models.Model):
     #         raise ValidationError("The Season for this Lot doesn’t match the Season entered above.")
     #     if self.su != self.lot.su:
     #         raise ValidationError("The SU for this Lot doesn’t match the SU entered above.")
+
+    def save(self, *args, **kwargs):
+        self.excavationnumber = self.excavationnumber.upper()
+        super(Object, self).save(*args, **kwargs)

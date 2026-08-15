@@ -44,7 +44,7 @@
 #details label:has(+ input[type="checkbox"]) {
     display: inline-block;
     margin-top: 10px;
-    width: calc(100% - 65px);
+    width: calc(100% - 75px);
 }
 
 #details input:not([type="checkbox"]),
@@ -53,6 +53,13 @@
     font-family: 'Times New Roman', Times, serif;
     font-size: large;
     width: calc(100% - 13px);
+}
+
+#details input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-left: 3px;
+    vertical-align: text-bottom;
 }
 
 #details input[type="text"],
@@ -82,6 +89,7 @@
     border-width: 1px;;
     border-color: grey;
     background-color: white;
+    font-size: large;
 }
 
 #details #worldfilecontents {
@@ -109,6 +117,10 @@
 #details textarea:invalid {
     border-width: 1px;
     border-color: red;
+}
+
+#details #id_worldfile:invalid {
+    color: red;
 }
 
 /* Custom Details View Grids Follow */
@@ -158,8 +170,9 @@ form[name="LotForm"] {
 /* Objects */
 form[name="ObjectForm"] {
     grid-template-areas:
-        "number excavationnumber ."
-        ". lot season"
+        "number excavationnumber season"
+        "surfacefind . ."
+        "lot . ."
         "area locale su"
         "excavationdate registrationdate registrar"
         "objecttype objectsubtype ."
@@ -168,6 +181,7 @@ form[name="ObjectForm"] {
         "material . ."
         "stonesubtype . ."
         "metalsubtype . ."
+        "shellsubtype . ."
         "preservation repairedorrepurposed ."
         "maincolor decoration decorationcolor"
         "height length width"

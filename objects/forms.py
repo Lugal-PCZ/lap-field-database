@@ -62,10 +62,10 @@ def _update_field_behavior(editable, ref):
 
 
 class ObjectForm(forms.ModelForm):
-    # locale = forms.CharField(
-    #     required=False,
-    #     disabled=True,
-    # )
+    objectsubtype = forms.ChoiceField(
+        required=False,
+        label="Object Subtype",
+    )
 
     class Meta:
         model = Object
@@ -81,7 +81,6 @@ class ObjectForm(forms.ModelForm):
             "registrationdate",
             "registrar",
             "objecttype",
-            "objectsubtype",
             "sealingfunction",
             "clayslaborsealingmarking",
             "bladeserration",
@@ -90,6 +89,7 @@ class ObjectForm(forms.ModelForm):
             "material",
             "stonesubtype",
             "metalsubtype",
+            "shellsubtype",
             "maincolor",
             "decoration",
             "decorationcolor",
@@ -114,12 +114,15 @@ class ObjectForm(forms.ModelForm):
             "number": forms.TextInput(
                 attrs={"pattern": r"^\d{1,2}LAP\d{5}$"},
             ),
-            # TODO: fix the pattern below
-            # "excavationnumber": forms.TextInput(
-            #     attrs={"pattern": r"^\d{1,2}LAP\d{5}$"},
-            # ),
+            "excavationnumber": forms.TextInput(
+                attrs={"pattern": r"^(\d{1,2}LAP\d{3}/[A-Za-z]{1,2})|([13]LAP\d{3}.\d{3})|([nN]/[aA])$"},
+            ),
             "lot": AutocompleteSelect(
                 Object._meta.get_field("lot"),  # type: ignore
+                admin.site,
+            ),
+            "locale": AutocompleteSelect(
+                Object._meta.get_field("locale"),  # type: ignore
                 admin.site,
             ),
             "su": AutocompleteSelect(
@@ -127,11 +130,11 @@ class ObjectForm(forms.ModelForm):
                 admin.site,
             ),
             "excavationdate": forms.DateInput(
-                attrs={"type": "date"},
+                attrs={"type": "date", "required": True},
                 format="%Y-%m-%d",
             ),
             "registrationdate": forms.DateInput(
-                attrs={"type": "date"},
+                attrs={"type": "date", "required": True},
                 format="%Y-%m-%d",
             ),
         }
@@ -143,10 +146,22 @@ class ObjectForm(forms.ModelForm):
         user = kwargs.pop("user", None)
         super(ObjectForm, self).__init__(*args, **kwargs)
         self.fields["registrar"].initial = user
+        self.fields["lot"].required = True
+        self.fields["objecttype"].widget.attrs["onChange"] = "loadObjectSubtypes()"
+        subtypes = []
+        if self.instance.pk:
+            for each_subtype in ObjectSubtype.objects.filter(type_id=self.instance.objecttype):
+                subtypes.append((each_subtype.pk, each_subtype.name))
+            self.fields["objectsubtype"].initial = self.instance.objectsubtype.pk
+        self.fields["objectsubtype"].choices = subtypes  # type: ignore
+        if not subtypes:
+            self.fields["objectsubtype"].widget.attrs["initiallyhidden"] = True
         if not self.instance.material == "Stone":
             self.fields["stonesubtype"].widget.attrs["initiallyhidden"] = True
         if not self.instance.material == "Metal":
             self.fields["metalsubtype"].widget.attrs["initiallyhidden"] = True
+        if not self.instance.material == "Shell":
+            self.fields["shellsubtype"].widget.attrs["initiallyhidden"] = True
         if not self.instance.pk or not (
             self.instance.objecttype.name == "Administrative"
             and self.instance.objectsubtype.name in ["Clay Slab", "Sealing"]
@@ -156,11 +171,11 @@ class ObjectForm(forms.ModelForm):
             self.instance.objecttype.name == "Administrative" and self.instance.objectsubtype.name == "Sealing"
         ):
             self.fields["sealingfunction"].widget.attrs["initiallyhidden"] = True
-        if not self.instance.pk or self.instance.objectsubtype.name != "Blade":
+        if not self.instance.pk or not self.instance.objectsubtype or self.instance.objectsubtype.name != "Blade":
             self.fields["bladeserration"].widget.attrs["initiallyhidden"] = True
         if not self.instance.senttobaghdad:
             self.fields["baghdadnumber"].widget.attrs["initiallyhidden"] = True
-            self.fields["su"].widget.attrs["onChange"] = "loadLocale()"
-            if self.instance and hasattr(self.instance, "su"):
-                self.fields["locale"].initial = self.instance.su.locale
+            # self.fields["su"].widget.attrs["onChange"] = "loadLocale()"
+            # if self.instance and hasattr(self.instance, "su"):
+            #     self.fields["locale"].initial = self.instance.su.locale
         _update_field_behavior(editable, self)

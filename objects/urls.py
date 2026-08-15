@@ -1,7 +1,6 @@
 from django.urls import path
 
-from .views import details, exporters, lists
-# from .views import ajax, details, exporters, lists
+from .views import ajax, details, exporters, lists
 
 
 urlpatterns = [
@@ -10,5 +9,5 @@ urlpatterns = [
     path("object/new/", details.object_details),
     path("object/<int:id>/", details.object_details),
     # path("object/<int:id>/export/", exporters.object_details_export),
-    # path("ajax/load_locale/", ajax.load_locale),
+    path("ajax/load_objectsubtypes/", ajax.load_objectsubtypes),
 ]

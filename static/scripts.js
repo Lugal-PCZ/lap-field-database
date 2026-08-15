@@ -83,6 +83,10 @@ function resetForm() {
     if (document.querySelector("#id_voided")) {
       toggleVoided();
     };
+    if (document.querySelector("#id_objectsubtype")) {
+      loadObjectSubtypes();
+      document.getElementById("id_objectsubtype").innerHTML = localStorage.getItem("id_objectsubtype");
+    };
     handleDependentFields();
     highlightRequiredSelect2Fields();
   };
@@ -134,17 +138,90 @@ function handleDependentFields() {
   if (document.querySelector("#details")) {
     switch(document.getElementById("details").name) {
       case "SUForm":
-        // there is a tracing displayed
+        // there is a tracing displayed, so display worldfile
         if (document.querySelector("#onscreen")) {
           document.getElementById("id_worldfile").closest("div.form-group").hidden = false;
         };
-        // a tracing is selected, but not yet saved
+        // a tracing is selected, but not yet saved, so show worldfile widget and make it required
         if (document.querySelector("#id_tracing") && document.getElementById("id_tracing").value) {
           document.getElementById("id_worldfile").closest("div.form-group").hidden = false;
           document.getElementById("id_worldfile").required = true;
         };
         break;
       case "ObjectForm":
+        // material is Stone, Metal, or Shell, so show the appropriate material subtype widget
+        switch (document.getElementById("id_material").value) {
+          case "Stone":
+            document.getElementById("id_stonesubtype").closest("div.form-group").hidden = false;
+            document.getElementById("id_stonesubtype").required = true;
+            document.getElementById("id_metalsubtype").closest("div.form-group").hidden = true;
+            document.getElementById("id_metalsubtype").required = false;
+            document.getElementById("id_shellsubtype").closest("div.form-group").hidden = true;
+            document.getElementById("id_shellsubtype").required = false;
+            break;
+          case "Metal":
+            document.getElementById("id_stonesubtype").closest("div.form-group").hidden = true;
+            document.getElementById("id_stonesubtype").required = false;
+            document.getElementById("id_metalsubtype").closest("div.form-group").hidden = false;
+            document.getElementById("id_metalsubtype").required = true;
+            document.getElementById("id_shellsubtype").closest("div.form-group").hidden = true;
+            document.getElementById("id_shellsubtype").required = false;
+            break;
+          case "Shell":
+            document.getElementById("id_stonesubtype").closest("div.form-group").hidden = true;
+            document.getElementById("id_stonesubtype").required = false;
+            document.getElementById("id_metalsubtype").closest("div.form-group").hidden = true;
+            document.getElementById("id_metalsubtype").required = false;
+            document.getElementById("id_shellsubtype").closest("div.form-group").hidden = false;
+            document.getElementById("id_shellsubtype").required = true;
+            break;
+          default:
+            ["stone", "metal", "shell"].forEach(material => {
+              document.getElementById(`id_${material}subtype`).closest("div.form-group").hidden = true;
+              document.getElementById(`id_${material}subtype`).required = false;
+            });
+        };
+        // subtype is Clay Slab or Sealing, so show clayslaborsealingmarking
+        let currentsubtype = ""
+        if (document.getElementById("id_objecttype").selectedIndex > -1) {
+          currentsubtype = document.getElementById("id_objecttype").selectedOptions[0].text;
+        };
+        if (document.getElementById("id_objecttype").selectedOptions[0].text === "Administrative") {
+          switch (currentsubtype) {
+            case "Clay Slab":
+            case "Sealing":
+              document.getElementById("id_clayslaborsealingmarking").closest("div.form-group").hidden = false;
+              document.getElementById("id_clayslaborsealingmarking").required = true;
+              break;
+            default:
+              document.getElementById("id_clayslaborsealingmarking").closest("div.form-group").hidden = true;
+              document.getElementById("id_clayslaborsealingmarking").required = false;
+          };
+          // subtype is Sealing, so show sealingfunction
+          if (currentsubtype === "Sealing") {
+            document.getElementById("id_sealingfunction").closest("div.form-group").hidden = false;
+            document.getElementById("id_sealingfunction").required = true;
+          } else {
+            document.getElementById("id_sealingfunction").closest("div.form-group").hidden = true;
+            document.getElementById("id_sealingfunction").required = false;
+          };
+        };
+        // subtype is Blade, so show bladeserration
+        if (document.getElementById("id_objecttype").selectedOptions[0].text === "Lithic" && document.getElementById("id_objectsubtype").selectedOptions[0].text === "Blade"){
+          document.getElementById("id_bladeserration").closest("div.form-group").hidden = false;
+          document.getElementById("id_bladeserration").required = true;
+        } else {
+          document.getElementById("id_bladeserration").closest("div.form-group").hidden = true;
+          document.getElementById("id_bladeserration").required = false;
+        };
+        // senttobaghdad is checked, so show baghdadnumber
+        if (document.getElementById("id_senttobaghdad").checked) {
+          document.getElementById("id_baghdadnumber").closest("div.form-group").hidden = false;
+          document.getElementById("id_baghdadnumber").required = true;
+        } else {
+          document.getElementById("id_baghdadnumber").closest("div.form-group").hidden = true;
+          document.getElementById("id_baghdadnumber").required = false;
+        };
         break;
     };
   };
@@ -170,7 +247,13 @@ function highlightRequiredSelect2Fields() {
   const select2widgets = document.querySelectorAll(".select2-selection");
   select2widgets.forEach(field => {
     const selectfield = field.closest(".form-group").querySelector("select");
-    if (selectfield.required && !selectfield.querySelector("option")) {
+    let optionselected = false
+    selectfield.querySelectorAll("option").forEach(option => {
+      if (option.innerText) {
+        optionselected = true;
+      };
+    });
+    if (selectfield.required && (!selectfield.querySelector("option") || !optionselected)) {
       field.setAttribute("style", "border-color: red;");
     } else {
       field.removeAttribute("style");
@@ -178,13 +261,39 @@ function highlightRequiredSelect2Fields() {
   });
 }
 
-function loadLocale() {
+async function loadLocale() {
   const su_id = document.getElementById("id_su").value;
-  fetch(`/ajax/load_locale/?su_id=${su_id}`)
+  await fetch(`/ajax/load_locale/?su_id=${su_id}`)
     .then(response => response.json())
     .then(data => {
       document.getElementById("id_locale").value = data[0].name;
     });
+}
+
+async function loadObjectSubtypes() {
+  const subtypemenu = document.getElementById("id_objectsubtype");
+  subtypemenu.options.length = 0;
+  subtypemenu.add(document.createElement('option'));  // add a blank dummy option
+  const objecttype_id = document.getElementById("id_objecttype").value;
+  if (objecttype_id){
+    await fetch(`/ajax/load_objectsubtypes/?objecttype_id=${objecttype_id}`)
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(subtype => {
+          var newOption = document.createElement('option');
+          newOption.value = subtype[0];
+          newOption.text = subtype[1];
+          subtypemenu.add(newOption);
+        });
+      });
+  }
+  if (subtypemenu.options.length > 1) {
+    subtypemenu.closest("div.form-group").hidden = false;
+    subtypemenu.required = true;
+  } else {
+    subtypemenu.closest("div.form-group").hidden = true;
+    subtypemenu.required = false;
+  };
 }
 
 function showImage(thewidget, original) {
