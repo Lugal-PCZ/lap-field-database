@@ -27,13 +27,11 @@ class Locale(models.Model):
         on_delete=models.PROTECT,
         related_name="locales",
         null=False,
-        default=Area.objects.filter(Q(name="Area H")).last().pk,  # type: ignore
     )
     method = models.CharField(
         max_length=20,
         choices=METHOD_CHOICES,
         null=False,
-        default="Scraping",
     )
     notes = models.TextField(
         null=True,
@@ -334,7 +332,7 @@ class SU(models.Model):
         else:
             name = f"SU_{self.number}"
         name = (
-            name.replace(" ", "_")
+            name.replace(" ", "_")  # type: ignore
             .replace("/", "_")
             .replace(":", "_")
             .replace(chr(92), "_")
