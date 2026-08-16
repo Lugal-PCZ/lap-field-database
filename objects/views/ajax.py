@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from ..models import ObjectType, ObjectSubtype
+from ..models import get_next_object_number, ObjectSubtype
 
 
 def load_objectsubtypes(request):
@@ -9,3 +9,9 @@ def load_objectsubtypes(request):
     for each_subtype in objectsubtypes:
         subtypes_list.append((each_subtype.pk, each_subtype.name))
     return JsonResponse(subtypes_list, safe=False)
+
+
+def load_nextnumber(request):
+    season = request.GET.get("season")
+    nextnumber = get_next_object_number(season)
+    return JsonResponse(nextnumber, safe=False)

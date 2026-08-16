@@ -4,18 +4,26 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from accounts.models import CustomUser
-from lapinfo.models import Area, Season
-from contexts.models import Locale, SU
+from lapinfo.models import Season
+from contexts.models import SU
 from lots.models import Lot
 
 
-def get_next_object_number():
-    currentseason = Season.objects.last().name  # type: ignore
-    lastnumber = Object.objects.all().order_by("number").last().number  # type: ignore
-    if lastnumber.split("LAP")[0] != currentseason.split("LAP")[0]:
-        nextnumber = f"{currentseason}{int(currentseason.split('LAP')[0]) - 3:02d}000"
+def get_next_object_number(selectedseason=None):
+    currentseason = Season.objects.order_by("id").last().name  # type: ignore
+    if selectedseason and selectedseason != currentseason:
+        # with the dummy data, this will throw an error for 1LAP. It can safely be ignored
+        if selectedseason == "2LAP":
+            nextnumber = "2LAP00000"
+        else:
+            lastnumber = Object.objects.filter(season__name=selectedseason).order_by("number").last().number  # type: ignore
+            nextnumber = f"{selectedseason}{int(lastnumber.split('LAP')[1]) + 1:05d}"
     else:
-        nextnumber = f"{currentseason}{int(lastnumber.split('LAP')[1]) + 1:05d}"
+        lastnumber = Object.objects.all().order_by("number").last().number  # type: ignore
+        if lastnumber.split("LAP")[0] != currentseason.split("LAP")[0]:
+            nextnumber = f"{currentseason}{int(currentseason.split('LAP')[0]) - 3:02d}000"
+        else:
+            nextnumber = f"{currentseason}{int(lastnumber.split('LAP')[1]) + 1:05d}"
     return nextnumber
 
 

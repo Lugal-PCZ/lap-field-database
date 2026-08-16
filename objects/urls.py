@@ -10,4 +10,5 @@ urlpatterns = [
     path("object/<int:id>/", details.object_details),
     # path("object/<int:id>/export/", exporters.object_details_export),
     path("ajax/load_objectsubtypes/", ajax.load_objectsubtypes),
+    path("ajax/load_nextnumber/", ajax.load_nextnumber),
 ]

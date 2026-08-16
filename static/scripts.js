@@ -296,6 +296,27 @@ async function loadObjectSubtypes() {
   };
 }
 
+async function loadNextObjectNumberForSeason() {
+  const season = document.getElementById("id_season").selectedOptions[0].innerText;
+  await fetch(`/ajax/load_nextnumber/?season=${season}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById("id_number").value = data;
+    });
+  const savedState = JSON.parse(localStorage.getItem("initialState"))
+  if (localStorage.getItem("okToChangeLapIdentifier") === "false") {
+    if (confirm("Are you sure that you want to change this record’s number?")) {
+      localStorage.setItem("okToChangeLapIdentifier", "true");
+    } else {
+      document.getElementById("id_number").value = savedState.number;
+      document.getElementById("id_season").value = savedState.season;
+    };
+  } else if (document.getElementById("id_season").value == savedState.season) {
+    document.getElementById("id_number").value = savedState.number;
+    checkForm();
+  };
+}
+
 function showImage(thewidget, original) {
   const image = thewidget;
   new Viewer(image, {url(image) {return original}, title: false, navbar: false, toolbar: false,});
