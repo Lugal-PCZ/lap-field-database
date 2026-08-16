@@ -302,6 +302,7 @@ async function loadNextObjectNumberForSeason() {
     .then(response => response.json())
     .then(data => {
       document.getElementById("id_number").value = data;
+      document.getElementById("id_excavationnumber").value = season;
     });
   const savedState = JSON.parse(localStorage.getItem("initialState"))
   if (localStorage.getItem("okToChangeLapIdentifier") === "false") {
@@ -309,10 +310,12 @@ async function loadNextObjectNumberForSeason() {
       localStorage.setItem("okToChangeLapIdentifier", "true");
     } else {
       document.getElementById("id_number").value = savedState.number;
+      document.getElementById("id_excavationnumber").value = savedState.excavationnumber;
       document.getElementById("id_season").value = savedState.season;
     };
   } else if (document.getElementById("id_season").value == savedState.season) {
     document.getElementById("id_number").value = savedState.number;
+    document.getElementById("id_excavationnumber").value = savedState.excavationnumber;
     checkForm();
   };
 }
