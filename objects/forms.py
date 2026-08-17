@@ -62,6 +62,11 @@ def _update_field_behavior(editable, ref):
 
 
 class ObjectForm(forms.ModelForm):
+    su_display = forms.CharField(
+        required=False,
+        disabled=True,
+        label="SU or 1LAP/3LAP Locus",
+    )
     area = forms.CharField(
         required=False,
         disabled=True,
@@ -71,10 +76,6 @@ class ObjectForm(forms.ModelForm):
         required=False,
         disabled=True,
         label="Locale",
-    )
-    objectsubtype = forms.ChoiceField(
-        required=False,
-        label="Object Subtype",
     )
 
     class Meta:
@@ -90,6 +91,7 @@ class ObjectForm(forms.ModelForm):
             "registrationdate",
             "registrar",
             "objecttype",
+            "objectsubtype",
             "sealingfunction",
             "clayslaborsealingmarking",
             "bladeserration",
@@ -153,19 +155,22 @@ class ObjectForm(forms.ModelForm):
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)
         super(ObjectForm, self).__init__(*args, **kwargs)
+        self.fields["su"].widget.attrs["initiallyhidden"] = True
+        # self.fields["su_display"].widget.attrs["style"] = "grid-area: su;"
+        if self.instance.pk:
+            self.fields["su_display"].initial = self.instance.su
         self.fields["registrar"].initial = user
         self.fields["season"].widget.attrs["onChange"] = "loadNextObjectNumberForSeason()"
-        if self.instance.surfacefind:
-            self.fields["lot"].widget.attrs["initiallyhidden"] = True
-        elif not self.instance:
+        if not self.instance:
             self.fields["lot"].required = True
         self.fields["objecttype"].widget.attrs["onChange"] = "loadObjectSubtypes()"
         subtypes = []
         if self.instance.pk:
             for each_subtype in ObjectSubtype.objects.filter(type_id=self.instance.objecttype):
                 subtypes.append((each_subtype.pk, each_subtype.name))
-            self.fields["objectsubtype"].initial = self.instance.objectsubtype.pk
         self.fields["objectsubtype"].choices = subtypes  # type: ignore
+        if self.instance.objectsubtype:
+            self.fields["objectsubtype"].initial = self.instance.objectsubtype.pk
         if not subtypes:
             self.fields["objectsubtype"].widget.attrs["initiallyhidden"] = True
         if not self.instance.material == "Stone":

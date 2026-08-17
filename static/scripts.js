@@ -107,6 +107,11 @@ function checkForm() {
   };
 }
 
+function resetForm() {
+  document.getElementById("details").reset();
+  location.reload()
+}
+
 function handleDependentFields() {
   if (document.querySelector("#details")) {
     switch(document.getElementById("details").name) {
@@ -126,23 +131,26 @@ function handleDependentFields() {
         if (document.getElementById("id_surfacefind").checked) {
           document.getElementById("id_lot").closest("div.form-group").hidden = true;
           document.getElementById("id_lot").required = false;
-          // TODO: also clear out what's been entered for lot
           document.getElementById("id_lot").innerHTML = '';
           document.getElementById("select2-id_lot-container").removeAttribute("title");
           document.getElementById("id_su").required = true;
+          document.getElementById("id_su").nextSibling.style.width = document.getElementById("id_lot").nextSibling.style.width;
+          document.getElementById("id_su").closest("div.form-group").hidden = false;
+          document.getElementById("id_su_display").closest("div.form-group").hidden = true;
         } else {
           document.getElementById("id_lot").closest("div.form-group").hidden = false;
           document.getElementById("id_lot").required = true;
           document.getElementById("id_su").required = false;
+          document.getElementById("id_su").closest("div.form-group").hidden = true;
+          document.getElementById("id_su_display").closest("div.form-group").hidden = false;
         };
         // lot is entered, so populate SU field
         if (document.getElementById("id_lot").value) {
-          document.getElementById("id_su").disabled = true;
-          document.getElementById("id_su").nextSibling.style.opacity = "0.66";
           loadSU();
-        } else {
-          document.getElementById("id_su").disabled = false;
-          document.getElementById("id_su").nextSibling.style.opacity = null;
+        };
+        // SU is entered, so populate area and locale fields
+        if (document.getElementById("id_su").value) {
+          loadLocale();
         };
         // material is Stone, Metal, or Shell, so show the appropriate material subtype widget
         switch (document.getElementById("id_material").value) {
@@ -248,10 +256,10 @@ function highlightRequiredSelect2Fields() {
         optionselected = true;
       };
     });
-    if (selectfield.required && (!selectfield.querySelector("option") || !optionselected)) {
-      field.setAttribute("style", "border-color: red;");
+    if (selectfield.required && (!selectfield.options || !optionselected)) {
+      field.style.borderColor = "red";
     } else {
-      field.removeAttribute("style");
+      field.style.borderColor = null;
     };
   });
 }
@@ -266,11 +274,17 @@ async function loadSU() {
   await fetch(`/ajax/load_su/?lot_id=${lot_id}`)
     .then(response => response.json())
     .then(data => {
-      document.getElementById("id_su").value = data.su.name;
-      document.getElementById("id_su").innerHTML = `<option value="${data.su.id}">${data.su.name}</option>`;
+      document.getElementById("id_su").length = 0;
+      document.getElementById("id_su").value = data.su.id;
+      var newOption = document.createElement("option");
+      newOption.value = data.su.id;
+      newOption.text = data.su.name;
+      // newOption.selected = true;
+      document.getElementById("id_su").add(newOption);
       document.getElementById("select2-id_su-container").setAttribute("title", data.su.name);
       document.getElementById("select2-id_su-container").innerHTML = data.su.name;
       document.getElementById("id_su").value = data.su.id;
+      document.getElementById("id_su_display").value = data.su.name;
       document.getElementById("id_area").value = data.area;
       document.getElementById("id_locale").value = data.locale;
       // also load the exavationdate with the date that the lot was assigned
@@ -283,7 +297,10 @@ async function loadLocale() {
   await fetch(`/ajax/load_locale/?su_id=${su_id}`)
     .then(response => response.json())
     .then(data => {
-      document.getElementById("id_locale").value = data[0].name;
+      document.getElementById("id_locale").value = data.locale;
+      if (document.querySelector("#id_area")) {
+        document.getElementById("id_area").value = data.area;
+      };
     });
 }
 
@@ -297,7 +314,7 @@ async function loadObjectSubtypes() {
       .then(response => response.json())
       .then(data => {
         data.forEach(subtype => {
-          var newOption = document.createElement('option');
+          var newOption = document.createElement("option");
           newOption.value = subtype[0];
           newOption.text = subtype[1];
           subtypemenu.add(newOption);

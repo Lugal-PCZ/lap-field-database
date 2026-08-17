@@ -84,6 +84,10 @@
     margin-left: 0px;
 }
 
+#details .select2-container {
+    width: 150px;
+}
+
 #details .select2-selection {
     border-style: solid;
     border-width: 1px;;
@@ -176,6 +180,7 @@ form[name="ObjectForm"] {
         "surfacefind . ."
         "lot . ."
         "su area locale"
+        "su_display area locale"
         "excavationdate registrationdate registrar"
         "objecttype objectsubtype ."
         "clayslaborsealingmarking sealingfunction ."
