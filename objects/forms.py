@@ -156,7 +156,6 @@ class ObjectForm(forms.ModelForm):
         user = kwargs.pop("user", None)
         super(ObjectForm, self).__init__(*args, **kwargs)
         self.fields["su"].widget.attrs["initiallyhidden"] = True
-        # self.fields["su_display"].widget.attrs["style"] = "grid-area: su;"
         if self.instance.pk:
             self.fields["su_display"].initial = self.instance.su
         self.fields["registrar"].initial = user
