@@ -123,6 +123,8 @@
     color: red;
 }
 
+#details #id_su:disabled:has
+
 /* Custom Details View Grids Follow */
 
 /* Locales */
@@ -173,7 +175,7 @@ form[name="ObjectForm"] {
         "number excavationnumber season"
         "surfacefind . ."
         "lot . ."
-        "area locale su"
+        "su area locale"
         "excavationdate registrationdate registrar"
         "objecttype objectsubtype ."
         "clayslaborsealingmarking sealingfunction ."

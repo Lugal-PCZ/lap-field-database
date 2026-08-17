@@ -87,7 +87,7 @@ cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fi
                     {% else %}Save Changes
                     {% endif %}
                 </button>
-                <button id="discardchangesbutton" form="details" type="reset" onclick="resetForm()" disabled>Discard Changes</button>
+                <button id="discardchangesbutton" form="details" onclick="location.reload();" disabled>Discard Changes</button>
             </span>
         {% endif %}
         <form id="filters" method="get">

@@ -62,6 +62,16 @@ def _update_field_behavior(editable, ref):
 
 
 class ObjectForm(forms.ModelForm):
+    area = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Area",
+    )
+    locale = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Locale",
+    )
     objectsubtype = forms.ChoiceField(
         required=False,
         label="Object Subtype",
@@ -73,10 +83,9 @@ class ObjectForm(forms.ModelForm):
             "number",
             "excavationnumber",
             "season",
-            "area",
-            "locale",
-            "su",
+            "surfacefind",
             "lot",
+            "su",
             "excavationdate",
             "registrationdate",
             "registrar",
@@ -121,10 +130,6 @@ class ObjectForm(forms.ModelForm):
                 Object._meta.get_field("lot"),  # type: ignore
                 admin.site,
             ),
-            "locale": AutocompleteSelect(
-                Object._meta.get_field("locale"),  # type: ignore
-                admin.site,
-            ),
             "su": AutocompleteSelect(
                 Object._meta.get_field("su"),  # type: ignore
                 admin.site,
@@ -149,7 +154,11 @@ class ObjectForm(forms.ModelForm):
         user = kwargs.pop("user", None)
         super(ObjectForm, self).__init__(*args, **kwargs)
         self.fields["registrar"].initial = user
-        self.fields["lot"].required = True
+        self.fields["season"].widget.attrs["onChange"] = "loadNextObjectNumberForSeason()"
+        if self.instance.surfacefind:
+            self.fields["lot"].widget.attrs["initiallyhidden"] = True
+        elif not self.instance:
+            self.fields["lot"].required = True
         self.fields["objecttype"].widget.attrs["onChange"] = "loadObjectSubtypes()"
         subtypes = []
         if self.instance.pk:
@@ -178,7 +187,4 @@ class ObjectForm(forms.ModelForm):
             self.fields["bladeserration"].widget.attrs["initiallyhidden"] = True
         if not self.instance.senttobaghdad:
             self.fields["baghdadnumber"].widget.attrs["initiallyhidden"] = True
-            # self.fields["su"].widget.attrs["onChange"] = "loadLocale()"
-            # if self.instance and hasattr(self.instance, "su"):
-            #     self.fields["locale"].initial = self.instance.su.locale
         _update_field_behavior(editable, self)

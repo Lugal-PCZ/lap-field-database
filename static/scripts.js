@@ -65,33 +65,6 @@ function cacheForm() {
   };
 }
 
-function resetForm() {
-  if (document.querySelector("#details")) {
-    document.getElementById("details").reset();
-    const autocompletefields = document.querySelectorAll(".select2-selection__rendered");
-    autocompletefields.forEach(field => {
-      const target_field = `id_${field.id.split("_")[1].split("-")[0]}`
-      field.removeAttribute("title");
-      field.innerHTML = localStorage.getItem(target_field);
-      if (!localStorage.getItem(target_field)) {
-        document.getElementById(target_field).innerHTML = '';
-      }
-    });
-    document.getElementById('savebutton').disabled=true;
-    document.getElementById('discardchangesbutton').disabled=true;
-    document.getElementById('newbutton').disabled=false;
-    if (document.querySelector("#id_voided")) {
-      toggleVoided();
-    };
-    if (document.querySelector("#id_objectsubtype")) {
-      loadObjectSubtypes();
-      document.getElementById("id_objectsubtype").innerHTML = localStorage.getItem("id_objectsubtype");
-    };
-    handleDependentFields();
-    highlightRequiredSelect2Fields();
-  };
-}
-
 function checkForm() {
   if (document.querySelector("#details")) {
     const savedState = JSON.parse(localStorage.getItem("initialState"))
@@ -149,6 +122,28 @@ function handleDependentFields() {
         };
         break;
       case "ObjectForm":
+        // surfacefind is checked, so hide lot
+        if (document.getElementById("id_surfacefind").checked) {
+          document.getElementById("id_lot").closest("div.form-group").hidden = true;
+          document.getElementById("id_lot").required = false;
+          // TODO: also clear out what's been entered for lot
+          document.getElementById("id_lot").innerHTML = '';
+          document.getElementById("select2-id_lot-container").removeAttribute("title");
+          document.getElementById("id_su").required = true;
+        } else {
+          document.getElementById("id_lot").closest("div.form-group").hidden = false;
+          document.getElementById("id_lot").required = true;
+          document.getElementById("id_su").required = false;
+        };
+        // lot is entered, so populate SU field
+        if (document.getElementById("id_lot").value) {
+          document.getElementById("id_su").disabled = true;
+          document.getElementById("id_su").nextSibling.style.opacity = "0.66";
+          loadSU();
+        } else {
+          document.getElementById("id_su").disabled = false;
+          document.getElementById("id_su").nextSibling.style.opacity = null;
+        };
         // material is Stone, Metal, or Shell, so show the appropriate material subtype widget
         switch (document.getElementById("id_material").value) {
           case "Stone":
@@ -183,8 +178,8 @@ function handleDependentFields() {
         };
         // subtype is Clay Slab or Sealing, so show clayslaborsealingmarking
         let currentsubtype = ""
-        if (document.getElementById("id_objecttype").selectedIndex > -1) {
-          currentsubtype = document.getElementById("id_objecttype").selectedOptions[0].text;
+        if (document.getElementById("id_objectsubtype").selectedIndex > -1) {
+          currentsubtype = document.getElementById("id_objectsubtype").selectedOptions[0].text;
         };
         if (document.getElementById("id_objecttype").selectedOptions[0].text === "Administrative") {
           switch (currentsubtype) {
@@ -261,6 +256,28 @@ function highlightRequiredSelect2Fields() {
   });
 }
 
+function showImage(thewidget, original) {
+  const image = thewidget;
+  new Viewer(image, {url(image) {return original}, title: false, navbar: false, toolbar: false,});
+}
+
+async function loadSU() {
+  const lot_id = document.getElementById("id_lot").value;
+  await fetch(`/ajax/load_su/?lot_id=${lot_id}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById("id_su").value = data.su.name;
+      document.getElementById("id_su").innerHTML = `<option value="${data.su.id}">${data.su.name}</option>`;
+      document.getElementById("select2-id_su-container").setAttribute("title", data.su.name);
+      document.getElementById("select2-id_su-container").innerHTML = data.su.name;
+      document.getElementById("id_su").value = data.su.id;
+      document.getElementById("id_area").value = data.area;
+      document.getElementById("id_locale").value = data.locale;
+      // also load the exavationdate with the date that the lot was assigned
+      document.getElementById("id_excavationdate").value = data.lot_dateassigned;
+    });
+}
+
 async function loadLocale() {
   const su_id = document.getElementById("id_su").value;
   await fetch(`/ajax/load_locale/?su_id=${su_id}`)
@@ -320,7 +337,3 @@ async function loadNextObjectNumberForSeason() {
   };
 }
 
-function showImage(thewidget, original) {
-  const image = thewidget;
-  new Viewer(image, {url(image) {return original}, title: false, navbar: false, toolbar: false,});
-}

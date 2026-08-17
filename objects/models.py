@@ -13,6 +13,7 @@ def get_next_object_number(selectedseason=None):
     currentseason = Season.objects.order_by("id").last().name  # type: ignore
     if selectedseason and selectedseason != currentseason:
         # with the dummy data, this will throw an error for 1LAP. It can safely be ignored
+        # there are no cataloged 2LAP objects, so if we were to retroactively do one, we know the starting number
         if selectedseason == "2LAP":
             nextnumber = "2LAP00000"
         else:
@@ -210,30 +211,17 @@ class Object(models.Model):
         default=Season.objects.last().pk,  # type: ignore
         null=False,
     )
-    area = models.ForeignKey(
-        Area,
-        on_delete=models.PROTECT,
-        null=False,
-        # TODO: in the form, this should filter the possible locales
-    )
-    locale = models.ForeignKey(
-        Locale,
-        on_delete=models.PROTECT,
-        null=False,
-        # TODO: in the form, this and Season together should filter the possible SUs
-    )
     su = models.ForeignKey(
         SU,
         on_delete=models.PROTECT,
         null=False,
         verbose_name="SU or 1LAP/3LAP Locus",
     )
-    # surfacefind = models.BooleanField(
-    #     null=False,
-    #     default=False,
-    #     verbose_name = "Surface Find (no Lot)"
-    #     # TODO: selecting this in the form should hide the lot field
-    # )
+    surfacefind = models.BooleanField(
+        null=False,
+        default=False,
+        verbose_name="Surface Find (no Lot)",
+    )
     lot = models.ForeignKey(
         Lot,
         on_delete=models.PROTECT,
@@ -243,10 +231,7 @@ class Object(models.Model):
     excavationdate = models.DateField(
         null=True,
         blank=True,
-        # default=timezone.now,
         verbose_name="Excavation Date",
-        # TODO: best would be if this auto-populated with the Lot's date
-        # TODO: if Lot is given, this date must match the excavation date
     )
     registrationdate = models.DateField(
         null=True,
