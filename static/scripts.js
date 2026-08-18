@@ -225,6 +225,14 @@ function handleDependentFields() {
           document.getElementById("id_baghdadnumber").closest("div.form-group").hidden = true;
           document.getElementById("id_baghdadnumber").required = false;
         };
+        // published is checked, so show publicationcitations
+        if (document.getElementById("id_published").checked) {
+          document.getElementById("id_publicationcitations").closest("div.form-group").hidden = false;
+          document.getElementById("id_publicationcitations").required = true;
+        } else {
+          document.getElementById("id_publicationcitations").closest("div.form-group").hidden = true;
+          document.getElementById("id_publicationcitations").required = false;
+        };
         break;
     };
   };
