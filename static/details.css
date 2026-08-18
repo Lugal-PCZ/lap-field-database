@@ -192,9 +192,11 @@ form[name="ObjectForm"] {
         "diametermax diametermin diameterholes"
         "description description description"
         "notes notes notes"
-        "senttobaghdad . ."
-        "baghdadnumber . ."
         "tobephotographed photographed ."
         "tobedrawn drawn ."
+        "senttobaghdad . ."
+        "baghdadnumber . ."
+        "published . ."
+        "publicationcitations . ."
         "voided . .";
     }

@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import F, Q
+from django.db.models import F
 from django.db.models.functions import Lower
 from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator

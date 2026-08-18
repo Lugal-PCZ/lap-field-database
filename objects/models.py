@@ -393,6 +393,17 @@ class Object(models.Model):
         blank=True,
         verbose_name="Baghdad Number",
     )
+    published = models.BooleanField(
+        null=False,
+        default=False,
+        verbose_name="Published",
+    )
+    publicationcitations = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name="Publication Citations",
+    )
     tobephotographed = models.BooleanField(
         null=False,
         default=False,

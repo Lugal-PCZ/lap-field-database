@@ -115,12 +115,14 @@ class ObjectForm(forms.ModelForm):
             "diameterholes",
             "description",
             "notes",
-            "senttobaghdad",
-            "baghdadnumber",
             "tobephotographed",
             "photographed",
             "tobedrawn",
             "drawn",
+            "senttobaghdad",
+            "baghdadnumber",
+            "published",
+            "publicationcitations",
             "voided",
         ]
         widgets = {
@@ -169,6 +171,8 @@ class ObjectForm(forms.ModelForm):
         self.fields["season"].widget.attrs["onChange"] = "loadNextObjectNumberForSeason()"
         if not self.instance:
             self.fields["lot"].required = True
+        self.fields["image"].widget.attrs["onscreen"] = f"/{str(self.instance.image_onscreen)}"
+        self.fields["image"].widget.attrs["user"] = str(user)
         self.fields["objecttype"].widget.attrs["onChange"] = "loadObjectSubtypes()"
         subtypes = []
         if self.instance.pk:
@@ -198,6 +202,6 @@ class ObjectForm(forms.ModelForm):
             self.fields["bladeserration"].widget.attrs["initiallyhidden"] = True
         if not self.instance.senttobaghdad:
             self.fields["baghdadnumber"].widget.attrs["initiallyhidden"] = True
-        self.fields["image"].widget.attrs["onscreen"] = f"/{str(self.instance.image_onscreen)}"
-        self.fields["image"].widget.attrs["user"] = str(user)
+        if not self.instance.published:
+            self.fields["publicationcitations"].widget.attrs["initiallyhidden"] = True
         _update_field_behavior(editable, self)
