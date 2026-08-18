@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import AutocompleteSelect
 from django.db.models import F
 
+from templates.widgets.widgets import CustomImageWidget
 from lapinfo.models import Season
 from contexts.models import Locale
 from .models import Object, ObjectType, ObjectSubtype
@@ -90,6 +91,7 @@ class ObjectForm(forms.ModelForm):
             "excavationdate",
             "registrationdate",
             "registrar",
+            "image",
             "objecttype",
             "objectsubtype",
             "sealingfunction",
@@ -144,6 +146,11 @@ class ObjectForm(forms.ModelForm):
                 attrs={"type": "date", "required": True},
                 format="%Y-%m-%d",
             ),
+            "image": CustomImageWidget(
+                attrs={
+                    "accept": ".jpg,.jpeg",
+                },
+            ),
         }
         labels = {
             "excavationnumber": "Excavation Number (or N/A)",
@@ -191,4 +198,6 @@ class ObjectForm(forms.ModelForm):
             self.fields["bladeserration"].widget.attrs["initiallyhidden"] = True
         if not self.instance.senttobaghdad:
             self.fields["baghdadnumber"].widget.attrs["initiallyhidden"] = True
+        self.fields["image"].widget.attrs["onscreen"] = f"/{str(self.instance.image_onscreen)}"
+        self.fields["image"].widget.attrs["user"] = str(user)
         _update_field_behavior(editable, self)

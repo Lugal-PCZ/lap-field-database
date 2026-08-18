@@ -3,6 +3,8 @@ from django.db.models.functions import Lower
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
+from django_advance_thumbnail import AdvanceThumbnailField
+
 from accounts.models import CustomUser
 from lapinfo.models import Season
 from contexts.models import SU
@@ -200,7 +202,7 @@ class Object(models.Model):
         null=False,
     )
     excavationnumber = models.CharField(
-        max_length=12,
+        max_length=15,
         default=Season.objects.last().name,  # type: ignore
         null=False,
         verbose_name="Excavation Number",
@@ -412,6 +414,32 @@ class Object(models.Model):
     voided = models.BooleanField(
         null=False,
         default=False,
+    )
+    image = models.FileField(
+        upload_to="uploads/objects/images/",
+        null=True,
+        blank=True,
+    )
+    image_thumbnail = AdvanceThumbnailField(
+        source_field="image",  # type: ignore
+        upload_to="uploads/objects/images/thumbnails/",
+        size=(150, 100),  # type: ignore
+        null=True,
+        blank=True,
+    )
+    image_onscreen = AdvanceThumbnailField(
+        source_field="image",  # type: ignore
+        upload_to="uploads/objects/images/onscreen/",
+        size=(310, 310),  # type: ignore
+        null=True,
+        blank=True,
+    )
+    image_pdf = AdvanceThumbnailField(
+        source_field="image",  # type: ignore
+        upload_to="uploads/objects/images/pdf/",
+        size=(600, 600),  # type: ignore
+        null=True,
+        blank=True,
     )
 
     class Meta:
