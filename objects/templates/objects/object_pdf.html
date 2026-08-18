@@ -1,0 +1,188 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+{{ pdf_css|safe }}
+</style>
+</head>
+
+<body>
+{% with blank="-" %}
+{% with datamissing='<i style="color: red;">(data missing)</i>' %}
+    <div id="header">
+        {% if object.voided %}
+        <h1>LAP Object <span id="voided_record">{{ object }}</span> <span id="voided_warning">VOIDED</span></h1>
+    {% else %}
+        <h1>LAP Object {{ su }}</h1>
+    {% endif %}
+    <hr>
+    </div>
+    <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
+    
+    {% comment %}
+        NOTE: Table cells can't span pages, so anything that might run long should be contained in a dl instead.
+    {% endcomment %}
+    <table>
+        <tr>
+            <th>Number:</th>
+            <th>Excavation Number:</th>
+            <th>Season:</th>
+        </tr>
+        <tr>
+            <td>{{ object.number|default:datamissing }}</td>
+            <td>{{ object.excavationnumber|default:datamissing }}</td>
+            <td>{{ object.season|default:datamissing }}</td>
+        </tr>
+        <tr>
+            <th>Surface Find (no Lot):</th>
+        </tr>
+        <tr>
+            <td>{% if object.surfacefind %}Yes{% else %}No{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Lot:</th>
+        </tr>
+        <tr>
+            <td>{{ object.lot|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>SU or 1LAP/3LAP Locus:</th>
+            <th>Area:</th>
+            <th>Locale:</th>
+        </tr>
+        <tr>
+            <td>{{ object.su|default:datamissing }}</td>
+            <td>{{ object.su.locale.area|default:datamissing }}</td>
+            <td>{{ object.su.locale|default:datamissing }}</td>
+        </tr>
+        <tr>
+            <th>Image:</th>
+        </tr>
+        <tr>
+            <td>{% if object.image %}<img src="{{ object.image_pdf }}"><br><span class="filename">{{ filename }}</span>{% else %}-{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Object Type:</th>
+            <th>Object Subtype:</th>
+        </tr>
+        <tr>
+            <td>{{ object.objecttype|default:blank }}</td>
+            <td>{{ object.objectsubtype|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>Clay Slab/Sealing Marking:</th>
+            <th>Sealing Function:</th>
+            <th>Blade Serration:</th>
+        </tr>
+        <tr>
+            <td>{{ object.clayslaborsealingmarking|default:blank }}</td>
+            <td>{{ object.seaslingfunction|default:blank }}</td>
+            <td>{{ object.bladeserration|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>Material:</th>
+        </tr>
+        <tr>
+            <td>{{ object.material|default:datamissing }}</td>
+        </tr>
+        <tr>
+            <th>Stone Subtype:</th>
+            <th>Metal Subtype:</th>
+            <th>Shell Subtype:</th>
+        </tr>
+        <tr>
+            <td>{{ object.stonesubtype|default:blank }}</td>
+            <td>{{ object.metalsubtype|default:blank }}</td>
+            <td>{{ object.shellsubtype|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>Preservation:</th>
+            <th>Repaired/Repurposed:</th>
+        </tr>
+        <tr>
+            <td>{{ object.preservation|default:datamissing }}</td>
+            <td>{{ object.repairedorrepurposed|default:datamissing }}</td>
+        </tr>
+        <tr>
+            <th>Main Color:</th>
+            <th>Decoration:</th>
+            <th>Decoration Color:</th>
+        </tr>
+        <tr>
+            <td>{{ object.maincolor|default:datamissing }}</td>
+            <td>{{ object.decoration|default:blank }}</td>
+            <td>{{ object.decorationcolor|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>Height:</th>
+            <th>Length:</th>
+            <th>Width:</th>
+        </tr>
+        <tr>
+            <td>{{ object.height|default:blank }}</td>
+            <td>{{ object.length|default:blank }}</td>
+            <td>{{ object.width|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>Thickness:</th>
+        </tr>
+        <tr>
+            <td>{{ object.thickness|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>Diameter (max):</th>
+            <th>Diameter (min):</th>
+            <th>Diameter (holes):</th>
+        </tr>
+        <tr>
+            <td>{{ object.diametermax|default:blank }}</td>
+            <td>{{ object.diametermin|default:blank }}</td>
+            <td>{{ object.diameterholes|default:blank }}</td>
+        </tr>
+    </table>
+    <dl>
+        <dt>Description:</dt><dd>{{ object.description|default:blank|escape|linebreaksbr }}</dd>
+        <dt>Notes:</dt><dd>{{ object.notes|default:blank|escape|linebreaksbr }}</dd>
+    </dl>
+    <table>
+        <tr>
+            <th>To Be Photographed:</th>
+            <th>Photographed:</th>
+        </tr>
+        <tr>
+            <td>{% if object.tobephotographed %}Yes{% else %}No{% endif %}</td>
+            <td>{% if object.photographed %}Yes{% else %}No{% endif %}</td>
+        </tr>
+        <tr>
+            <th>To Be Drawn:</th>
+            <th>Drawn:</th>
+        </tr>
+        <tr>
+            <td>{% if object.tobedrawn %}Yes{% else %}No{% endif %}</td>
+            <td>{% if object.drawn %}Yes{% else %}No{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Sent to Baghdad:</th>
+            <th>Baghdad Number:</th>
+        </tr>
+        <tr>
+            <td>{% if object.senttobaghdad %}Yes{% else %}No{% endif %}</td>
+            <td>{{ object.baghdadnumber|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>Published:</th>
+        </tr>
+        <tr>
+            <td>{% if object.published %}Yes{% else %}No{% endif %}</td>
+        </tr>
+        <tr>
+            <th>Publication Citations:</th>
+        </tr>
+        <tr>
+            <td>{{ object.publicationcitations|default:blank }}</td>
+        </tr>
+    </table>
+{% endwith %}
+{% endwith %}
+</body>
+</html>

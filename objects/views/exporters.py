@@ -150,17 +150,18 @@ def objects_list_export(request):
     return response
 
 
-# def object_details_export(request, id):
-#     details = Object.objects.filter(id=id).first()
-#     with open(Path(settings.BASE_DIR / "static/pdfs.css"), "r") as f:
-#         pdf_css = f.read()
-#     context = {
-#         "pdf_css": pdf_css,
-#         "object": details,
-#     }
-#     template = render_to_string("objects/object_pdf.html", context)
-#     result = io.BytesIO()
-#     pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
-#     response = HttpResponse(result.getvalue(), content_type="application/pdf")
-#     response["Content-Disposition"] = f'attachment; filename="LAP Object {details.number}.pdf"'  # type: ignore
-#     return response
+def object_details_export(request, id):
+    details = Object.objects.filter(id=id).first()
+    with open(Path(settings.BASE_DIR / "static/pdfs.css"), "r") as f:
+        pdf_css = f.read()
+    context = {
+        "pdf_css": pdf_css,
+        "object": details,
+        "filename": str(details.image).split("/")[-1],  # type: ignore
+    }
+    template = render_to_string("objects/object_pdf.html", context)
+    result = io.BytesIO()
+    pisa.pisaDocument(io.BytesIO(template.encode("UTF-8")), result)
+    response = HttpResponse(result.getvalue(), content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="LAP Object {details.number}.pdf"'  # type: ignore
+    return response

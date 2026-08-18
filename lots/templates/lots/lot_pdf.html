@@ -7,6 +7,8 @@
 </head>
 
 <body>
+{% with blank="-" %}
+{% with datamissing='<i style="color: red;">(data missing)</i>' %}
     <div id="header">
         {% if lot.voided %}
         <h1>LAP Lot <span id="voided_record">{{ lot }}</span> <span id="voided_warning">VOIDED</span></h1>
@@ -27,9 +29,9 @@
             <th>Locale:</th>
         </tr>
         <tr>
-            <td>{{ lot.number }}</td>
-            <td>{{ lot.su }}</td>
-            <td>{{ lot.su.locale }}</td>
+            <td>{{ lot.number|default:datamissing }}</td>
+            <td>{{ lot.su|default:datamissing }}</td>
+            <td>{{ lot.su.locale|default:datamissing }}</td>
         </tr>
     </table>
     <table>
@@ -39,13 +41,15 @@
             <th>Contents:</th>
         </tr>
         <tr>
-            <td>{{ lot.dateassigned|date:"Y-m-d" }}</td>
-            <td>{{ lot.season }}</td>
-            <td>{{ lot.contents|default:"-" }}</td>
+            <td>{{ lot.dateassigned|date:"Y-m-d"|default:datamissing }}</td>
+            <td>{{ lot.season|default:datamissing }}</td>
+            <td>{{ lot.contents|default:blank }}</td>
         </tr>
     </table>
     <dl>
         <dt>Notes:</dt><dd>{{ lot.notes|default:"-" }}</dd>
     </dl>
+{% endwith %}
+{% endwith %}
 </body>
 </html>

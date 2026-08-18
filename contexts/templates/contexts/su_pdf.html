@@ -7,11 +7,13 @@
 </head>
 
 <body>
+{% with blank="-" %}
+{% with datamissing='<i style="color: red;">(data missing)</i>' %}
     <div id="header">
         {% if su.voided %}
-        <h1>LAP Lot <span id="voided_record">{{ su }}</span> <span id="voided_warning">VOIDED</span></h1>
+        <h1>LAP <span id="voided_record">{{ su }}</span> <span id="voided_warning">VOIDED</span></h1>
     {% else %}
-        <h1>LAP Lot {{ su }}</h1>
+        <h1>LAP {{ su }}</h1>
     {% endif %}
     <hr>
     </div>
@@ -28,8 +30,8 @@
         </tr>
         <tr>
             <td>{% if su.locus %}-{% else %}{{ su.number|default:"0" }}{% endif %}</td>
-            <td>{{ su.locus|default:"-" }}</td>
-            <td>{{ su.locale }}</td>
+            <td>{{ su.locus|default:blank }}</td>
+            <td>{{ su.locale|default:datamissing }}</td>
         </tr>
         <tr>
             <th>Date Assigned:</th>
@@ -37,25 +39,25 @@
             <th>Seasons:</th>
         </tr>
         <tr>
-            <td>{{ su.dateassigned|date:"Y-m-d" }}</td>
-            <td>{{ su.recordedby }}</td>
-            <td>{{ su.seasons_list|join:", " }}</td>
+            <td>{{ su.dateassigned|date:"Y-m-d"|default:datamissing }}</td>
+            <td>{{ su.recordedby|default:datamissing }}</td>
+            <td>{{ su.seasons_list|default:blank|join:", " }}</td>
         </tr>
         <tr>
             <th>Feature Type:</th>
             <th>Dimensions:</th>
         </tr>
         <tr>
-            <td>{{ su.prefix|default:"-" }}</td>
-            <td>{{ su.dimensions|default:"-" }}</td>
+            <td>{{ su.prefix|default:blank }}</td>
+            <td>{{ su.dimensions|default:blank }}</td>
         </tr>
         <tr>
             <th>Elevation (top):</th>
             <th>Elevation (bottom):</th>
         </tr>
         <tr>
-            <td>{{ su.elevationtop|default:"-" }}</td>
-            <td>{{ su.elevationbottom|default:"-" }}</td>
+            <td>{{ su.elevationtop|default:blank }}</td>
+            <td>{{ su.elevationbottom|default:blank }}</td>
         </tr>
     </table>
     <table>
@@ -65,72 +67,74 @@
         </tr>
         <tr>
             <td>{% if su.tracing %}<img src="{{ su.tracing_pdf }}"><br><span class="filename">{{ filename }}</span>{% else %}-{% endif %}</td>
-            <td>{{ su.worldfile_contents|default:"-"|linebreaks }}</td>
+            <td>{{ su.worldfile_contents|default:blank|linebreaks }}</td>
         </tr>
         <tr>
             <th>Architectural Features:</th>
             <th>Architectural Technique:</th>
         </tr>
         <tr>
-            <td>{{ su.architecturalfeatures|default:"-" }}</td>
-            <td>{{ su.architecturaltechnique|default:"-" }}</td>
+            <td>{{ su.architecturalfeatures|default:blank }}</td>
+            <td>{{ su.architecturaltechnique|default:blank }}</td>
         </tr>
         <tr>
             <th>Color:</th>
             <th>Composition:</th>
         </tr>
         <tr>
-            <td>{{ su.color|default:"-" }}</td>
-            <td>{{ su.composition|default:"-" }}</td>
+            <td>{{ su.color|default:blank }}</td>
+            <td>{{ su.composition|default:blank }}</td>
         </tr>
         <tr>
             <th>Texture:</th>
             <th>Inclusions:</th>
         </tr>
         <tr>
-            <td>{{ su.texture|default:"-" }}</td>
-            <td>{{ su.inclusions|default:"-" }}</td>
+            <td>{{ su.texture|default:blank }}</td>
+            <td>{{ su.inclusions|default:blank }}</td>
         </tr>
         <tr>
             <th>Abuts:</th>
             <th>Same As:</th>
         </tr>
         <tr>
-            <td>{{ su.abuts|default:"-" }}</td>
-            <td>{{ su.sameas|default:"-" }}</td>
+            <td>{{ su.abuts|default:blank }}</td>
+            <td>{{ su.sameas|default:blank }}</td>
         </tr>
         <tr>
             <th>Covered By:</th>
             <th>Covers:</th>
         </tr>
         <tr>
-            <td>{{ su.coveredby|default:"-" }}</td>
-            <td>{{ su.covers|default:"-" }}</td>
+            <td>{{ su.coveredby|default:blank }}</td>
+            <td>{{ su.covers|default:blank }}</td>
         </tr>
         <tr>
             <th>Cut By:</th>
             <th>Cuts:</th>
         </tr>
         <tr>
-            <td>{{ su.cutby|default:"-" }}</td>
-            <td>{{ su.cuts|default:"-" }}</td>
+            <td>{{ su.cutby|default:blank }}</td>
+            <td>{{ su.cuts|default:blank }}</td>
         </tr>
         <tr>
             <th>Filled By:</th>
             <th>Fills:</th>
         </tr>
         <tr>
-            <td>{{ su.filledby|default:"-" }}</td>
-            <td>{{ su.fills|default:"-" }}</td>
+            <td>{{ su.filledby|default:blank }}</td>
+            <td>{{ su.fills|default:blank }}</td>
         </tr>
     </table>
     <dl>
-        <dt>Description:</dt><dd>{{ su.description|default:"-" }}</dd>
-        <dt>Interpretation:</dt><dd>{{ su.interpretation|default:"-" }}</dd>
-        <dt>Notes:</dt><dd>{{ su.notes|default:"-" }}</dd>
-        <dt>Lots:</dt><dd>{{ lots|default:"-"|join:", " }}</dd>
-        <dt>Photos:</dt><dd>{{ su.photos|default:"-" }}</dd>
-        <dt>Photogrammetry Numbers:</dt><dd>{{ su.photogrammetrynumbers|default:"-" }}</dd>
+        <dt>Description:</dt><dd>{{ su.description|default:blank }}</dd>
+        <dt>Interpretation:</dt><dd>{{ su.interpretation|default:blank }}</dd>
+        <dt>Notes:</dt><dd>{{ su.notes|default:blank }}</dd>
+        <dt>Lots:</dt><dd>{{ lots|default:blank|join:", " }}</dd>
+        <dt>Photos:</dt><dd>{{ su.photos|default:blank }}</dd>
+        <dt>Photogrammetry Numbers:</dt><dd>{{ su.photogrammetrynumbers|default:blank }}</dd>
     </dl>
+{% endwith %}
+{% endwith %}
 </body>
 </html>

@@ -7,6 +7,8 @@
 </head>
 
 <body>
+{% with blank="-" %}
+{% with datamissing='<i style="color: red;">(data missing)</i>' %}
     <div id="header"><h1>LAP Locale {{ locale.formatted_name }}</h1><hr></div>
     <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
     
@@ -20,15 +22,17 @@
             <th>Method:</th>
         </tr>
         <tr>
-            <td>{{ locale.name }}</td>
-            <td>{{ locale.area }}</td>
-            <td>{{ locale.method }}</td>
+            <td>{{ locale.name|default:datamissing }}</td>
+            <td>{{ locale.area|default:datamissing }}</td>
+            <td>{{ locale.method|default:datamissing }}</td>
         </tr>
     </table>
     <dl>
-        <dt>Seasons:</dt><dd>{{ locale.seasons_list|default:"-"|join:", " }}</dd>
-        <dt>SUs and 1LAP/3LAP Loci:</dt><dd>{{ locale.sus_list|default:"-"|join:", " }}</dd>
-        <dt>Notes:</dt><dd>{{ locale.notes|default:"-"|escape|linebreaksbr }}</dd>
+        <dt>Seasons:</dt><dd>{{ locale.seasons_list|default:blank|join:", " }}</dd>
+        <dt>SUs and 1LAP/3LAP Loci:</dt><dd>{{ locale.sus_list|default:blank|join:", " }}</dd>
+        <dt>Notes:</dt><dd>{{ locale.notes|default:blank|escape|linebreaksbr }}</dd>
     </dl>
+{% endwith %}
+{% endwith %}
 </body>
 </html>
