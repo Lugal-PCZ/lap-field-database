@@ -468,13 +468,13 @@ class Object(models.Model):
     def __str__(self):
         return self.number
 
-    # def clean(self):
-    #     if self.locale != self.su.locale:
-    #         raise ValidationError("The Locale for this SU doesn’t match the Locale entered above.")
-    #     if self.season != self.lot.season:
-    #         raise ValidationError("The Season for this Lot doesn’t match the Season entered above.")
-    #     if self.su != self.lot.su:
-    #         raise ValidationError("The SU for this Lot doesn’t match the SU entered above.")
+    def clean(self):
+        # if f"{self.number.split('LAP')[0]}LAP" != str(self.season):
+        #     raise ValidationError("The number given to this Object doesn’t match the Season.")
+        # if self.excavationnumber.upper() != "N/A" and f"{self.number.split('LAP')[0]}LAP" != str(self.season):
+        #     raise ValidationError("The excavationnumber given to this Object doesn’t match the Season.")
+        if self.lot and f"{str(self.lot).split('LAP')[0]}LAP" != str(self.season):
+            raise ValidationError("The lot given to this Object doesn’t match the Season.")
 
     def save(self, *args, **kwargs):
         self.excavationnumber = self.excavationnumber.upper()

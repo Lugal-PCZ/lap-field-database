@@ -35,8 +35,12 @@ def lap_form_handler(request, model, form, id):
                 return redirect(request.path.replace("/new/", f"/{record.pk}/"))
         else:
             for eacherror in form.non_field_errors():
+                if re.match("The (\\w+) given", eacherror):
+                    thefield = re.match("The (\\w+) given", eacherror).group(1)  # type: ignore
+                elif re.match("This (\\w+) already", eacherror):
+                    thefield = re.match("This (\\w+) already", eacherror).group(1)  # type: ignore
                 form.add_error(
-                    re.match("This (.*) already", eacherror).group(1),  # type: ignore
+                    thefield,
                     eacherror,
                 )
             context["form"] = form  # type: ignore

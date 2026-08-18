@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.functions import Lower
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 from lapinfo.models import Season
@@ -63,3 +64,7 @@ class Lot(models.Model):
 
     def __str__(self):
         return self.number
+
+    def clean(self):
+        if f"{self.number.split('LAP')[0]}LAP" != str(self.season):
+            raise ValidationError("The number given to this Lot doesn’t match the Season.")
