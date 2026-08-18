@@ -203,4 +203,5 @@ class SUForm(forms.ModelForm):
             lots = list(lots)
             lots.sort()
             self.fields["lots_list"].widget.attrs["value"] = ", ".join(lots)
+        self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)

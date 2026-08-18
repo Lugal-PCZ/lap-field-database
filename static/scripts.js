@@ -237,12 +237,17 @@ function toggleVoided() {
       labels.forEach(label => {
         label.classList.add('voided');
       });
-      alert("Be sure to write in the notes why this record is being voided.");
     } else {
       labels.forEach(label => {
         label.classList.remove('voided');
       });
     };
+  };
+}
+
+function voidedAlert() {
+  if (document.getElementById("id_voided").checked) {
+    alert("Be sure to write in the notes why this record is being voided.");
   };
 }
 

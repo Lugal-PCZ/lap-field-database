@@ -93,4 +93,5 @@ class LotForm(forms.ModelForm):
         self.fields["su"].widget.attrs["onChange"] = "loadLocale()"
         if self.instance and hasattr(self.instance, "su"):
             self.fields["locale"].initial = self.instance.su.locale
+        self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)

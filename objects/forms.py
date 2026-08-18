@@ -204,4 +204,5 @@ class ObjectForm(forms.ModelForm):
             self.fields["baghdadnumber"].widget.attrs["initiallyhidden"] = True
         if not self.instance.published:
             self.fields["publicationcitations"].widget.attrs["initiallyhidden"] = True
+        self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)
