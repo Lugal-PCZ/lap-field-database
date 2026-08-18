@@ -84,10 +84,6 @@
     margin-left: 0px;
 }
 
-#details .select2-container {
-    width: 150px;
-}
-
 #details .select2-selection {
     border-style: solid;
     border-width: 1px;;
@@ -127,7 +123,6 @@
     color: red;
 }
 
-#details #id_su:disabled:has
 
 /* Custom Details View Grids Follow */
 
@@ -137,7 +132,7 @@ form[name="LocaleForm"] {
         "name area method"
         "seasons_list . ."
         "sus_list sus_list sus_list"
-        "notes notes notes"
+        "notes notes notes";
 }
 
 /* SUs */
