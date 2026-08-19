@@ -55,6 +55,11 @@ class LotForm(forms.ModelForm):
         required=False,
         disabled=True,
     )
+    contents = forms.CharField(
+        required=False,
+        disabled=True,
+        initial="(general/pottery)",
+    )
 
     class Meta:
         model = Lot

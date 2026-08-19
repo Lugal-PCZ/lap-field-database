@@ -8,21 +8,18 @@ from contexts.models import SU
 
 
 class Lot(models.Model):
-    CONTENTS_CHOICES = [
-        ("foo", "foo"),
-        ("bar", "bar"),
-        ("baz", "baz"),
-    ]
     number = models.CharField(
         max_length=9,
         default=Season.objects.last().name,  # type: ignore
         null=False,
+        verbose_name="Lot Number",
     )
     season = models.ForeignKey(
         Season,
         on_delete=models.PROTECT,
         default=Season.objects.last().pk,  # type: ignore
         null=False,
+        verbose_name="Season",
     )
     su = models.ForeignKey(
         SU,
@@ -37,17 +34,19 @@ class Lot(models.Model):
     )
     contents = models.CharField(
         max_length=20,
-        choices=CONTENTS_CHOICES,
-        null=True,
-        blank=True,
+        null=False,
+        default="(general/pottery)",
+        verbose_name="Contents",
     )
     notes = models.TextField(
         null=True,
         blank=True,
+        verbose_name="Notes",
     )
     voided = models.BooleanField(
         null=False,
         default=False,
+        verbose_name="Voided",
     )
 
     class Meta:
