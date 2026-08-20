@@ -42,7 +42,12 @@ def locales_list_export(request, contexttype):
         method = "Surface Find"
     unfiltered_items = (
         Locale.objects.filter(method=method)
-        .order_by(F("name")[0:6], "id")  # type: ignore
+        .extra(
+            select={
+                "sortorder": 'CASE WHEN "method" = "Survey" THEN "b-" || "name" WHEN "method" = "Surface Find" THEN "c-" || "name" WHEN substr("name", "LAPTT") THEN "a-" || "name" ELSE cast(substr("name", instr("name", " ") + 1, 3) as int) END'
+            }
+        )
+        .order_by("sortorder")  # type: ignore
         .prefetch_related(
             Prefetch(
                 "sus",

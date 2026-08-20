@@ -23,7 +23,11 @@ def _build_params(request, params):
 
 
 def lots_list(request):
-    unfiltered_items = Lot.objects.all()
+    unfiltered_items = (
+        Lot.objects.all()
+        .extra(select={"sortorder": 'cast(substr("number", instr("number", "LAP") + 3) as int)'})
+        .order_by("season", "sortorder")
+    )
     params, paramstring = _build_params(request, ["su", "locale", "contents", "season"])
     filtered_items = unfiltered_items
     if su := params["su"]:

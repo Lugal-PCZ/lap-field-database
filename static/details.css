@@ -2,7 +2,6 @@
     min-width: 1000px;
     margin-left: -5px;
     margin-right: 15px;
-    margin-bottom: 10px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: minmax(0px, auto);
