@@ -114,7 +114,7 @@
 #details input:invalid,
 #details select:invalid,
 #details textarea:invalid {
-    border-width: 1px;
+    border-width: 2px;
     border-color: red;
 }
 

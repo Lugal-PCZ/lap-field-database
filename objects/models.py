@@ -406,7 +406,7 @@ class Object(models.Model):
     )
     tobephotographed = models.BooleanField(
         null=False,
-        default=False,
+        default=True,
         verbose_name="To Be Photographed",
     )
     photographed = models.BooleanField(

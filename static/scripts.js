@@ -271,6 +271,7 @@ function highlightRequiredSelect2Fields() {
     });
     if (selectfield.required && (!selectfield.options || !optionselected)) {
       field.style.borderColor = "red";
+      field.style.borderWidth = "2px";
     } else {
       field.style.borderColor = null;
     };
