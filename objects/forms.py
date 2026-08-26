@@ -91,7 +91,7 @@ class ObjectForm(forms.ModelForm):
             "number",
             "excavationnumber",
             "season",
-            "surfacefind",
+            "nolot",
             "lot",
             "su",
             "excavationdate",
@@ -136,7 +136,9 @@ class ObjectForm(forms.ModelForm):
                 attrs={"pattern": r"^\d{1,2}LAP\d{5}$"},
             ),
             "excavationnumber": forms.TextInput(
-                attrs={"pattern": r"^(\d{1,2}LAP\d{3}/[A-Za-z]{1,2})|([13]LAP\d{3}.\d{3})|([nN]/[aA])$"},
+                attrs={
+                    "pattern": r"^(\d{1,2}LAP\d{3}(/[A-Za-z]{1,2})?)|(\d{1,2}LAP\d{3}/\d+)|([1-4]LAP\d{3,4}.\d{3})|([nN]/[aA])$"
+                },
             ),
             "lot": AutocompleteSelect(
                 Object._meta.get_field("lot"),  # type: ignore

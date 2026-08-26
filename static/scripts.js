@@ -127,8 +127,8 @@ function handleDependentFields() {
         };
         break;
       case "ObjectForm":
-        // surfacefind is checked, so hide lot
-        if (document.getElementById("id_surfacefind").checked) {
+        // nolot is checked, so hide lot
+        if (document.getElementById("id_nolot").checked) {
           document.getElementById("id_lot").closest("div.form-group").hidden = true;
           document.getElementById("id_lot").required = false;
           document.getElementById("id_lot").innerHTML = '';
@@ -302,7 +302,9 @@ async function loadSU() {
       document.getElementById("id_area").value = data.area;
       document.getElementById("id_locale").value = data.locale;
       // also load the exavationdate with the date that the lot was assigned
-      document.getElementById("id_excavationdate").value = data.lot_dateassigned;
+      if (!document.getElementById("id_excavationdate").value) {
+        document.getElementById("id_excavationdate").value = data.lot_dateassigned;
+      };
     });
 }
 

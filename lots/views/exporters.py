@@ -49,6 +49,7 @@ def lots_list_export(request):
         [
             "Lot",
             "SU or 1LAP/3LAP Locus",
+            "Area",
             "Locale",
             "Contents",
             "Date Assigned",
@@ -68,6 +69,7 @@ def lots_list_export(request):
             [
                 record,
                 record.su,
+                record.su.locale.area,
                 record.su.locale,
                 contents,
                 record.dateassigned,

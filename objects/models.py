@@ -219,10 +219,10 @@ class Object(models.Model):
         null=False,
         verbose_name="SU or 1LAP/3LAP Locus",
     )
-    surfacefind = models.BooleanField(
+    nolot = models.BooleanField(
         null=False,
         default=False,
-        verbose_name="Surface Find (no Lot)",
+        verbose_name="No Lot (Surface Find)",
     )
     lot = models.ForeignKey(
         Lot,
