@@ -18,7 +18,7 @@
 <body onload="
 {% if messages %}
 {% for message in messages %}
-alert('{{ message.message }}');
+alert('{{ message.message|escapejs }}');
 {% endfor %}
 {%  endif %}
 cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fields();">

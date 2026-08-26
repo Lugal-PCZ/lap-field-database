@@ -1,6 +1,7 @@
 import re
 
 from django.shortcuts import redirect, render
+from django.contrib import messages
 
 
 def mainmenu(request):
@@ -11,7 +12,7 @@ def mainmenu(request):
     )
 
 
-def lap_form_handler(request, model, form, id):
+def lap_form_handler(request, model, form, id, message=None):
     context = {"newitemlink": f"/{model.__name__.lower()}/new/"}
     context["view"] = "details"
     context["title"] = f"{model.__name__} Details"
@@ -28,6 +29,8 @@ def lap_form_handler(request, model, form, id):
         form = form(request.POST, request.FILES, instance=instance, editable=editable, user=request.user)
         if form.is_valid():
             record = form.save()
+            if message:
+                messages.success(request, message)
             if record.pk == id:  # a record was updated
                 return redirect(request.path)
             if record.pk != id:  # a new record was created
