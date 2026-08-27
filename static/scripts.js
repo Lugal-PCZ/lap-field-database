@@ -182,6 +182,7 @@ function handleDependentFields() {
             ["stone", "metal", "shell"].forEach(material => {
               document.getElementById(`id_${material}subtype`).closest("div.form-group").hidden = true;
               document.getElementById(`id_${material}subtype`).required = false;
+              document.getElementById(`id_${material}subtype`).value = '';
             });
         };
         // subtype is Clay Slab or Sealing, so show clayslaborsealingmarking
@@ -199,6 +200,7 @@ function handleDependentFields() {
             default:
               document.getElementById("id_clayslaborsealingmarking").closest("div.form-group").hidden = true;
               document.getElementById("id_clayslaborsealingmarking").required = false;
+              document.getElementById("id_clayslaborsealingmarking").value = '';
           };
           // subtype is Sealing, so show sealingfunction
           if (currentsubtype === "Sealing") {
@@ -207,6 +209,7 @@ function handleDependentFields() {
           } else {
             document.getElementById("id_sealingfunction").closest("div.form-group").hidden = true;
             document.getElementById("id_sealingfunction").required = false;
+            document.getElementById("id_sealingfunction").value = '';
           };
         };
         // subtype is Blade, so show bladeserration
@@ -216,6 +219,7 @@ function handleDependentFields() {
         } else {
           document.getElementById("id_bladeserration").closest("div.form-group").hidden = true;
           document.getElementById("id_bladeserration").required = false;
+          document.getElementById("id_bladeserration").value = '';
         };
         // senttobaghdad is checked, so show baghdadnumber
         if (document.getElementById("id_senttobaghdad").checked) {
