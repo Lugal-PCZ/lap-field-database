@@ -64,8 +64,9 @@ def locales_list(request, contexttype):
         seasons = []
         seasons_list = set()
         for each_su in each_item.sus_list:  # type: ignore
-            seasons.append(each_su.seasons.values()[0]["id"])
-            seasons_list.add(each_su.seasons.values()[0]["name"])
+            if each_su.seasons.values():
+                seasons.append(each_su.seasons.values()[0]["id"])
+                seasons_list.add(each_su.seasons.values()[0]["name"])
         seasons_list = list(seasons_list)
         seasons_list.sort()
         each_item.seasons = seasons  # type: ignore
