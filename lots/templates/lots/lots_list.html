@@ -18,12 +18,12 @@
         <div>Season</div>
     </dt>
     {% for item in all_items %}
-    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(5, 1fr);" onclick="window.open('/lot/{{ item.id }}', '_self')">
-        <div>{{ item }}</div>
-        <div>{{ item.su }}</div>
-        <div>{{ item.su.locale }}</div>
-        <div>{{ item.contents|default:"-" }}</div>
-        <div>{{ item.season }}</div>
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(5, 1fr);" onclick="localStorage.setItem('listview', window.location.href)">
+        <div><a href="/lot/{{ item.id }}/">{{ item }}</a></div>
+        <div><a href="/lot/{{ item.id }}/">{{ item.su }}</a></div>
+        <div><a href="/lot/{{ item.id }}/">{{ item.su.locale }}</a></div>
+        <div><a href="/lot/{{ item.id }}/">{{ item.contents|default:"-" }}</a></div>
+        <div><a href="/lot/{{ item.id }}/">{{ item.season }}</a></div>
     </dd>
     {% endfor %}
 </dl>

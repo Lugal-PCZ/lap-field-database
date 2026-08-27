@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>LAP - {{ title }}</title>
+<title>{{ title }}</title>
 <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
 <link rel="stylesheet" href="{% static 'base.css' %}">
 <link rel="stylesheet" href="{% static 'lists.css' %}">
@@ -27,7 +27,7 @@ cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fi
     <div id="pagetitle">
         <a href="/">LAP FIELD DATABASE</a> - {{ title }}
         {% if "New " in title or " Details" in title %}
-        <img id="backarrow" src="{% static 'img/backarrow.svg' %}" onclick="history.back()" />
+        <img id="backarrow" src="{% static 'img/backarrow.svg' %}" onclick="window.open(localStorage.getItem('listview'), '_self')" />
         {% endif %}
         <div id="popupmenus">
             <div onclick="toggleLogin()">

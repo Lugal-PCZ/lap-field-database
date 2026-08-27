@@ -46,6 +46,11 @@ dd>div {
     padding-bottom: 8px;
 }
 
+dd>div>a {
+    display: inline-block;
+    width: 100%;
+}
+
 dd:nth-child(odd) {
     background-color: aliceblue;
 }

@@ -16,10 +16,10 @@
         <div>Seasons</div>
     </dt>
     {% for item in all_items %}
-    <dd style="grid-template-columns: minmax(300px, min-content) 1fr 1fr;" onclick="window.open('/locale/{{ item.id }}', '_self')">
-        <div>{{ item.name }}</div>
-        <div>{{ item.area }}</div>
-        <div>{{ item.seasons_list|join:", " }}</div>
+    <dd style="grid-template-columns: minmax(300px, min-content) 1fr 1fr;" onclick="localStorage.setItem('listview', window.location.href)">
+        <div><a href="/locale/{{ item.id }}/">{{ item.name }}</a></div>
+        <div><a href="/locale/{{ item.id }}/">{{ item.area }}</a></div>
+        <div><a href="/locale/{{ item.id }}/">{{ item.seasons_list|join:", " }}</a></div>
     </dd>
     {% endfor %}
 </dl>

@@ -20,13 +20,13 @@
         <div>Thumbnail</div>
     </dt>
     {% for item in all_items %}
-    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(7, 1fr);">
-        <div onclick="window.open('/object/{{ item.id }}', '_self')">{{ item }}</div>
-        <div onclick="window.open('/object/{{ item.id }}', '_self')">{{ item.season }}</div>
-        <div onclick="window.open('/object/{{ item.id }}', '_self')">{{ item.su.locale }}</div>
-        <div onclick="window.open('/object/{{ item.id }}', '_self')">{{ item.material }}</div>
-        <div onclick="window.open('/object/{{ item.id }}', '_self')">{{ item.objecttype }}</div>
-        <div onclick="window.open('/object/{{ item.id }}', '_self')">{{ item.objectsubtype.name|default:"-" }}</div>
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(7, 1fr);" onclick="localStorage.setItem('listview', window.location.href)">
+        <div><a href="/object/{{ item.id }}/">{{ item }}</a></div>
+        <div><a href="/object/{{ item.id }}/">{{ item.season }}</a></div>
+        <div><a href="/object/{{ item.id }}/">{{ item.su.locale }}</a></div>
+        <div><a href="/object/{{ item.id }}/">{{ item.material }}</a></div>
+        <div><a href="/object/{{ item.id }}/">{{ item.objecttype }}</a></div>
+        <div><a href="/object/{{ item.id }}/">{{ item.objectsubtype.name|default:"-" }}</a></div>
         {% if item.image_thumbnail %}
             <div onmousedown="showImage(this, '/static/{{ item.image|cut:"uploads/" }}');">
                 <img src="/static/{{ item.image_thumbnail|cut:"uploads/" }}">
