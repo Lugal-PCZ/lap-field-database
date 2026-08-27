@@ -25,7 +25,10 @@ cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fi
 <div id="background"></div>
 <div id="header">
     <div id="pagetitle">
-        <a href="/">LAP FIELD DATABASE</a>: {{ title }}
+        <a href="/">LAP FIELD DATABASE</a> - {{ title }}
+        {% if "New " in title or " Details" in title %}
+        <img id="backarrow" src="{% static 'img/backarrow.svg' %}" onclick="history.back()" />
+        {% endif %}
         <div id="popupmenus">
             <div onclick="toggleLogin()">
             {% if user.is_authenticated %}

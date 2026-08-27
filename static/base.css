@@ -53,6 +53,13 @@ button {
     color: white;
 }
 
+#backarrow {
+    height: 20px;
+    width: 20px;
+    margin-left: 12px;
+    cursor: pointer;
+}
+
 #popupmenus {
     float: right;
     margin: 0px 15px 0px 0px;

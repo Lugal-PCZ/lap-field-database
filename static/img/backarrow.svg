@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   width="613.80701"
+   height="456.90366"
+   viewBox="0 0 18.41421 13.70711"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="backarrow.svg"
+   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.03875"
+     inkscape:cx="313.3574"
+     inkscape:cy="256.07702"
+     inkscape:current-layer="svg1" />
+  <path
+     d="M 1.41421,5.70711 0.7071,6.41421 0,5.70711 0.7071,5 Z m 4.29289,5.7071 -5,-5 L 2.12132,5 l 5,5.00001 z M 0.7071,5 l 5,-5 1.41422,1.41422 -5,4.99999 z M 1.41421,4.70711 h 10 v 2 h -10 z m 17,7 v 2 h -2 v -2 z m -7,-7 c 3.866,0 7,3.134 7,7 h -2 c 0,-2.7614 -2.2386,-5 -5,-5 z"
+     fill="#33363f"
+     id="path1"
+     sodipodi:nodetypes="cccccccccccccccccccccccccccccc"
+     style="fill:#ffffff;fill-opacity:1" />
+</svg>
