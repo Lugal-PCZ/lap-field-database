@@ -13,7 +13,9 @@ def mainmenu(request):
 
 
 def lap_form_handler(request, model, form, id, message=None):
-    context = {"newitemlink": f"/{model.__name__.lower()}/new/"}
+    context = {}
+    if not model.__name__.lower() == "area":  # This is to prevent users from creating new Areas
+        context["newitemlink"] = f"/{model.__name__.lower()}/new/"
     context["view"] = "details"
     context["title"] = f"{model.__name__} Details"
     if request.path.endswith("/new/"):

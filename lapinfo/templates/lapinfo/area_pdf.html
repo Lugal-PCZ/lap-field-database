@@ -1,0 +1,34 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+{{ pdf_css|safe }}
+</style>
+</head>
+
+<body>
+{% with blank="-" %}
+{% with datamissing='<i style="color: red;">(data missing)</i>' %}
+    <div id="header"><h1>LAP {% if "Area " not in area.formatted_name %}Area {% endif %}{{ area.formatted_name }}</h1><hr></div>
+    <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
+    
+    {% comment %}
+        NOTE: Table cells can't span pages, so anything that might run long should be contained in a dl instead.
+    {% endcomment %}
+    <table>
+        <tr>
+            <th>Name:</th>
+            <th>Shortname:</th>
+        </tr>
+        <tr>
+            <td>{{ area.name|default:datamissing }}</td>
+            <td>{{ area.shortname|default:blank }}</td>
+        </tr>
+    </table>
+    <dl>
+        <dt>Locales:</dt><dd>{{ area.locales_list|default:blank }}</dd>
+    </dl>
+{% endwith %}
+{% endwith %}
+</body>
+</html>

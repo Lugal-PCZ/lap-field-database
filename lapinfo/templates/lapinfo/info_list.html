@@ -8,7 +8,15 @@
 <dl>
     <dt style="grid-template-columns: 200px;"><div>{{ title|slice:":-1" }}</div></dt>
     {% for item in all_items %}
-    <dd style="grid-template-columns: 200px;"><div>{{ item.formatted_name }}</div></dd>
+    {% if title == "Areas" %}
+        <dd style="grid-template-columns: 200px;" onclick="localStorage.setItem('listview', window.location.href)">
+            <div><a href="/area/{{ item.id }}/">{{ item.formatted_name }}</a></div>
+        </dd>
+    {% else %}
+        <dd style="grid-template-columns: 200px;">
+            <div>{{ item.formatted_name }}</div>
+        </dd>
+    {% endif %}
     {% endfor %}
 </dl>
 {% endblock %}

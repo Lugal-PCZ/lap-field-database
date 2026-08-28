@@ -82,7 +82,7 @@ cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fi
                 {% endfor %}
                 <b>]</b></span>
             {% endif %}
-        {% elif user.is_authenticated and request.path != "/" %}
+        {% elif newitemlink and user.is_authenticated and request.path != "/" %}
             <span id="subheadspacer">
                 <button id="newbutton" type="button" onclick="window.open('{{ newitemlink }}', '_self')">+</button>
                 <button id="savebutton" type="submit" form="details" disabled>

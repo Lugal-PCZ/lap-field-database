@@ -4,7 +4,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.db.models import F, Prefetch
+from django.db.models import Prefetch
 from django.template.loader import render_to_string
 
 from xhtml2pdf import pisa

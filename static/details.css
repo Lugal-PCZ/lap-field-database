@@ -125,6 +125,13 @@
 
 /* Custom Details View Grids Follow */
 
+/* Areas */
+form[name="AreaForm"] {
+    grid-template-areas:
+        "name shortname ."
+        "locales_list locales_list locales_list";
+}
+
 /* Locales */
 form[name="LocaleForm"] {
     grid-template-areas:
