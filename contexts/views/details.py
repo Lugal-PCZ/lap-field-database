@@ -9,5 +9,7 @@ def locale_details(request, id=None):
 
 
 def su_details(request, id=None):
-    message = "SU saved successfully.\nPlease verify that the Locale is correct before proceeding."
+    message = None
+    if request.path.endswith("/new/"):
+        message = "SU saved successfully.\nPlease verify that the Locale is correct before proceeding."
     return lap_form_handler(request, SU, SUForm, id, message)
