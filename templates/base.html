@@ -66,7 +66,7 @@ cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fi
     <div id="pagesubhead">
         {% if count >= 0 %}
             {% if newitemlink and user.is_authenticated %}
-                <button id="newbutton" type="button" onclick="window.open('{{ newitemlink }}', '_self')">+</button>
+                <button id="newbutton" type="button" onclick="localStorage.setItem('listview', window.location.href); window.open('{{ newitemlink }}', '_self')">+</button>
             {% endif %}
             <span id="count">{{ count }} Item{{ count|pluralize }}</span>
             {% if all_items.paginator and count > 0 %}
@@ -86,8 +86,10 @@ cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fi
             <span id="subheadspacer">
                 <button id="newbutton" type="button" onclick="window.open('{{ newitemlink }}', '_self')">+</button>
                 <button id="savebutton" type="submit" form="details" disabled>
-                    {% if "/new/" in request.path %}Save Record
-                    {% else %}Save Changes
+                    {% if "/new/" in request.path %}
+                        Save Record
+                    {% else %}
+                        Save Changes
                     {% endif %}
                 </button>
                 <button id="discardchangesbutton" form="details" onclick="resetForm();" disabled>Discard Changes</button>
