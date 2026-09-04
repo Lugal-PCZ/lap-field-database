@@ -8,7 +8,6 @@ class LotAdmin(admin.ModelAdmin):
     list_display = [
         "number",
         "su",
-        "su__locale",
         "contents",
         "season",
     ]
@@ -23,7 +22,3 @@ class LotAdmin(admin.ModelAdmin):
     autocomplete_fields = [
         "su",
     ]
-
-    def get_search_results(self, request, queryset, search_term):
-        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        return queryset.exclude(voided=True), use_distinct
