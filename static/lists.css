@@ -49,6 +49,7 @@ dd>div {
 dd>div>a {
     display: inline-block;
     width: 100%;
+    height: 100%;
 }
 
 dd:nth-child(odd) {
@@ -63,7 +64,7 @@ dd>div:first-child {
     font-weight: bold;
 }
 
-dd.voided>div {
+dd.voided>div>a {
     color: red;
     text-decoration: line-through;
 }
