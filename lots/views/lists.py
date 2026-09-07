@@ -28,12 +28,12 @@ def lots_list(request):
         .extra(select={"sortorder": 'cast(substr("number", instr("number", "LAP") + 3) as int)'})
         .order_by("season", "sortorder")
     )
-    params, paramstring = _build_params(request, ["su", "locale", "contents", "season"])
+    params, paramstring = _build_params(request, ["locale", "su", "contents", "season"])
     filtered_items = unfiltered_items
-    if su := params["su"]:
-        filtered_items = [item for item in filtered_items if item.su_id == int(su)]  # type: ignore
     if locale := params["locale"]:
         filtered_items = [item for item in filtered_items if item.su.locale_id == int(locale)]  # type: ignore
+    if su := params["su"]:
+        filtered_items = [item for item in filtered_items if item.su_id == int(su)]  # type: ignore
     if contents := params["contents"]:
         if contents == "None":
             filtered_items = [item for item in filtered_items if item.contents == None]

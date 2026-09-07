@@ -26,12 +26,12 @@ def _build_params(request, params):
 
 def lots_list_export(request):
     unfiltered_items = Lot.objects.all()
-    params, paramstring = _build_params(request, ["su", "locale", "contents", "season"])
+    params, paramstring = _build_params(request, ["locale", "su", "contents", "season"])
     filtered_items = unfiltered_items
-    if su := params["su"]:
-        filtered_items = [item for item in filtered_items if item.su_id == int(su)]  # type: ignore
     if locale := params["locale"]:
         filtered_items = [item for item in filtered_items if item.su.locale_id == int(locale)]  # type: ignore
+    if su := params["su"]:
+        filtered_items = [item for item in filtered_items if item.su_id == int(su)]  # type: ignore
     if contents := params["contents"]:
         if contents == "None":
             filtered_items = [item for item in filtered_items if item.contents == None]
@@ -48,9 +48,9 @@ def lots_list_export(request):
     writer.writerow(
         [
             "Lot",
-            "SU or 1LAP/3LAP Locus",
             "Area",
             "Locale",
+            "SU or 1LAP/3LAP Locus",
             "Contents",
             "Date Assigned",
             "Season",
@@ -72,9 +72,9 @@ def lots_list_export(request):
         writer.writerow(
             [
                 record,
-                record.su,
                 record.su.locale.area,
                 record.su.locale,
+                record.su,
                 contents,
                 record.dateassigned,
                 record.season,

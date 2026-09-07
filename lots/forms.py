@@ -12,12 +12,6 @@ from .models import Lot
 
 
 class LotFilters(forms.Form):
-    su = forms.ModelChoiceField(
-        label="SU",
-        empty_label="all",
-        queryset=SU.objects.filter(Q(number__isnull=False) | Q(locus__isnull=False)),
-        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
-    )
     locale = forms.ModelChoiceField(
         label="Locale",
         empty_label="all",
@@ -28,6 +22,12 @@ class LotFilters(forms.Form):
             }
         )
         .order_by("sortorder"),
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    su = forms.ModelChoiceField(
+        label="SU",
+        empty_label="all",
+        queryset=SU.objects.filter(Q(number__isnull=False) | Q(locus__isnull=False)),
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
     contents = forms.ModelChoiceField(

@@ -12,16 +12,16 @@
 <dl>
     <dt style="grid-template-columns: repeat(5, 1fr);">
         <div>Lot</div>
-        <div>SU or 1LAP/3LAP Locus</div>
         <div>Locale</div>
+        <div>SU or 1LAP/3LAP Locus</div>
         <div>Contents</div>
         <div>Season</div>
     </dt>
     {% for item in all_items %}
     <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(5, 1fr);" onclick="localStorage.setItem('listview', window.location.href)">
         <div><a href="/lot/{{ item.id }}/">{{ item }}</a></div>
-        <div><a href="/lot/{{ item.id }}/">{{ item.su }}</a></div>
         <div><a href="/lot/{{ item.id }}/">{{ item.su.locale }}</a></div>
+        <div><a href="/lot/{{ item.id }}/">{{ item.su }}</a></div>
         <div><a href="/lot/{{ item.id }}/">{{ item.contents|default:"-" }}</a></div>
         <div><a href="/lot/{{ item.id }}/">{{ item.season }}</a></div>
     </dd>
