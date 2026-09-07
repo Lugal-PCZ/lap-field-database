@@ -12,21 +12,21 @@
 <dl>
     <dt style="grid-template-columns: repeat(7, 1fr);">
         <div>Object</div>
-        <div>Season</div>
         <div>Locale</div>
-        <div>Material</div>
         <div>Type</div>
         <div>Subtype</div>
+        <div>Material</div>
+        <div>Season</div>
         <div>Thumbnail</div>
     </dt>
     {% for item in all_items %}
     <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(7, 1fr);" onclick="localStorage.setItem('listview', window.location.href)">
         <div><a href="/object/{{ item.id }}/">{{ item }}</a></div>
-        <div><a href="/object/{{ item.id }}/">{{ item.season }}</a></div>
         <div><a href="/object/{{ item.id }}/">{{ item.su.locale }}</a></div>
-        <div><a href="/object/{{ item.id }}/">{{ item.material }}</a></div>
         <div><a href="/object/{{ item.id }}/">{{ item.objecttype }}</a></div>
         <div><a href="/object/{{ item.id }}/">{{ item.objectsubtype.name|default:"-" }}</a></div>
+        <div><a href="/object/{{ item.id }}/">{{ item.material }}</a></div>
+        <div><a href="/object/{{ item.id }}/">{{ item.season }}</a></div>
         {% if item.image_thumbnail %}
             <div onmousedown="showImage(this, '/static/{{ item.image|cut:"uploads/" }}');">
                 <img src="/static/{{ item.image_thumbnail|cut:"uploads/" }}">

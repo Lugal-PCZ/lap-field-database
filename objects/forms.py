@@ -12,18 +12,7 @@ from .models import Object, ObjectType, ObjectSubtype
 # List View Filters
 
 
-class SubtypeModelChoiceField(forms.ModelChoiceField):
-    def label_from_instance(self, obj):
-        return obj.formatted_name()
-
-
 class ObjectFilters(forms.Form):
-    season = forms.ModelChoiceField(
-        label="Season",
-        empty_label="all",
-        queryset=Season.objects.all(),
-        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
-    )
     locale = forms.ModelChoiceField(
         label="Locale",
         empty_label="all",
@@ -36,22 +25,22 @@ class ObjectFilters(forms.Form):
         .order_by("sortorder"),
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
-    material = forms.ModelChoiceField(
-        label="Material",
-        empty_label="all",
-        queryset=Object.objects.values_list("material", flat=True).order_by("material").distinct(),  # type: ignore
-        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
-    )
     type = forms.ModelChoiceField(
         label="Type",
         empty_label="all",
         queryset=ObjectType.objects.all(),
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
-    subtype = SubtypeModelChoiceField(
-        label="Subtype",
+    material = forms.ModelChoiceField(
+        label="Material",
         empty_label="all",
-        queryset=ObjectSubtype.objects.all().order_by("name", "type"),
+        queryset=Object.objects.values_list("material", flat=True).order_by("material").distinct(),  # type: ignore
+        widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
+    )
+    season = forms.ModelChoiceField(
+        label="Season",
+        empty_label="all",
+        queryset=Season.objects.all(),
         widget=forms.Select(attrs={"onchange": "submitCleanURL(this.form)"}),
     )
 

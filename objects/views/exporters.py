@@ -26,16 +26,19 @@ def _build_params(request, params):
 
 def objects_list_export(request):
     unfiltered_items = Object.objects.all()
-    params, paramstring = _build_params(request, ["season", "locale", "type", "subtype"])
+    params, paramstring = _build_params(request, ["locale", "type", "material", "season"])
     filtered_items = unfiltered_items
-    if season := params["season"]:
-        filtered_items = [item for item in filtered_items if item.season_id == int(season)]  # type: ignore
     if locale := params["locale"]:
         filtered_items = [item for item in filtered_items if item.su.locale_id == int(locale)]  # type: ignore
     if objecttype := params["type"]:
         filtered_items = [item for item in filtered_items if item.objecttype_id == int(objecttype)]  # type: ignore
-    if objectsubtype := params["subtype"]:
-        filtered_items = [item for item in filtered_items if item.objectsubtype_id == int(objectsubtype)]  # type: ignore
+    if material := params["material"]:
+        if material == "None":
+            filtered_items = [item for item in filtered_items if item.material == None]
+        else:
+            filtered_items = [item for item in filtered_items if str(item.material).upper() == material.upper()]
+    if season := params["season"]:
+        filtered_items = [item for item in filtered_items if item.season_id == int(season)]  # type: ignore
     response = HttpResponse(
         content_type="text/csv",
         headers={"Content-Disposition": 'attachment; filename="LAP Objects.csv"'},
@@ -45,8 +48,8 @@ def objects_list_export(request):
     writer.writerow(
         [
             "Object",
-            "Excavation Number",
             "Season",
+            "Excavation Number",
             "Area",
             "Locale",
             "SU or 1LAP/3LAP Locus",
@@ -107,8 +110,8 @@ def objects_list_export(request):
         writer.writerow(
             [
                 record.number,
-                record.excavationnumber,
                 record.season,
+                record.excavationnumber,
                 record.su.locale.area,
                 record.su.locale,
                 record.su,

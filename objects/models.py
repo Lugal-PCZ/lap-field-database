@@ -69,9 +69,6 @@ class ObjectSubtype(models.Model):
     def __str__(self):
         return self.name
 
-    def formatted_name(self):
-        return f"{self.name} ({self.type})"
-
 
 class Object(models.Model):
     SEALINGFUNCTION_CHOICES = [
@@ -469,10 +466,6 @@ class Object(models.Model):
         return self.number
 
     def clean(self):
-        # if f"{self.number.split('LAP')[0]}LAP" != str(self.season):
-        #     raise ValidationError("The number given to this Object doesn’t match the Season.")
-        # if self.excavationnumber.upper() != "N/A" and f"{self.number.split('LAP')[0]}LAP" != str(self.season):
-        #     raise ValidationError("The excavationnumber given to this Object doesn’t match the Season.")
         if self.lot and f"{str(self.lot).split('LAP')[0]}LAP" != str(self.season):
             raise ValidationError("The lot given to this Object doesn’t match the Season.")
 
