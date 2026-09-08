@@ -14,7 +14,6 @@ from lots.models import Lot
 def get_next_object_number(selectedseason=None):
     currentseason = Season.objects.order_by("id").last().name  # type: ignore
     if selectedseason and selectedseason != currentseason:
-        # with the dummy data, this will throw an error for 1LAP. It can safely be ignored
         # there are no cataloged 2LAP objects, so if we were to retroactively do one, we know the starting number
         if selectedseason == "2LAP":
             nextnumber = "2LAP00000"
