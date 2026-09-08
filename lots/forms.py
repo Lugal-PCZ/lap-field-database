@@ -71,6 +71,11 @@ class LotForm(forms.ModelForm):
         disabled=True,
         label="Objects",
     )
+    samples_list = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Samples",
+    )
 
     class Meta:
         model = Lot
@@ -110,6 +115,7 @@ class LotForm(forms.ModelForm):
         if self.instance and hasattr(self.instance, "su"):
             self.fields["locale"].initial = self.instance.su.locale
         if self.instance.pk:
+            # get a list of all Objects from this Lot
             related_objects = self.instance.object_set.values()
             objects = set()
             for each_object in related_objects:
@@ -117,5 +123,13 @@ class LotForm(forms.ModelForm):
             objects = list(objects)
             objects.sort()
             self.fields["objects_list"].widget.attrs["value"] = ", ".join(objects)
+            # get a list of all Samples from this Lot
+            related_samples = self.instance.sample_set.values()
+            samples = set()
+            for each_sample in related_samples:
+                samples.add(each_sample["number"])
+            samples = list(samples)
+            samples.sort()
+            self.fields["samples_list"].widget.attrs["value"] = ", ".join(samples)
         self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)

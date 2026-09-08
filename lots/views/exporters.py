@@ -56,6 +56,7 @@ def lots_list_export(request):
             "Season",
             "Notes",
             "Objects",
+            "Samples",
             "Voided",
         ]
     )
@@ -63,9 +64,14 @@ def lots_list_export(request):
         contents = record.contents
         if not record.contents:
             contents = "-"
+        # get list of all Objects from this Lot
         objects = []
         for each_object in record.object_set.values():  # type: ignore
             objects.append(each_object["number"])
+        # get list of all Samples from this Lot
+        samples = []
+        for each_sample in record.sample_set.values():  # type: ignore
+            samples.append(each_sample["number"])
         voided = ""
         if record.voided:
             voided = "VOID"
@@ -80,6 +86,7 @@ def lots_list_export(request):
                 record.season,
                 record.notes,
                 ", ".join(objects),
+                ", ".join(samples),
                 voided,
             ]
         )
@@ -88,16 +95,23 @@ def lots_list_export(request):
 
 def lot_details_export(request, id):
     details = Lot.objects.filter(id=id).first()
+    # get list of all Objects from this Lot
     objects = []
     for each_object in details.object_set.values():  # type: ignore
         objects.append(each_object["number"])
     objects.sort()
+    # get list of all Samples from this Lot
+    samples = []
+    for each_sample in details.sample_set.values():  # type: ignore
+        samples.append(each_sample["number"])
+    samples.sort()
     with open(Path(settings.BASE_DIR / "static/pdfs.css"), "r") as f:
         pdf_css = f.read()
     context = {
         "pdf_css": pdf_css,
         "lot": details,
         "objects": objects,
+        "samples": samples,
     }
     template = render_to_string("lots/lot_pdf.html", context)
     result = io.BytesIO()
