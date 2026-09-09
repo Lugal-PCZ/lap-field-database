@@ -207,3 +207,15 @@ form[name="ObjectForm"] {
         "publicationcitations . ."
         "voided . .";
     }
+
+/* Samples */
+form[name="SampleForm"] {
+    grid-template-areas:
+        "number excavationnumber season"
+        "lot . ."
+        "su area locale"
+        "excavationdate registrationdate registrar"
+        "sampletype box intendedanalysis"
+        "notes notes notes"
+        "voided . .";
+    }

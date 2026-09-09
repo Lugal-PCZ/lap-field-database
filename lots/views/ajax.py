@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from contexts.models import Locale, SU
+from contexts.models import SU
 
 
 def load_locale(request):

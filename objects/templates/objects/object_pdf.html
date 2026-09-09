@@ -56,6 +56,16 @@
             <td>{{ object.su.locale|default:datamissing }}</td>
         </tr>
         <tr>
+            <th>Excavation Date:</th>
+            <th>Registration Date:</th>
+            <th>Registrar:</th>
+        </tr>
+        <tr>
+            <td>{{ object.excavationdate|date:"Y-m-d"|default:datamissing }}</td>
+            <td>{{ object.registrationdate|date:"Y-m-d"|default:datamissing }}</td>
+            <td>{{ object.registrar|default:datamissing }}</td>
+        </tr>
+        <tr>
             <th>Image:</th>
         </tr>
         <tr>

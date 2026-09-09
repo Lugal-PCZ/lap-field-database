@@ -15,8 +15,8 @@ def get_next_sample_number(selectedseason=None):
         nextnumber = f"{selectedseason}.S.{int(lastnumber.split('LAP.S.')[1]) + 1:03d}"
     else:
         lastnumber = Sample.objects.all().order_by("number").last().number  # type: ignore
-        if lastnumber.split("LAP.S.")[0] != currentseason.split("LAP.S.")[0]:
-            nextnumber = f"{currentseason}.S.{int(currentseason.split('LAP.S.')[0]) + 1:03d}"
+        if lastnumber.split("LAP.S.")[0] != currentseason.split("LAP")[0]:
+            nextnumber = f"{currentseason}.S.001"
         else:
             nextnumber = f"{currentseason}.S.{int(lastnumber.split('LAP.S.')[1]) + 1:03d}"
     return nextnumber
@@ -70,7 +70,8 @@ class Sample(models.Model):
     registrar = models.ForeignKey(
         CustomUser,
         on_delete=models.PROTECT,
-        null=False,
+        null=True,
+        blank=True,
     )
     season = models.ForeignKey(
         Season,
@@ -82,6 +83,7 @@ class Sample(models.Model):
         SampleType,
         on_delete=models.PROTECT,
         null=False,
+        verbose_name="Sample Type",
     )
     box = models.CharField(
         max_length=50,
@@ -120,7 +122,7 @@ class Sample(models.Model):
 
     def clean(self):
         if self.lot and f"{str(self.lot).split('LAP')[0]}LAP" != str(self.season):
-            raise ValidationError("The lot given to this Object doesn’t match the Season.")
+            raise ValidationError("The lot given to this Sample doesn’t match the Season.")
 
     def save(self, *args, **kwargs):
         self.number = self.number.upper()

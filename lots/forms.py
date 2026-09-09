@@ -111,7 +111,7 @@ class LotForm(forms.ModelForm):
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)
         super(LotForm, self).__init__(*args, **kwargs)
-        self.fields["su"].widget.attrs["onChange"] = "loadLocale()"
+        self.fields["su"].widget.attrs["onChange"] = "loadLocale('lot')"
         if self.instance and hasattr(self.instance, "su"):
             self.fields["locale"].initial = self.instance.su.locale
         if self.instance.pk:

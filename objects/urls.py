@@ -9,7 +9,8 @@ urlpatterns = [
     path("object/new/", details.object_details),
     path("object/<int:id>/", details.object_details),
     path("object/<int:id>/export/", exporters.object_details_export),
-    path("ajax/load_objectsubtypes/", ajax.load_objectsubtypes),
-    path("ajax/load_nextnumber/", ajax.load_nextnumber),
-    path("ajax/load_su/", ajax.load_su),
+    path("object/ajax/load_objectsubtypes/", ajax.load_objectsubtypes),
+    path("object/ajax/load_nextnumber/", ajax.load_nextnumber),
+    path("object/ajax/load_su/", ajax.load_su),
+    path("object/ajax/load_locale/", ajax.load_locale),
 ]

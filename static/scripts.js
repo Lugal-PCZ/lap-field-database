@@ -114,7 +114,7 @@ function resetForm() {
 
 function handleDependentFields() {
   if (document.querySelector("#details")) {
-    switch(document.getElementById("details").name) {
+    switch (document.getElementById("details").name) {
       case "SUForm":
         // there is a tracing displayed, so display worldfile
         if (document.querySelector("#onscreen")) {
@@ -146,11 +146,11 @@ function handleDependentFields() {
         };
         // lot is entered, so populate SU field
         if (document.getElementById("id_lot").value) {
-          loadSU();
+          loadSU('object');
         };
         // SU is entered, so populate area and locale fields
         if (document.getElementById("id_su").value) {
-          loadLocale();
+          loadLocale('object');
         };
         // material is Stone, Metal, or Shell, so show the appropriate material subtype widget
         switch (document.getElementById("id_material").value) {
@@ -238,6 +238,12 @@ function handleDependentFields() {
           document.getElementById("id_publicationcitations").required = false;
         };
         break;
+      case "SampleForm":
+        // lot is entered, so populate SU, Area, and Locale fields
+        if (document.getElementById("id_lot").value) {
+          loadSU('sample');
+        };
+        break;
     };
   };
 }
@@ -278,6 +284,7 @@ function highlightRequiredSelect2Fields() {
       field.style.borderWidth = "2px";
     } else {
       field.style.borderColor = null;
+      field.style.borderWidth = null;
     };
   });
 }
@@ -287,24 +294,32 @@ function showImage(thewidget, original) {
   new Viewer(image, {url(image) {return original}, title: false, navbar: false, toolbar: false,});
 }
 
-async function loadSU() {
+async function loadSU(recordtype) {
   const lot_id = document.getElementById("id_lot").value;
-  await fetch(`/ajax/load_su/?lot_id=${lot_id}`)
+  await fetch(`/${recordtype}/ajax/load_su/?lot_id=${lot_id}`)
     .then(response => response.json())
     .then(data => {
-      document.getElementById("id_su").length = 0;
-      document.getElementById("id_su").value = data.su.id;
-      var newOption = document.createElement("option");
-      newOption.value = data.su.id;
-      newOption.text = data.su.name;
-      // newOption.selected = true;
-      document.getElementById("id_su").add(newOption);
-      document.getElementById("select2-id_su-container").setAttribute("title", data.su.name);
-      document.getElementById("select2-id_su-container").innerHTML = data.su.name;
-      document.getElementById("id_su").value = data.su.id;
-      document.getElementById("id_su_display").value = data.su.name;
-      document.getElementById("id_area").value = data.area;
-      document.getElementById("id_locale").value = data.locale;
+      switch  (recordtype) {
+        case "object":
+          document.getElementById("id_su").length = 0;
+          document.getElementById("id_su").value = data.su.id;
+          var newOption = document.createElement("option");
+          newOption.value = data.su.id;
+          newOption.text = data.su.name;
+          document.getElementById("id_su").add(newOption);
+          document.getElementById("select2-id_su-container").setAttribute("title", data.su.name);
+          document.getElementById("select2-id_su-container").innerHTML = data.su.name;
+          document.getElementById("id_su").value = data.su.id;
+          document.getElementById("id_su_display").value = data.su.name;
+          document.getElementById("id_area").value = data.area;
+          document.getElementById("id_locale").value = data.locale;
+          break;
+        case "sample":
+          document.getElementById("id_su").value = data.su.name;
+          document.getElementById("id_area").value = data.area;
+          document.getElementById("id_locale").value = data.locale;
+          break;
+      };
       // also load the exavationdate with the date that the lot was assigned
       if (!document.getElementById("id_excavationdate").value) {
         document.getElementById("id_excavationdate").value = data.lot_dateassigned;
@@ -312,9 +327,9 @@ async function loadSU() {
     });
 }
 
-async function loadLocale() {
+async function loadLocale(recordtype) {
   const su_id = document.getElementById("id_su").value;
-  await fetch(`/ajax/load_locale/?su_id=${su_id}`)
+  await fetch(`/${recordtype}/ajax/load_locale/?su_id=${su_id}`)
     .then(response => response.json())
     .then(data => {
       document.getElementById("id_locale").value = data.locale;
@@ -324,35 +339,9 @@ async function loadLocale() {
     });
 }
 
-async function loadObjectSubtypes() {
-  const subtypemenu = document.getElementById("id_objectsubtype");
-  subtypemenu.options.length = 0;
-  subtypemenu.add(document.createElement('option'));  // add a blank dummy option
-  const objecttype_id = document.getElementById("id_objecttype").value;
-  if (objecttype_id){
-    await fetch(`/ajax/load_objectsubtypes/?objecttype_id=${objecttype_id}`)
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(subtype => {
-          var newOption = document.createElement("option");
-          newOption.value = subtype[0];
-          newOption.text = subtype[1];
-          subtypemenu.add(newOption);
-        });
-      });
-  }
-  if (subtypemenu.options.length > 1) {
-    subtypemenu.closest("div.form-group").hidden = false;
-    subtypemenu.required = true;
-  } else {
-    subtypemenu.closest("div.form-group").hidden = true;
-    subtypemenu.required = false;
-  };
-}
-
-async function loadNextObjectNumberForSeason() {
+async function loadNextRecordNumberForSeason(recordtype) {
   const season = document.getElementById("id_season").selectedOptions[0].innerText;
-  await fetch(`/ajax/load_nextnumber/?season=${season}`)
+  await fetch(`/${recordtype}/ajax/load_nextnumber/?season=${season}`)
     .then(response => response.json())
     .then(data => {
       document.getElementById("id_number").value = data;
@@ -374,3 +363,28 @@ async function loadNextObjectNumberForSeason() {
   };
 }
 
+async function loadObjectSubtypes() {
+  const subtypemenu = document.getElementById("id_objectsubtype");
+  subtypemenu.options.length = 0;
+  subtypemenu.add(document.createElement('option'));  // add a blank dummy option
+  const objecttype_id = document.getElementById("id_objecttype").value;
+  if (objecttype_id){
+    await fetch(`/object/ajax/load_objectsubtypes/?objecttype_id=${objecttype_id}`)
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(subtype => {
+          var newOption = document.createElement("option");
+          newOption.value = subtype[0];
+          newOption.text = subtype[1];
+          subtypemenu.add(newOption);
+        });
+      });
+  }
+  if (subtypemenu.options.length > 1) {
+    subtypemenu.closest("div.form-group").hidden = false;
+    subtypemenu.required = true;
+  } else {
+    subtypemenu.closest("div.form-group").hidden = true;
+    subtypemenu.required = false;
+  };
+}

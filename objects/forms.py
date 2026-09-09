@@ -165,7 +165,7 @@ class ObjectForm(forms.ModelForm):
         if self.instance.pk:
             self.fields["su_display"].initial = self.instance.su
         self.fields["registrar"].initial = user
-        self.fields["season"].widget.attrs["onChange"] = "loadNextObjectNumberForSeason()"
+        self.fields["season"].widget.attrs["onChange"] = "loadNextRecordNumberForSeason('object')"
         if not self.instance:
             self.fields["lot"].required = True
         self.fields["image"].widget.attrs["onscreen"] = f"/{str(self.instance.image_onscreen)}"

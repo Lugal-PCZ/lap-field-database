@@ -1,0 +1,79 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+{{ pdf_css|safe }}
+</style>
+</head>
+
+<body>
+{% with blank="-" %}
+{% with datamissing='<i style="color: red;">(data missing)</i>' %}
+    <div id="header">
+        {% if sample.voided %}
+        <h1>LAP Sample <span id="voided_record">{{ sample }}</span> <span id="voided_warning">VOIDED</span></h1>
+    {% else %}
+        <h1>LAP Sample {{ sample }}</h1>
+    {% endif %}
+    <hr>
+    </div>
+    <div id="footer">Page <pdf:pagenumber> of <pdf:pagecount> - {% now "Y-m-d H:i" %}</div>
+    
+    {% comment %}
+        NOTE: Table cells can't span pages, so anything that might run long should be contained in a dl instead.
+    {% endcomment %}
+    <table>
+        <tr>
+            <th>Number:</th>
+            <th>Excavation Number:</th>
+            <th>Season:</th>
+        </tr>
+        <tr>
+            <td>{{ sample.number|default:datamissing }}</td>
+            <td>{{ sample.excavationnumber|default:datamissing }}</td>
+            <td>{{ sample.season|default:datamissing }}</td>
+        </tr>
+        <tr>
+            <th>Lot:</th>
+        </tr>
+        <tr>
+            <td>{{ sample.lot|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>SU or 1LAP/3LAP Locus:</th>
+            <th>Area:</th>
+            <th>Locale:</th>
+        </tr>
+        <tr>
+            <td>{{ sample.lot.su|default:datamissing }}</td>
+            <td>{{ sample.lot.su.locale.area|default:datamissing }}</td>
+            <td>{{ sample.lot.su.locale|default:datamissing }}</td>
+        </tr>
+        <tr>
+            <th>Excavation Date:</th>
+            <th>Registration Date:</th>
+            <th>Registrar:</th>
+        </tr>
+        <tr>
+            <td>{{ sample.excavationdate|date:"Y-m-d"|default:datamissing }}</td>
+            <td>{{ sample.registrationdate|date:"Y-m-d"|default:datamissing }}</td>
+            <td>{{ sample.registrar|default:datamissing }}</td>
+        </tr>
+        <tr>
+            <th>Sample Type:</th>
+            <th>Box:</th>
+            <th>Intended Analysis:</th>
+        </tr>
+        <tr>
+            <td>{{ sample.sampletype|default:datamissing }}</td>
+            <td>{{ sample.box|default:blank }}</td>
+            <td>{{ sample.intendedanalysis|default:blank }}</td>
+        </tr>
+    </table>
+    <dl>
+        <dt>Notes:</dt><dd>{{ sample.notes|default:blank|escape|linebreaksbr }}</dd>
+    </dl>
+{% endwith %}
+{% endwith %}
+</body>
+</html>

@@ -9,5 +9,5 @@ urlpatterns = [
     path("lot/new/", details.lot_details),
     path("lot/<int:id>/", details.lot_details),
     path("lot/<int:id>/export/", exporters.lot_details_export),
-    path("ajax/load_locale/", ajax.load_locale),
+    path("lot/ajax/load_locale/", ajax.load_locale),
 ]

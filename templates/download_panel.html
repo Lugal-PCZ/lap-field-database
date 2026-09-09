@@ -1,4 +1,5 @@
 {% load static %}
+{% if "/new/" not in request.path %}
 <div id="downloadpanel" hidden>
     {% if view == "list" %}
     <a href="export/{% querystring %}" onclick="this.parentElement.hidden=true">
@@ -18,3 +19,4 @@
     </a>
     {% endif %}
 </div>
+{% endif %}

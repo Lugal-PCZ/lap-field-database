@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block downloadpanel %}
+{% include "download_panel.html" %}
+{% endblock %}
+
+{% block filters %}
+{{ form.as_p }}
+{% endblock %}
+
+{% block content %}
+<dl>
+    <dt style="grid-template-columns: repeat(5, 1fr);">
+        <div>Sample</div>
+        <div>Locale</div>
+        <div>Type</div>
+        <div>Lot</div>
+        <div>Season</div>
+    </dt>
+    {% for item in all_items %}
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(5, 1fr);" onclick="localStorage.setItem('listview', window.location.href)">
+        <div><a href="/sample/{{ item.id }}/">{{ item }}</a></div>
+        <div><a href="/sample/{{ item.id }}/">{{ item.lot.su.locale }}</a></div>
+        <div><a href="/sample/{{ item.id }}/">{{ item.sampletype }}</a></div>
+        <div><a href="/sample/{{ item.id }}/">{{ item.lot }}</a></div>
+        <div><a href="/sample/{{ item.id }}/">{{ item.season }}</a></div>
+    </dd>
+    {% endfor %}
+</dl>
+{% endblock %}
