@@ -21,13 +21,15 @@
 alert('{{ message.message|escapejs }}');
 {% endfor %}
 {%  endif %}
-cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fields();">
+cacheForm(); toggleVoided(); handleDependentFields(); highlightRequiredSelect2Fields(); makePrevAndNextRecordLinks();">
 <div id="background"></div>
 <div id="header">
     <div id="pagetitle">
         <a href="/">LAP FIELD DATABASE</a> - {{ title }}
         {% if "New " in title or " Details" in title %}
-        <img id="backarrow" src="{% static 'img/backarrow.svg' %}" onclick="window.open(localStorage.getItem('listview'), '_self')" />
+        <img id="backarrow" src="{% static 'img/backarrow.svg' %}" onclick="returnToListView();" />
+        <a id="prev_record" class="nextrecordlink">&lt;</a>
+        <a id="next_record" class="nextrecordlink">&gt;</a>
         {% endif %}
         <div id="popupmenus">
             <div onclick="toggleLogin()">

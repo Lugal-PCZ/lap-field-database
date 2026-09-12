@@ -41,6 +41,7 @@ def lots_list(request):
             filtered_items = [item for item in filtered_items if str(item.contents).upper() == contents.upper()]
     if season := params["season"]:
         filtered_items = [item for item in filtered_items if item.season.id == int(season)]  # type: ignore
+    ids_list = [item.id for item in filtered_items]
     p = Paginator(filtered_items, ITEMSPERPAGE)
     if pagenum := request.GET.get("p"):
         pagenum = int(pagenum) if int(pagenum) <= p.num_pages else p.num_pages
@@ -55,6 +56,7 @@ def lots_list(request):
         "all_items": p.page(pagenum),
         "params": paramstring,
         "form": LotFilters(initial=params),
+        "ids_list": ids_list,
     }
     return render(
         request,

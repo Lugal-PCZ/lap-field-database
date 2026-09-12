@@ -80,6 +80,7 @@ def locales_list(request, contexttype):
             if int(season) in each_item.seasons:  # type: ignore
                 refiltered_items.append(each_item)
         filtered_items = refiltered_items
+    ids_list = [item.id for item in filtered_items]
     p = Paginator(filtered_items, ITEMSPERPAGE)
     if pagenum := request.GET.get("p"):
         pagenum = int(pagenum) if int(pagenum) <= p.num_pages else p.num_pages
@@ -94,6 +95,7 @@ def locales_list(request, contexttype):
         "all_items": p.page(pagenum),
         "params": paramstring,
         "form": LocaleFilters(initial=params),
+        "ids_list": ids_list,
     }
     return render(
         request,
@@ -125,6 +127,7 @@ def sus_list(request):
             if int(season) in seasons:
                 refiltered_items.append(each_item)
         filtered_items = refiltered_items
+    ids_list = [item.id for item in filtered_items]
     p = Paginator(filtered_items, ITEMSPERPAGE)
     if pagenum := request.GET.get("p"):
         pagenum = int(pagenum) if int(pagenum) <= p.num_pages else p.num_pages
@@ -139,6 +142,7 @@ def sus_list(request):
         "all_items": p.page(pagenum),
         "params": paramstring,
         "form": SUFilters(initial=params),
+        "ids_list": ids_list,
     }
     return render(
         request,

@@ -112,6 +112,35 @@ function resetForm() {
   location.reload()
 }
 
+function saveResultsList(ids_list) {
+  localStorage.setItem('listview', window.location.href);
+  localStorage.setItem('ids_list', ids_list);
+}
+
+function returnToListView() {
+  window.open(localStorage.getItem('listview'), '_self');
+}
+
+function makePrevAndNextRecordLinks() {
+  if (document.querySelector("#details")) {
+    const ids_list = localStorage.getItem("ids_list").split(",")
+    const current_id = window.location.pathname.split('/').filter(entry => entry !== '').pop();
+    const currentIdIndex = ids_list.indexOf(current_id);
+    const prevId = ids_list[currentIdIndex - 1];
+    const nextId = ids_list[currentIdIndex + 1];
+    const prevUrl = window.location.pathname.replace(`/${current_id}/`, `/${prevId}/`);
+    const nextUrl = window.location.pathname.replace(`/${current_id}/`, `/${nextId}/`);
+    if (prevId) {
+      document.getElementById("prev_record").setAttribute("href", prevUrl);
+      document.getElementById("prev_record").style["visibility"] = "visible"
+    };
+    if (nextId) {
+      document.getElementById("next_record").setAttribute("href", nextUrl);
+      document.getElementById("next_record").style["visibility"] = "visible"
+    };
+  };
+}
+
 function handleDependentFields() {
   if (document.querySelector("#details")) {
     switch (document.getElementById("details").name) {

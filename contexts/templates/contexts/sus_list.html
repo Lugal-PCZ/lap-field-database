@@ -17,7 +17,7 @@
         <div>Seasons</div>
     </dt>
     {% for item in all_items %}
-    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(4, 1fr);" onclick="localStorage.setItem('listview', window.location.href)">
+    <dd {% if item.voided %}class="voided"{% endif %} style="grid-template-columns: repeat(4, 1fr);" onclick="saveResultsList({{ ids_list }})">
         <div><a href="/su/{{ item.id }}/">{{ item }}</a></div>
         <div><a href="/su/{{ item.id }}/">{{ item.locale }}</a></div>
         <div><a href="/su/{{ item.id }}/">{{ item.prefix|default:"-" }}</a></div>

@@ -5,7 +5,6 @@ from lots.models import Lot
 
 
 def load_nextnumber(request):
-    print(">>> here")
     season = request.GET.get("season")
     nextnumber = get_next_sample_number(season)
     return JsonResponse(nextnumber, safe=False)
