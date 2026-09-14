@@ -107,11 +107,6 @@ function checkForm() {
   };
 }
 
-function resetForm() {
-  document.getElementById("details").reset();
-  location.reload()
-}
-
 function saveResultsList(ids_list) {
   localStorage.setItem('listview', window.location.href);
   localStorage.setItem('ids_list', ids_list);

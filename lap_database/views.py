@@ -20,8 +20,8 @@ def lap_form_handler(request, model, form, id, message=None):
     context["title"] = f"{model.__name__} Details"
     if request.path.endswith("/new/"):
         context["title"] = f"New {model.__name__}"
-    instance = None
-    if not request.path.endswith("/new/"):
+        instance = None
+    else:
         instance = model.objects.filter(id=id).first()
     editable = False
     if str(request.user) != "AnonymousUser":
