@@ -63,7 +63,7 @@ function cacheForm() {
     filefields.forEach(field => {
       localStorage.setItem(field.id, field.value);
     });
-    if (window.location.href.includes("/new/")) {
+    if (window.location.pathname.includes("/new/")) {
       localStorage.setItem("okToChangeLapIdentifier", "true")
     } else {
       localStorage.setItem("okToChangeLapIdentifier", "false")
@@ -123,7 +123,7 @@ function returnToListView() {
 }
 
 function makePrevAndNextRecordLinks() {
-  if (document.querySelector("#details")) {
+  if (document.querySelector("#details") && !window.location.pathname.includes("/new/") && localStorage.getItem("ids_list")) {
     const ids_list = localStorage.getItem("ids_list").split(",")
     const current_id = window.location.pathname.split('/').filter(entry => entry !== '').pop();
     const currentIdIndex = ids_list.indexOf(current_id);
