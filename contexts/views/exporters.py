@@ -192,6 +192,7 @@ def sus_list_export(request):
         [
             "SU or 1LAP/3LAP Locus",
             "Locale",
+            "Method",
             "Date Assigned",
             "Recorded By",
             "Seasons",
@@ -236,6 +237,7 @@ def sus_list_export(request):
             [
                 record,
                 record.locale,
+                record.locale.method,
                 record.dateassigned,
                 record.recordedby,
                 ", ".join(seasons),
