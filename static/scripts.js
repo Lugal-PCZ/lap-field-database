@@ -50,49 +50,49 @@ function submitCleanURL(form) {
 function cacheForm() {
   if (document.querySelector("#details")) {
     const initialState = FormSerializer.serialize(document.getElementById("details"));
-    localStorage.setItem("initialState", JSON.stringify(initialState));
+    localStorage.setItem("lapdb_initialState", JSON.stringify(initialState));
     const selectfields = document.querySelectorAll("select");
     selectfields.forEach(field => {
       if (field.selectedIndex === -1) {
-        localStorage.setItem(field.id, "")
+        localStorage.setItem(`lapdb_${field.id}`, "")
       } else {
-        localStorage.setItem(field.id, field.options[field.selectedIndex].innerHTML)
+        localStorage.setItem(`lapdb_${field.id}`, field.options[field.selectedIndex].innerHTML)
       }
     });
     const filefields = document.querySelectorAll('input[type="file"]');
     filefields.forEach(field => {
-      localStorage.setItem(field.id, field.value);
+      localStorage.setItem(`lapdb_${field.id}`, field.value);
     });
     if (window.location.pathname.includes("/new/")) {
-      localStorage.setItem("okToChangeLapIdentifier", "true")
+      localStorage.setItem("lapdb_okToChangeLapIdentifier", "true")
     } else {
-      localStorage.setItem("okToChangeLapIdentifier", "false")
+      localStorage.setItem("lapdb_okToChangeLapIdentifier", "false")
     };
   };
 }
 
 function checkForm() {
   if (document.querySelector("#details")) {
-    const savedState = JSON.parse(localStorage.getItem("initialState"))
+    const savedState = JSON.parse(localStorage.getItem("lapdb_initialState"))
     const currentState = FormSerializer.serialize(document.getElementById("details"));
     var changedFileFields = false;
     const filefields = document.querySelectorAll('input[type="file"]');
     filefields.forEach(field => {
-      if (localStorage.getItem(field.id) !== field.value) {
+      if (localStorage.getItem(`lapdb_${field.id}`) !== field.value) {
         changedFileFields = true;
       };
     });
-    if (JSON.stringify(currentState) !== localStorage.getItem("initialState") || changedFileFields) {
-      if (currentState.name != savedState.name && localStorage.getItem("okToChangeLapIdentifier") === "false") {
+    if (JSON.stringify(currentState) !== localStorage.getItem("lapdb_initialState") || changedFileFields) {
+      if (currentState.name != savedState.name && localStorage.getItem("lapdb_okToChangeLapIdentifier") === "false") {
         if (confirm("Are you sure that you want to change this record’s name?")) {
-          localStorage.setItem("okToChangeLapIdentifier", "true");
+          localStorage.setItem("lapdb_okToChangeLapIdentifier", "true");
         } else {
           document.getElementById("id_name").value = savedState.name;
         };
       };
-      if (currentState.number != savedState.number && localStorage.getItem("okToChangeLapIdentifier") === "false") {
+      if (currentState.number != savedState.number && localStorage.getItem("lapdb_okToChangeLapIdentifier") === "false") {
         if (confirm("Are you sure that you want to change this record’s number?")) {
-          localStorage.setItem("okToChangeLapIdentifier", "true");
+          localStorage.setItem("lapdb_okToChangeLapIdentifier", "true");
         } else {
           document.getElementById("id_number").value = savedState.number;
         };
@@ -114,17 +114,17 @@ function checkForm() {
 }
 
 function saveResultsList(ids_list) {
-  localStorage.setItem('listview', window.location.href);
-  localStorage.setItem('ids_list', ids_list);
+  localStorage.setItem('lapdb_listView', window.location.href);
+  localStorage.setItem('lapdb_idsList', ids_list);
 }
 
 function returnToListView() {
-  window.open(localStorage.getItem('listview'), '_self');
+  window.open(localStorage.getItem('lapdb_listView'), '_self');
 }
 
 function makePrevAndNextRecordLinks() {
-  if (document.querySelector("#details") && !window.location.pathname.includes("/new/") && localStorage.getItem("ids_list")) {
-    const ids_list = localStorage.getItem("ids_list").split(",")
+  if (document.querySelector("#details") && !window.location.pathname.includes("/new/") && localStorage.getItem("lapdb_idsList")) {
+    const ids_list = localStorage.getItem("lapdb_idsList").split(",")
     const current_id = window.location.pathname.split('/').filter(entry => entry !== '').pop();
     const currentIdIndex = ids_list.indexOf(current_id);
     const prevId = ids_list[currentIdIndex - 1];
@@ -377,10 +377,10 @@ async function loadNextRecordNumberForSeason(recordtype) {
       document.getElementById("id_number").value = data;
       document.getElementById("id_excavationnumber").value = season;
     });
-  const savedState = JSON.parse(localStorage.getItem("initialState"))
-  if (localStorage.getItem("okToChangeLapIdentifier") === "false") {
+  const savedState = JSON.parse(localStorage.getItem("lapdb_initialState"))
+  if (localStorage.getItem("lapdb_okToChangeLapIdentifier") === "false") {
     if (confirm("Are you sure that you want to change this record’s number?")) {
-      localStorage.setItem("okToChangeLapIdentifier", "true");
+      localStorage.setItem("lapdb_okToChangeLapIdentifier", "true");
     } else {
       document.getElementById("id_number").value = savedState.number;
       document.getElementById("id_excavationnumber").value = savedState.excavationnumber;

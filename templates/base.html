@@ -62,7 +62,7 @@
     <div id="pagesubhead">
         {% if count >= 0 %}
             {% if newitemlink and user.is_authenticated %}
-                <button id="newbutton" type="button" onclick="localStorage.setItem('listview', window.location.href); window.open('{{ newitemlink }}', '_self')">+</button>
+                <button id="newbutton" type="button" onclick="localStorage.setItem('lapdb_listview', window.location.href); window.open('{{ newitemlink }}', '_self')">+</button>
             {% endif %}
             <span id="count">{{ count }} Item{{ count|pluralize }}</span>
             {% if all_items.paginator and count > 0 %}
