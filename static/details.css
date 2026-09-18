@@ -215,8 +215,8 @@ form[name="ObjectForm"] {
 form[name="SampleForm"] {
     grid-template-areas:
         "number excavationnumber season"
-        "lot . ."
-        "su area locale"
+        "lot su ."
+        "area locale method"
         "excavationdate registrationdate registrar"
         "sampletype box intendedanalysis"
         "notes notes notes"

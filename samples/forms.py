@@ -67,6 +67,11 @@ class SampleForm(forms.ModelForm):
         disabled=True,
         label="Locale",
     )
+    method = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Method",
+    )
 
     class Meta:
         model = Sample
@@ -115,6 +120,7 @@ class SampleForm(forms.ModelForm):
             self.fields["su"].initial = self.instance.lot.su
             self.fields["area"].initial = self.instance.lot.su.locale.area
             self.fields["locale"].initial = self.instance.lot.su.locale
+            self.fields["method"].initial = self.instance.lot.su.locale.method
         self.fields["registrar"].required = True
         self.fields["registrar"].initial = user
         self.fields["season"].widget.attrs["onChange"] = "loadNextRecordNumberForSeason('sample')"

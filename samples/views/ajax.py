@@ -18,6 +18,7 @@ def load_su(request):
     response = {
         "su": {"id": su.id, "name": str(su)},  # type: ignore
         "locale": str(locale),
+        "method": str(su.locale.method),  # type: ignore
         "area": str(locale.area),
         "lot_dateassigned": lot.dateassigned,  # type: ignore
     }
@@ -29,6 +30,7 @@ def load_locale(request):
     su = SU.objects.filter(id=su_id).last()
     response = {
         "locale": str(su.locale),  # type: ignore
+        "method": str(su.locale.method),  # type: ignore
         "area": str(su.locale.area),  # type: ignore
     }
     return JsonResponse(response, safe=False)
