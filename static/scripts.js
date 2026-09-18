@@ -369,6 +369,15 @@ async function loadLocale(recordtype) {
     });
 }
 
+async function loadMethod(recordtype) {
+  const locale_id = document.getElementById("id_locale").value;
+  await fetch(`/${recordtype}/ajax/load_method/?locale_id=${locale_id}`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById("id_method").value = data.method;
+    });
+}
+
 async function loadNextRecordNumberForSeason(recordtype) {
   const season = document.getElementById("id_season").selectedOptions[0].innerText;
   await fetch(`/${recordtype}/ajax/load_nextnumber/?season=${season}`)

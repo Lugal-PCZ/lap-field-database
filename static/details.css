@@ -144,14 +144,15 @@ form[name="LocaleForm"] {
 /* SUs */
 form[name="SUForm"] {
     grid-template-areas:
-        "number locus locale"
+        "number locus ."
+        "locale method ."
         "dateassigned recordedby seasons"
-        "prefix dimensions ."
-        "elevationtop elevationbottom ."
-        "tracing worldfile ."
-        "architecturalfeatures architecturaltechnique ."
-        "color composition ."
-        "texture inclusions ."
+        "prefix dimensions seasons"
+        "elevationtop elevationbottom seasons"
+        "tracing worldfile seasons"
+        "architecturalfeatures architecturaltechnique seasons"
+        "color composition seasons"
+        "texture inclusions seasons"
         "sameas abuts ."
         "coveredby covers ."
         "cutby cuts ."

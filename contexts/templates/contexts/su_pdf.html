@@ -26,12 +26,18 @@
         <tr>
             <th>SU Number:</th>
             <th>1LAP/3LAP Locus:</th>
-            <th>Locale:</th>
         </tr>
         <tr>
             <td>{% if su.locus %}-{% else %}{{ su.number|default:"0" }}{% endif %}</td>
             <td>{{ su.locus|default:blank }}</td>
+        </tr>
+        <tr>
+            <th>Locale:</th>
+            <th>Method:</th>
+        </tr>
+        <tr>
             <td>{{ su.locale|default:datamissing }}</td>
+            <td>{{ su.locale.method|default:datamissing }}</td>
         </tr>
         <tr>
             <th>Date Assigned:</th>

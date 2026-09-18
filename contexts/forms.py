@@ -114,6 +114,11 @@ class LocaleForm(forms.ModelForm):
 
 
 class SUForm(forms.ModelForm):
+    method = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Method",
+    )
     lots_list = forms.CharField(
         required=False,
         disabled=True,
@@ -202,6 +207,7 @@ class SUForm(forms.ModelForm):
         if self.instance.worldfile_contents:
             self.fields["worldfile"].widget.attrs["value"] = f"{self.instance.worldfile_contents}"
         if self.instance.pk:
+            self.fields["method"].widget.attrs["value"] = self.instance.locale.method
             related_lots = self.instance.lot_set.values()
             lots = set()
             for each_lot in related_lots:
@@ -209,5 +215,6 @@ class SUForm(forms.ModelForm):
             lots = list(lots)
             lots.sort()
             self.fields["lots_list"].widget.attrs["value"] = ", ".join(lots)
+        self.fields["locale"].widget.attrs["onchange"] = "loadMethod('su');"
         self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)

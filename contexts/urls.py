@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import details, exporters, lists
+from .views import ajax, details, exporters, lists
 
 
 urlpatterns = [
@@ -15,4 +15,5 @@ urlpatterns = [
     path("su/<int:id>/", details.su_details),
     path("su/<int:id>/export/", exporters.su_details_export),
     path("su/<int:id>/tracing/", exporters.su_tracing_export),
+    path("su/ajax/load_method/", ajax.load_method),
 ]
