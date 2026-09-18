@@ -174,15 +174,6 @@ function handleDependentFields() {
           document.getElementById("id_su").closest("div.form-group").hidden = true;
           document.getElementById("id_su_display").closest("div.form-group").hidden = false;
         };
-        // lot is entered, so populate SU field
-        if (document.getElementById("id_lot").value) {
-          loadSU('object');
-        };
-        // SU is entered, so populate area and locale fields
-        if (document.getElementById("id_su").value) {
-          loadLocale('object');
-        };
-        // material is Stone, Metal, or Shell, so show the appropriate material subtype widget
         switch (document.getElementById("id_material").value) {
           case "Stone":
             document.getElementById("id_stonesubtype").closest("div.form-group").hidden = false;
@@ -350,7 +341,10 @@ async function loadSU(recordtype) {
           document.getElementById("id_locale").value = data.locale;
           break;
       };
-      // also load the exavationdate with the date that the lot was assigned
+      if (document.querySelector("#id_method")) {
+        document.getElementById("id_method").value = data.method;
+      };
+      // also load the exavationdate with the date that the lot was assigned, if excavationdate is empty
       if (!document.getElementById("id_excavationdate").value) {
         document.getElementById("id_excavationdate").value = data.lot_dateassigned;
       };

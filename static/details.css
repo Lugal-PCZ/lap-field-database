@@ -116,6 +116,7 @@
 #details textarea:invalid {
     border-width: 2px;
     border-color: red;
+    border-radius: 4px;
 }
 
 #details #id_worldfile:invalid {
@@ -182,10 +183,9 @@ form[name="LotForm"] {
 form[name="ObjectForm"] {
     grid-template-areas:
         "number excavationnumber season"
-        "nolot . ."
-        "lot . ."
-        "su area locale"
-        "su_display area locale"
+        "nolot su ."
+        "lot su_display ."
+        "area locale method"
         "excavationdate registrationdate registrar"
         "image . ."
         "objecttype . ."

@@ -73,6 +73,11 @@ class ObjectForm(forms.ModelForm):
         disabled=True,
         label="Locale",
     )
+    method = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Method",
+    )
 
     class Meta:
         model = Object
@@ -164,13 +169,14 @@ class ObjectForm(forms.ModelForm):
         self.fields["su"].widget.attrs["initiallyhidden"] = True
         if self.instance.pk:
             self.fields["su_display"].initial = self.instance.su
+            self.fields["area"].initial = self.instance.su.locale.area
+            self.fields["locale"].initial = self.instance.su.locale
+            self.fields["method"].initial = self.instance.su.locale.method
         self.fields["registrar"].initial = user
-        self.fields["season"].widget.attrs["onChange"] = "loadNextRecordNumberForSeason('object')"
         if not self.instance:
             self.fields["lot"].required = True
         self.fields["image"].widget.attrs["onscreen"] = f"/{str(self.instance.image_onscreen)}"
         self.fields["image"].widget.attrs["user"] = str(user)
-        self.fields["objecttype"].widget.attrs["onChange"] = "loadObjectSubtypes()"
         subtypes = []
         if self.instance.pk:
             for each_subtype in ObjectSubtype.objects.filter(type_id=self.instance.objecttype):
@@ -201,5 +207,9 @@ class ObjectForm(forms.ModelForm):
             self.fields["baghdadnumber"].widget.attrs["initiallyhidden"] = True
         if not self.instance.published:
             self.fields["publicationcitations"].widget.attrs["initiallyhidden"] = True
+        self.fields["season"].widget.attrs["onChange"] = "loadNextRecordNumberForSeason('object')"
+        self.fields["lot"].widget.attrs["onChange"] = "loadSU('object')"
+        self.fields["su"].widget.attrs["onChange"] = "loadLocale('object')"
+        self.fields["objecttype"].widget.attrs["onChange"] = "loadObjectSubtypes()"
         self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)
