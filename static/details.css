@@ -169,7 +169,8 @@ form[name="SUForm"] {
 /* Lots */
 form[name="LotForm"] {
     grid-template-areas:
-        "number su locale"
+        "number su ."
+        "locale method ."
         "dateassigned season contents"
         "notes notes notes"
         "objects_list objects_list objects_list"

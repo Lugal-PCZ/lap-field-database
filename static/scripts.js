@@ -366,6 +366,9 @@ async function loadLocale(recordtype) {
       if (document.querySelector("#id_area")) {
         document.getElementById("id_area").value = data.area;
       };
+      if (document.querySelector("#id_method")) {
+        document.getElementById("id_method").value = data.method;
+      };
     });
 }
 

@@ -26,15 +26,19 @@
         <tr>
             <th>Number:</th>
             <th>SU or 1LAP/3LAP Locus:</th>
-            <th>Locale:</th>
         </tr>
         <tr>
             <td>{{ lot.number|default:datamissing }}</td>
             <td>{{ lot.su|default:datamissing }}</td>
-            <td>{{ lot.su.locale|default:datamissing }}</td>
         </tr>
-    </table>
-    <table>
+        <tr>
+            <th>Locale:</th>
+            <th>Method:</th>
+        </tr>
+        <tr>
+            <td>{{ lot.su.locale|default:datamissing }}</td>
+            <td>{{ lot.su.locale.method|default:datamissing }}</td>
+        </tr>
         <tr>
             <th>Date Assigned:</th>
             <th>Season:</th>

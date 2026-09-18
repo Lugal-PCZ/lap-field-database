@@ -60,10 +60,17 @@ class LotForm(forms.ModelForm):
     locale = forms.CharField(
         required=False,
         disabled=True,
+        label="Locale",
+    )
+    method = forms.CharField(
+        required=False,
+        disabled=True,
+        label="Method",
     )
     contents = forms.CharField(
         required=False,
         disabled=True,
+        label="Contents",
         initial="(general/pottery)",
     )
     objects_list = forms.CharField(
@@ -111,9 +118,9 @@ class LotForm(forms.ModelForm):
     def __init__(self, *args, editable=False, **kwargs):
         user = kwargs.pop("user", None)
         super(LotForm, self).__init__(*args, **kwargs)
-        self.fields["su"].widget.attrs["onChange"] = "loadLocale('lot')"
         if self.instance and hasattr(self.instance, "su"):
             self.fields["locale"].initial = self.instance.su.locale
+            self.fields["method"].widget.attrs["value"] = self.instance.su.locale.method
         if self.instance.pk:
             # get a list of all Objects from this Lot
             related_objects = self.instance.object_set.values()
@@ -131,5 +138,6 @@ class LotForm(forms.ModelForm):
             samples = list(samples)
             samples.sort()
             self.fields["samples_list"].widget.attrs["value"] = ", ".join(samples)
+        self.fields["su"].widget.attrs["onChange"] = "loadLocale('lot')"
         self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)
