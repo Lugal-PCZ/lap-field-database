@@ -120,7 +120,7 @@ class LotForm(forms.ModelForm):
         super(LotForm, self).__init__(*args, **kwargs)
         if self.instance and hasattr(self.instance, "su"):
             self.fields["locale"].initial = self.instance.su.locale
-            self.fields["method"].widget.attrs["value"] = self.instance.su.locale.method
+            self.fields["method"].initial = self.instance.su.locale.method
         if self.instance.pk:
             # get a list of all Objects from this Lot
             related_objects = self.instance.object_set.values()
@@ -129,7 +129,7 @@ class LotForm(forms.ModelForm):
                 objects.add(each_object["number"])
             objects = list(objects)
             objects.sort()
-            self.fields["objects_list"].widget.attrs["value"] = ", ".join(objects)
+            self.fields["objects_list"].initial = ", ".join(objects)
             # get a list of all Samples from this Lot
             related_samples = self.instance.sample_set.values()
             samples = set()
@@ -137,7 +137,7 @@ class LotForm(forms.ModelForm):
                 samples.add(each_sample["number"])
             samples = list(samples)
             samples.sort()
-            self.fields["samples_list"].widget.attrs["value"] = ", ".join(samples)
+            self.fields["samples_list"].initial = ", ".join(samples)
         self.fields["su"].widget.attrs["onChange"] = "loadLocale('lot')"
         self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)

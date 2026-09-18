@@ -108,7 +108,7 @@ class LocaleForm(forms.ModelForm):
                 sus.append(str(each_su))
             seasons = list(seasons)
             seasons.sort()
-            self.fields["seasons_list"].widget.attrs["value"] = ", ".join(seasons)
+            self.fields["seasons_list"].initial = ", ".join(seasons)
             self.fields["sus_list"].initial = ", ".join(sus)
         _update_field_behavior(editable, self)
 
@@ -202,19 +202,19 @@ class SUForm(forms.ModelForm):
         self.fields["tracing"].widget.attrs["onscreen"] = f"/{str(self.instance.tracing_onscreen)}"
         self.fields["tracing"].widget.attrs["user"] = str(user)
         self.fields["worldfile"].widget.attrs["user"] = str(user)
-        if not self.instance.worldfile:
+        if not self.instance.worldfile_contents:
             self.fields["worldfile"].widget.attrs["initiallyhidden"] = True
         if self.instance.worldfile_contents:
             self.fields["worldfile"].widget.attrs["value"] = f"{self.instance.worldfile_contents}"
         if self.instance.pk:
-            self.fields["method"].widget.attrs["value"] = self.instance.locale.method
+            self.fields["method"].initial = self.instance.locale.method
             related_lots = self.instance.lot_set.values()
             lots = set()
             for each_lot in related_lots:
                 lots.add(each_lot["number"])
             lots = list(lots)
             lots.sort()
-            self.fields["lots_list"].widget.attrs["value"] = ", ".join(lots)
+            self.fields["lots_list"].initial = ", ".join(lots)
         self.fields["locale"].widget.attrs["onchange"] = "loadMethod('su');"
         self.fields["voided"].widget.attrs["onchange"] = "voidedAlert();"
         _update_field_behavior(editable, self)
