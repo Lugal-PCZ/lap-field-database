@@ -34,8 +34,12 @@ function toggleLogin() {
 
 function toggleDownloadPanel() {
   if (document.querySelector("#downloadpanel")) {
-    document.getElementById("loginpanel").hidden = true;
-    document.getElementById("downloadpanel").toggleAttribute("hidden");
+    if (!document.querySelector("#discardchangesbutton").disabled || window.location.href.includes("/new/")) {
+      alert("There are unsaved changes to this record. Revert or save the changes before downloading.");
+    } else {
+      document.getElementById("loginpanel").hidden = true;
+      document.getElementById("downloadpanel").toggleAttribute("hidden");
+    };
   };
 }
 
