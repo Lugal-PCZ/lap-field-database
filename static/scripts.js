@@ -34,7 +34,7 @@ function toggleLogin() {
 
 function toggleDownloadPanel() {
   if (document.querySelector("#downloadpanel")) {
-    if (!document.querySelector("#discardchangesbutton").disabled || window.location.href.includes("/new/")) {
+    if (document.querySelector("#details") && (!document.querySelector("#discardchangesbutton").disabled || window.location.href.includes("/new/"))) {
       alert("There are unsaved changes to this record. Revert or save the changes before downloading.");
     } else {
       document.getElementById("loginpanel").hidden = true;
